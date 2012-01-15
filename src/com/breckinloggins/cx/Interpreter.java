@@ -9,6 +9,7 @@ import com.breckinloggins.cx.reader.Discriminator;
 import com.breckinloggins.cx.reader.EndPair;
 import com.breckinloggins.cx.reader.Error;
 import com.breckinloggins.cx.reader.IReader;
+import com.breckinloggins.cx.reader.List;
 import com.breckinloggins.cx.reader.Name;
 import com.breckinloggins.cx.reader.Pair;
 import com.breckinloggins.cx.reader.Reader;
@@ -61,6 +62,7 @@ public class Interpreter {
 		env.setReaderAlias("endPair", EndPair.class.getName());
 		env.setReaderAlias("discriminator", Discriminator.class.getName());
 		env.setReaderAlias("error", Error.class.getName());
+		env.setReaderAlias("list", List.class.getName());
 		env.setReaderAlias("name", Name.class.getName());
 		env.setReaderAlias("reader", Reader.class.getName());
 		env.setReaderAlias("terminator", Terminator.class.getName());

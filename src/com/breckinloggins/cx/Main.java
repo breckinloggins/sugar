@@ -70,6 +70,7 @@ public class Main {
 		outputArea.setForeground(Color.WHITE);
 		outputArea.setEditable(false);
 		outputArea.setFont(f);
+		outputArea.setMargin(new Insets(3, 3, 3, 3));
 		JScrollPane outputScrollPane = new JScrollPane(outputArea);
 		
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, 

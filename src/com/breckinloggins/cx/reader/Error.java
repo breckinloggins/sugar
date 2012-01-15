@@ -17,6 +17,11 @@ public class Error extends BaseReader {
 	}
 	
 	@Override
+	public String getDescription()	{
+		return "Reads no characters and emits an error message";
+	}
+	
+	@Override
 	public IReader read(StringReader sr, Environment env) throws IOException {
 		int ch = sr.read();
 		if (ch != -1)	{

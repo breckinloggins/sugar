@@ -17,6 +17,14 @@ public abstract class BaseReader implements IReader {
 	
 	private PrintStream _writer;
 	
+	/*
+	 * @see com.breckinloggins.cx.reader.IReader#getDescription()
+	 */
+	@Override
+	public String getDescription()	{
+		return "(reader)";
+	}
+	
 	/* 
 	 * @see com.breckinloggins.cx.reader.IReader#setWriter(java.io.PrintStream)
 	 */

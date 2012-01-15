@@ -7,6 +7,11 @@ import com.breckinloggins.cx.Environment;
 public class Discriminator extends BaseReader {
 
 	@Override
+	public String getDescription()	{
+		return "Reads enough characters to determine the most probably next reader";
+	}
+	
+	@Override
 	public IReader read(StringReader sr, Environment env) throws IOException {
 		sr.mark(0);
 		int ch = sr.read();

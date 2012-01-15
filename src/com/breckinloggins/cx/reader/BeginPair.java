@@ -8,6 +8,11 @@ import com.breckinloggins.cx.Environment;
 public class BeginPair extends BaseReader	{
 
 	@Override
+	public String getDescription()	{
+		return "Reads a starting sequence of a balanced pair (such as '(')";
+	}
+	
+	@Override
 	public IReader read(StringReader sr, Environment env) throws IOException {
 		// TODO Auto-generated method stub
 		return null;

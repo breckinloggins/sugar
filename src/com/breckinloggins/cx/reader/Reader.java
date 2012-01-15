@@ -5,6 +5,10 @@ import java.io.StringReader;
 import com.breckinloggins.cx.Environment;
 
 public class Reader extends BaseReader {
+	@Override
+	public String getDescription()	{
+		return "Manually invokes a reader by the given name (e.g. '#list')";
+	}
 
 	@Override
 	public IReader read(StringReader sr, Environment env) throws IOException {

@@ -6,6 +6,9 @@ import com.breckinloggins.cx.Environment;
 
 public class Name extends BaseReader {
 
+	// TODO: The user needs to be able to define the acceptable character sequences
+	// of a name
+	
 	private String _name;
 	
 	public String getName()	{
@@ -13,7 +16,15 @@ public class Name extends BaseReader {
 	}
 	
 	@Override
+	public String getDescription()	{
+		return "Reads an identifier and (TODO) stores it in the environment if it doesn't already exist";
+	}
+	
+	@Override
 	public IReader read(StringReader sr, Environment env) throws IOException {
+		
+		// TODO: Store name in environment as a map key
+		
 		sr.mark(0);
 		int c = sr.read();
 		if (c == -1)	{

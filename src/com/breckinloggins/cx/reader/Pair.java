@@ -5,6 +5,11 @@ import java.io.StringReader;
 import com.breckinloggins.cx.Environment;
 
 public class Pair extends BaseReader {
+	
+	@Override
+	public String getDescription()	{
+		return "Reads a balanced pair (such as '(foo bar baz)' or '<stuff>')";
+	}
 
 	@Override
 	public IReader read(StringReader sr, Environment env) throws IOException {

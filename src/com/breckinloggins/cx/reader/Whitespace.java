@@ -8,7 +8,14 @@ import com.breckinloggins.cx.Environment;
 public class Whitespace extends BaseReader {
 
 	@Override
+	public String getDescription()	{
+		return "Reads one or more whitespace characters";
+	}
+	
+	@Override
 	public IReader read(StringReader sr, Environment env) throws IOException {
+		// TODO: User should be able to configure what counts as whitespace and any special actions
+		// that might occur (such as to support pythonic languages)
 		sr.mark(0);
 		int c = sr.read();
 		if (c == -1)	{

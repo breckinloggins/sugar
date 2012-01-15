@@ -2,6 +2,7 @@ package com.breckinloggins.cx;
 
 import java.io.PrintStream;
 import java.util.HashMap;
+import java.util.Set;
 
 import com.breckinloggins.cx.reader.IReader;
 
@@ -26,6 +27,10 @@ public class Environment {
 	
 	public void setReaderAlias(String alias, String className)	{
 		_readers.put(alias, className);
+	}
+	
+	public Set<String> getReaderAliases()	{
+		return _readers.keySet();
 	}
 	
 	public IReader createReader(String alias)	{
