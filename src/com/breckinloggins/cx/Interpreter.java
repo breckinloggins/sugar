@@ -76,9 +76,9 @@ public class Interpreter {
 		env.setCommandAlias("print", Print.class.getName());
 		
 		// TODO:
+		// - add an execute command that pops a name off the stack and executes a command by that
+		//   name
 		// - make readers and commands stateless (we use the environment for state)
-		// - break up readers into readers, commands, and evaluators??
-		// - readers use #
 		// - what are evaluators and how do they work?  Do we need them?
 		// - add error command
 		// - add get, unget, mark, reset reader commands
