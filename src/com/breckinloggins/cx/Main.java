@@ -26,18 +26,16 @@ public class Main {
 		splitPane.setDividerLocation(380);
 		
 		// TODO:
-		// 1. Add JSplitPane
-		// 2. Add a second output area in the right
-		// 3. Have the interpreter and environment take a configurable Out stream
-		// 4. Hook out stream to output area
-		// 5. Change fonts to mono space
+		// 1. Have the interpreter and environment take a configurable Out stream
+		// 2. Hook out stream to output area
+		// 3. Change fonts to mono space
 		
 		frame.getContentPane().add(splitPane);
 		
 		frame.setSize(600, 400);
 		frame.setVisible(true);
 		
-		final Interpreter interp = new Interpreter();
+		final Interpreter interp = new Interpreter(System.out);
 		
 		KeyListener keyListener = new KeyListener() {
 			// TODO: interpreter should read one character at a time

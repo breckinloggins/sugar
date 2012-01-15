@@ -1,6 +1,7 @@
 package com.breckinloggins.cx;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.StringReader;
 
 import com.breckinloggins.cx.reader.BeginPair;
@@ -17,6 +18,7 @@ import com.breckinloggins.cx.reader.Whitespace;
 public class Interpreter {
 	private Environment _rootEnvironment;
 	private IReader _reader;
+	private PrintStream _writer;
 
 	// TODO: Need an interpreter listener interface that will notify when we have:
 	// 1. Read a char
@@ -31,9 +33,11 @@ public class Interpreter {
 	
 	/**
 	 * Constructs a new interpreter
+	 * @param writer The print writer to use for output
 	 */
-	public Interpreter()	{
-		_rootEnvironment = new Environment();
+	public Interpreter(PrintStream writer)	{
+		_writer = writer;
+		_rootEnvironment = new Environment(_writer);
 		
 		// Set up the basic starting environment
 		// TODO: Need to find a better way to do this
@@ -69,7 +73,7 @@ public class Interpreter {
 	 */
 	public void TEMP_read(StringReader sr)	{
 		if (null == _reader)	{
-			_reader = new Discriminator();
+			_reader = _rootEnvironment.createReader("discriminator");
 		}
 		
 		try {
@@ -78,7 +82,7 @@ public class Interpreter {
 			} while (_reader != null && _reader.getClass().getName() != "Terminator");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e.printStackTrace(_writer);
 		}
 	}
 	
@@ -93,7 +97,7 @@ public class Interpreter {
 			// the environment should be set up "from nothing" each time.  We can then have a standard preamble that
 			// can be run by clicking a button or something, and in the future that preamble set will be run based
 			// on language selection and/or file extension.
-			_reader = new Discriminator();
+			//_reader = new Discriminator();
 		}
 		
 		// TODO: Readers need to read a character at a time, returning the same reader if it 

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import com.breckinloggins.cx.Environment;
 
-public class Name implements IReader {
+public class Name extends BaseReader {
 
 	private String _name;
 	
@@ -18,7 +18,7 @@ public class Name implements IReader {
 		int c = sr.read();
 		if (c == -1)	{
 			sr.reset();
-			Error e = new Error();
+			Error e = (Error)env.createReader("error");
 			e.setMessage("Unexpected");
 			return e;
 		}
@@ -26,7 +26,7 @@ public class Name implements IReader {
 		char ch = (char)c;
 		if (!Character.isLetter(ch) && ch != '_')	{
 			sr.reset();
-			Error e = new Error();
+			Error e = (Error)env.createReader("error");
 			e.setMessage("Unexpected Character");
 			return e;
 		}
@@ -39,10 +39,10 @@ public class Name implements IReader {
 			if (c == -1)	{
 				// It's up to upper level code to determine whether it's ok to 
 				// have an EOF directly after a name
-				System.out.println("r(Name): " + sb.toString());
+				getWriter().println("r(Name): " + sb.toString());
 				sr.reset();
 				_name = sb.toString();
-				return new Terminator();
+				return env.createReader("terminator");
 			}
 			
 			ch = (char)c;
@@ -58,12 +58,12 @@ public class Name implements IReader {
 		
 		// Optionally eat up some whitespace
 		// TODO: needs to be set by environment or other way to turn this off and on
-		new Whitespace().read(sr, env);
+		((Whitespace)env.createReader("whitespace")).read(sr, env);
 		
-		System.out.println("r(Name): " + sb.toString());
+		getWriter().println("r(Name): " + sb.toString());
 		_name = sb.toString();
 		
-		return new Discriminator();
+		return env.createReader("discriminator");
 	}
 
 }

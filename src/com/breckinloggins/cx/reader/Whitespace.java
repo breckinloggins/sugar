@@ -5,7 +5,7 @@ import java.io.StringReader;
 
 import com.breckinloggins.cx.Environment;
 
-public class Whitespace implements IReader {
+public class Whitespace extends BaseReader {
 
 	@Override
 	public IReader read(StringReader sr, Environment env) throws IOException {
@@ -13,7 +13,7 @@ public class Whitespace implements IReader {
 		int c = sr.read();
 		if (c == -1)	{
 			sr.reset();
-			return new Terminator();
+			return env.createReader("terminator");
 		}
 		
 		boolean hasWhitespace = false;
@@ -24,10 +24,10 @@ public class Whitespace implements IReader {
 			c = sr.read();
 		}
 		
-		if (hasWhitespace)	System.out.println("r(Whitespace");
+		if (hasWhitespace)	getWriter().println("r(Whitespace)");
 		
 		sr.reset();
-		return new Discriminator();
+		return env.createReader("discriminator");
 	}
 
 }

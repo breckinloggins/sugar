@@ -1,5 +1,6 @@
 package com.breckinloggins.cx;
 
+import java.io.PrintStream;
 import java.util.HashMap;
 
 import com.breckinloggins.cx.reader.IReader;
@@ -7,9 +8,11 @@ import com.breckinloggins.cx.reader.IReader;
 public class Environment {
 	
 	private HashMap<String, String> _readers;
+	private PrintStream _writer;
 	
-	public Environment()	{
+	public Environment(PrintStream writer)	{
 		_readers = new HashMap<String, String>();
+		_writer = writer;
 	}
 	
 	/**
@@ -34,18 +37,21 @@ public class Environment {
 		try {
 			Class<?> theClass = Class.forName(className);
 			IReader reader = (IReader)theClass.newInstance();
+			reader.setWriter(_writer);
 			return reader;
 			
 		} catch (ClassNotFoundException e) {
 			// The class name was registered, but doesn't really exist
+			_writer.println("The reader alias \"" + alias + "\" does not have a backing class");
 			return null;
 		} catch (InstantiationException e) {
 			// This probably happened because the reader did not specify a default
 			// constructor
-			e.printStackTrace();
+			_writer.println("There was an error constructing the reader \"" + alias + "\"");
+			e.printStackTrace(_writer);
 			return null;
 		} catch (IllegalAccessException e) {
-			e.printStackTrace();
+			e.printStackTrace(_writer);
 			return null;
 		}
 	}

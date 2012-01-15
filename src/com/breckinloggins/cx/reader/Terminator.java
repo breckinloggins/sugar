@@ -3,12 +3,12 @@ package com.breckinloggins.cx.reader;
 import java.io.StringReader;
 import com.breckinloggins.cx.Environment;
 
-public class Terminator implements IReader {
+public class Terminator extends BaseReader {
 
 	@Override
 	public IReader read(StringReader sr, Environment env) {
 		// The terminator never reads anything
-		System.out.println("r(Terminator");
+		getWriter().println("r(Terminator)");
 		return null;
 	}
 

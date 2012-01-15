@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import com.breckinloggins.cx.Environment;
 
-public class Pair implements IReader {
+public class Pair extends BaseReader {
 
 	@Override
 	public IReader read(StringReader sr, Environment env) throws IOException {
@@ -12,7 +12,7 @@ public class Pair implements IReader {
 		int c = sr.read();
 		if (c == -1)	{
 			sr.reset();
-			Error e = new Error();
+			Error e = (Error)env.createReader("error");
 			e.setMessage("Unexpected");
 			return e;
 		}

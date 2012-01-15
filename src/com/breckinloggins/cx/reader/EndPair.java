@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import com.breckinloggins.cx.Environment;
 
-public class EndPair implements IReader {
+public class EndPair extends BaseReader {
 
 	@Override
 	public IReader read(StringReader sr, Environment env) throws IOException {

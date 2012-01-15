@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import com.breckinloggins.cx.Environment;
 
-public class Discriminator implements IReader {
+public class Discriminator extends BaseReader {
 
 	@Override
 	public IReader read(StringReader sr, Environment env) throws IOException {
@@ -12,10 +12,10 @@ public class Discriminator implements IReader {
 		int ch = sr.read();
 		if (ch == -1)	{
 			// End of stream, send the Terminator
-			return new Terminator();
+			return env.createReader("terminator");
 		}
 		
-		System.out.println("r(Discriminator): " + Character.toString((char) ch));
+		getWriter().println("r(Discriminator): " + Character.toString((char) ch));
 		
 		// TODO: These know WAY too much about what each reader wants.  Instead, the discriminator should
 		// somehow be able to ask each reader if it will accept the input.  It would be nice to do this without
@@ -23,18 +23,18 @@ public class Discriminator implements IReader {
 		// for them to "duke it out", perhaps with precedence or implicit precedence by voting.
 		if (ch == '#')	{
 			sr.reset();
-			return new Reader();
+			return env.createReader("reader");
 		}
 		else if (Character.isLetter(ch) || ch == '_')	{
 			sr.reset();
-			return new Name();
+			return env.createReader("name");
 		}
 		
 		// TODO: A good compromise would be to have a whole reusable set of these readers per thread.  That way we can limit
 		// new object churn but still allow for parallel operations.  But that won't solve the problem where we need a nested
 		// context.  We won't optimize right now.  We may have to turn these into flyweights 
 		// (http://snehaprashant.blogspot.com/2009/01/flyweight-patternin-java.html)
-		return new Discriminator();
+		return env.createReader("discriminator");
 	}
 
 }

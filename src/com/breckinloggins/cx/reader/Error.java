@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import com.breckinloggins.cx.Environment;
 
-public class Error implements IReader {
+public class Error extends BaseReader {
 
 	protected String _message;
 	
@@ -20,12 +20,12 @@ public class Error implements IReader {
 	public IReader read(StringReader sr, Environment env) throws IOException {
 		int ch = sr.read();
 		if (ch != -1)	{
-			System.out.println(_message + ": EOF");
+			getWriter().println(_message + ": EOF");
 		} else {
-			System.out.println(_message + Character.toString((char)ch));
+			getWriter().println(_message + Character.toString((char)ch));
 		}
 		
-		return new Terminator();
+		return env.createReader("terminator");
 	}
 
 }
