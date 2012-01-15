@@ -1,0 +1,94 @@
+#include <stdio.h>
+
+int main(int argc, char** argv)
+{
+	printf("Hello, World!\n");
+	return 0;
+}
+
+-------
+First thing we know: it's in C (we know this because it has a C extension)
+
+We could have also done
+
+#syntax C
+```
+// C-code here
+```
+
+The first level reader is the "discriminator", it reads until it can instantiate a new reader of a good type, then hands it off.  For example:
+
+src = #include <stdio.h>
+
+r(discriminator) <- #
+
+This is enough to tell the discriminator to switch to a reader-reader.  It gets passed the discriminating character (the #).
+
+r(reader) <- #include
+
+Now we know to switch to the include reader:
+
+r(include) <- <stdio.h>
+
+At this point, the include reader is done reading and so passes back to the discriminator.
+
+Let's do this again in table form:
+
+r(discriminator)	<-		#															=>	r(reader)
+r(reader)			<-		#include													=>	r(include)
+r(include)			<-		SPC<stdio.h>												=>	r(discriminator)
+r(discriminator)	<-		\n 															=>	r(discriminator)
+r(discriminator)	<-		\n 															=>	r(discriminator)
+r(discriminator)	<-		i 															=>	r(name)
+r(name)				<-		int 														=>	r(discriminator)
+r(discriminator)	<-		SPC															=>	r(discriminator)
+r(discriminator)	<-		m 															=>	r(name)
+r(name)				<-		main 														=>	r(discriminator)
+r(discriminator)	<-		SPC															=>	r(discriminator)
+r(discriminator)	<-		(															=>	r(balanced) [)]
+r(balanced)			<-		(int argc, char** argv)										=>	r(discriminator)
+	|
+	*>	r(discriminator)	<-		i 															=> r(name)
+		r(name)				<-		int 														=> r(discriminator)
+		r(discriminator)	<-		SPC															=> r(discriminator)
+		r(discriminator)	<-		a 															=> r(name)
+		r(name)				<-		argc														=> r(discriminator)
+		r(discriminator)	<-		,															=> r(separator) [,]
+		r(separator)		<-		,															=> r(discriminator)
+		r(discriminator)	<-		SPC															=> r(discriminator)
+		r(discriminator)	<-		c 															=> r(name)
+		r(name)				<-		char 														=> r(discriminator)
+		r(discriminator)	<-		*															=> r(op)
+		r(op)				<-		**															=> r(discriminator)
+		r(discriminator)	<-		SPC															=> r(discriminator)
+		r(discriminator)	<-		a 															=> r(name)
+		r(name)				<-		argv														=> r(TERM)
+	*--<
+	|
+r(discriminator)	<-		\n 															=> r(discriminator)
+r(discriminator)	<-		{															=> r(balanced) [}]
+r(balanced)			<-		{\n\tprintf("Hello, World!\n");\n\treturn 0;\n}				=> r(discriminator)
+	|
+	*>	r(discriminator)	<-		\n\t 														=> r(discriminator)
+		r(discriminator)	<-		p 															=> r(name)
+		r(name)				<-		printf 														=> r(discriminator)
+		r(discriminator)	<-		(															=> r(balanced) [)]
+		r(balanced)			<-		("Hello, World!\n")											=> r(discriminator)
+			|
+			*>	r(discriminator)	<-		"													=> r(balanced) ["]
+				r(balanced)			<-		"Hello, World!\n"									=> r(discriminator)
+					|
+					*>	r(string)			<-	Hello, World!\n 								=> r(TERM)
+					*--<
+					|
+				r(discriminator)
+
+				.
+				.
+				.
+
+// TODO: Finish this
+
+But this is missing the other half of the picture, the evaluator.  We'll need to figure out how that works as well.
+
+
