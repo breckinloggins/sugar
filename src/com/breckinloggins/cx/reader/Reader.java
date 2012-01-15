@@ -26,7 +26,7 @@ public class Reader extends BaseReader {
 			return next;
 		}
 		
-		String alias = nameReader.getName();
+		String alias = env.pop();
 		next = env.createReader(alias);
 		
 		getWriter().print("r(Reader): ");

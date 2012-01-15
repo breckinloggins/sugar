@@ -75,6 +75,8 @@ public class Main {
 		outputArea.setTabSize(3);
 		JScrollPane outputScrollPane = new JScrollPane(outputArea);
 		
+		// TODO: Need a third text area for the debug output as opposed to the command/program output
+		
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, 
 				inputScrollPane, outputScrollPane);
 		splitPane.setDividerLocation(380);

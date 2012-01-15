@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.StringReader;
 
+import com.breckinloggins.cx.command.Nop;
+import com.breckinloggins.cx.command.Print;
 import com.breckinloggins.cx.reader.BeginPair;
+import com.breckinloggins.cx.reader.Command;
 import com.breckinloggins.cx.reader.Discriminator;
 import com.breckinloggins.cx.reader.EndPair;
 import com.breckinloggins.cx.reader.Error;
@@ -57,29 +60,36 @@ public class Interpreter {
 		//
 		// But, again, we ultimately want to hard-code as little of this as possible.
 		Environment env = _rootEnvironment;
+		env.setReaderAlias("command", Command.class.getName());
 		env.setReaderAlias("pair", Pair.class.getName());
 		env.setReaderAlias("beginPair", BeginPair.class.getName());
 		env.setReaderAlias("endPair", EndPair.class.getName());
 		env.setReaderAlias("discriminator", Discriminator.class.getName());
 		env.setReaderAlias("error", Error.class.getName());
-		env.setReaderAlias("list", List.class.getName());
+		env.setReaderAlias("list", List.class.getName());	// TODO: Change to an environment query command
 		env.setReaderAlias("name", Name.class.getName());
 		env.setReaderAlias("reader", Reader.class.getName());
 		env.setReaderAlias("terminator", Terminator.class.getName());
 		env.setReaderAlias("whitespace", Whitespace.class.getName());
 		
+		env.setCommandAlias("nop", Nop.class.getName());
+		env.setCommandAlias("print", Print.class.getName());
+		
 		// TODO:
+		// - make readers and commands stateless (we use the environment for state)
 		// - break up readers into readers, commands, and evaluators??
 		// - readers use #
-		// - commands use #command cmd args? 
-		// - ! is a shortcut for #command 
 		// - what are evaluators and how do they work?  Do we need them?
-		// - add print and error commands
+		// - add error command
 		// - add get, unget, mark, reset reader commands
 		// - add set and unset commands, which create and destroy bindings in the current environment
 		// - add accept and expect readers that take as an argument a reader to accept or expect
 		// - make readers read character by character
 		// - add #new reader reader
+		// - add #new command reader
+		// - add a super-interface for commands and readers (an IThingy... need to come up with a name)
+		//   this way we can join readers, commands, and other object types into a generic system that we can 
+		//   create by name with #new
 		// - replace pair, beingPair, endPair, error, name, and whitespace with dynamically defined readers 
 	}
 	

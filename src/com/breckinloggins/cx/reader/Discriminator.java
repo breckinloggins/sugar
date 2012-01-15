@@ -29,8 +29,9 @@ public class Discriminator extends BaseReader {
 		if (ch == '#')	{
 			sr.reset();
 			return env.createReader("reader");
-		}
-		else if (Character.isLetter(ch) || ch == '_')	{
+		} else if (ch == '!')	{
+			return env.createReader("command");
+		} else if (Character.isLetter(ch) || ch == '_')	{
 			sr.reset();
 			return env.createReader("name");
 		}
@@ -39,6 +40,9 @@ public class Discriminator extends BaseReader {
 		// new object churn but still allow for parallel operations.  But that won't solve the problem where we need a nested
 		// context.  We won't optimize right now.  We may have to turn these into flyweights 
 		// (http://snehaprashant.blogspot.com/2009/01/flyweight-patternin-java.html)
+		//
+		// TODO: Actually, forget the above.  The environment should represent the current state.  If we keep this rule, then
+		// the commands and readers don't NEED a state and we can cache them.
 		return env.createReader("discriminator");
 	}
 

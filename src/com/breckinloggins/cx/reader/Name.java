@@ -9,21 +9,13 @@ public class Name extends BaseReader {
 	// TODO: The user needs to be able to define the acceptable character sequences
 	// of a name
 	
-	private String _name;
-	
-	public String getName()	{
-		return _name;
-	}
-	
 	@Override
 	public String getDescription()	{
-		return "Reads an identifier and (TODO) stores it in the environment if it doesn't already exist";
+		return "Reads an identifier and pushes it onto the stack";
 	}
 	
 	@Override
 	public IReader read(StringReader sr, Environment env) throws IOException {
-		
-		// TODO: Store name in environment as a map key
 		
 		sr.mark(0);
 		int c = sr.read();
@@ -52,7 +44,7 @@ public class Name extends BaseReader {
 				// have an EOF directly after a name
 				getWriter().println("r(Name): " + sb.toString());
 				sr.reset();
-				_name = sb.toString();
+				env.push(sb.toString());
 				return env.createReader("terminator");
 			}
 			
@@ -72,7 +64,7 @@ public class Name extends BaseReader {
 		((Whitespace)env.createReader("whitespace")).read(sr, env);
 		
 		getWriter().println("r(Name): " + sb.toString());
-		_name = sb.toString();
+		env.push(sb.toString());
 		
 		return env.createReader("discriminator");
 	}
