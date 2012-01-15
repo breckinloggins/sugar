@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.StringReader;
 
+import com.breckinloggins.cx.command.Execute;
 import com.breckinloggins.cx.command.Nop;
 import com.breckinloggins.cx.command.Print;
 import com.breckinloggins.cx.reader.BeginPair;
@@ -74,10 +75,15 @@ public class Interpreter {
 		
 		env.setCommandAlias("nop", Nop.class.getName());
 		env.setCommandAlias("print", Print.class.getName());
+		env.setCommandAlias("execute", Execute.class.getName());
 		
 		// TODO:
-		// - add an execute command that pops a name off the stack and executes a command by that
-		//   name
+		// - add a symbol reader that accepts anything that isn't whitespace
+		// - figure out which commands need to be built-in.  For example:
+		//		* add, subtract, multiply, if, loop, etc.
+		// - figure out if the stack needs arg types or if we can keep them all as strings.  I'd prefer to 
+		// - have types encoded in commands.  For example, add_int vs add_float vs add_string, etc.
+		// - add an if command
 		// - make readers and commands stateless (we use the environment for state)
 		// - what are evaluators and how do they work?  Do we need them?
 		// - add error command
