@@ -17,6 +17,7 @@ import com.breckinloggins.cx.reader.List;
 import com.breckinloggins.cx.reader.Name;
 import com.breckinloggins.cx.reader.Pair;
 import com.breckinloggins.cx.reader.Reader;
+import com.breckinloggins.cx.reader.Symbol;
 import com.breckinloggins.cx.reader.Terminator;
 import com.breckinloggins.cx.reader.Whitespace;
 
@@ -62,6 +63,7 @@ public class Interpreter {
 		// But, again, we ultimately want to hard-code as little of this as possible.
 		Environment env = _rootEnvironment;
 		env.setReaderAlias("command", Command.class.getName());
+		env.setReaderAlias("symbol", Symbol.class.getName());
 		env.setReaderAlias("pair", Pair.class.getName());
 		env.setReaderAlias("beginPair", BeginPair.class.getName());
 		env.setReaderAlias("endPair", EndPair.class.getName());
@@ -78,7 +80,10 @@ public class Interpreter {
 		env.setCommandAlias("execute", Execute.class.getName());
 		
 		// TODO:
-		// - add a symbol reader that accepts anything that isn't whitespace
+		// - add a super-interface for commands and readers (an IEntry)
+		//   this way we can join readers, commands, and other object types into a generic system that we can 
+		//   create by name with #new		
+		// - add a dictionary to the environment that stores a map between a symbol and an IEntry
 		// - figure out which commands need to be built-in.  For example:
 		//		* add, subtract, multiply, if, loop, etc.
 		// - figure out if the stack needs arg types or if we can keep them all as strings.  I'd prefer to 
@@ -93,9 +98,6 @@ public class Interpreter {
 		// - make readers read character by character
 		// - add #new reader reader
 		// - add #new command reader
-		// - add a super-interface for commands and readers (an IThingy... need to come up with a name)
-		//   this way we can join readers, commands, and other object types into a generic system that we can 
-		//   create by name with #new
 		// - replace pair, beingPair, endPair, error, name, and whitespace with dynamically defined readers 
 	}
 	
