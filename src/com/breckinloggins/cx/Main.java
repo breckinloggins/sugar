@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.StringReader;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -52,23 +55,30 @@ public class Main {
 		JFrame frame = new JFrame("Interpreter Window");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		Font f = new Font(Font.MONOSPACED, Font.PLAIN, 12);
+		
 		JTextArea inputArea = new JTextArea();
+		inputArea.setBackground(Color.DARK_GRAY);
+		inputArea.setForeground(Color.WHITE);
+		inputArea.setCaretColor(Color.LIGHT_GRAY);
+		inputArea.setFont(f);
+		inputArea.setMargin(new Insets(3, 3, 3, 3));
 		JScrollPane inputScrollPane = new JScrollPane(inputArea);
 		
 		JTextArea outputArea = new JTextArea();
+		outputArea.setBackground(Color.DARK_GRAY);
+		outputArea.setForeground(Color.WHITE);
+		outputArea.setEditable(false);
+		outputArea.setFont(f);
 		JScrollPane outputScrollPane = new JScrollPane(outputArea);
 		
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, 
 				inputScrollPane, outputScrollPane);
 		splitPane.setDividerLocation(380);
 		
-		// TODO:
-		// - Change text area backgrounds to dark grey
-		// - Change fonts to mono space
-		
 		frame.getContentPane().add(splitPane);
 		
-		frame.setSize(600, 400);
+		frame.setSize(600, 500);
 		frame.setVisible(true);
 		
 		PrintStream out = new PrintStream(createOutputStreamForTextArea(outputArea));
@@ -99,7 +109,7 @@ public class Main {
 			}
 			
 		};
-		inputArea.addKeyListener(keyListener);		
+		inputArea.addKeyListener(keyListener);	
 	}
 
 }
