@@ -1,5 +1,8 @@
 package com.breckinloggins.cx;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.io.StringReader;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -8,6 +11,40 @@ import javax.swing.*;
 
 public class Main {
 
+	/**
+	 * Creates an output stream that writes to a text area instead of to the console
+	 * @param textArea The JTextArea to which to write
+	 * @return The new OutputStream, which can be used to construct a PrintStream
+	 */
+	public static OutputStream createOutputStreamForTextArea(final JTextArea textArea)	{
+		OutputStream out = new OutputStream() {  
+		    private void updateTextArea(final String str)	{
+		    	SwingUtilities.invokeLater(new Runnable() {  
+		    		public void run() {  
+		    			textArea.append(str);  
+		    		}  
+		    	});  
+		    }
+			
+			@Override  
+		    public void write(int b) throws IOException {  
+		      updateTextArea(String.valueOf((char) b));  
+		    }  
+		  
+		    @Override  
+		    public void write(byte[] b, int off, int len) throws IOException {  
+		      updateTextArea(new String(b, off, len));  
+		    }  
+		  
+		    @Override  
+		    public void write(byte[] b) throws IOException {  
+		      write(b, 0, b.length);  
+		    }  
+		  };  
+		  
+		  return out;
+	}
+	
 	/**
 	 * @param args
 	 */
@@ -26,16 +63,17 @@ public class Main {
 		splitPane.setDividerLocation(380);
 		
 		// TODO:
-		// 1. Have the interpreter and environment take a configurable Out stream
-		// 2. Hook out stream to output area
-		// 3. Change fonts to mono space
+		// - Change text area backgrounds to dark grey
+		// - Change fonts to mono space
 		
 		frame.getContentPane().add(splitPane);
 		
 		frame.setSize(600, 400);
 		frame.setVisible(true);
 		
-		final Interpreter interp = new Interpreter(System.out);
+		PrintStream out = new PrintStream(createOutputStreamForTextArea(outputArea));
+		
+		final Interpreter interp = new Interpreter(out);
 		
 		KeyListener keyListener = new KeyListener() {
 			// TODO: interpreter should read one character at a time
