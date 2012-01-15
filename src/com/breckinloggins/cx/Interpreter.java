@@ -67,6 +67,20 @@ public class Interpreter {
 		env.setReaderAlias("reader", Reader.class.getName());
 		env.setReaderAlias("terminator", Terminator.class.getName());
 		env.setReaderAlias("whitespace", Whitespace.class.getName());
+		
+		// TODO:
+		// - break up readers into readers, commands, and evaluators??
+		// - readers use #
+		// - commands use #command cmd args? 
+		// - ! is a shortcut for #command 
+		// - what are evaluators and how do they work?  Do we need them?
+		// - add print and error commands
+		// - add get, unget, mark, reset reader commands
+		// - add set and unset commands, which create and destroy bindings in the current environment
+		// - add accept and expect readers that take as an argument a reader to accept or expect
+		// - make readers read character by character
+		// - add #new reader reader
+		// - replace pair, beingPair, endPair, error, name, and whitespace with dynamically defined readers 
 	}
 	
 	/**

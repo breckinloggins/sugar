@@ -63,6 +63,7 @@ public class Main {
 		inputArea.setCaretColor(Color.LIGHT_GRAY);
 		inputArea.setFont(f);
 		inputArea.setMargin(new Insets(3, 3, 3, 3));
+		inputArea.setTabSize(3);
 		JScrollPane inputScrollPane = new JScrollPane(inputArea);
 		
 		JTextArea outputArea = new JTextArea();
@@ -71,6 +72,7 @@ public class Main {
 		outputArea.setEditable(false);
 		outputArea.setFont(f);
 		outputArea.setMargin(new Insets(3, 3, 3, 3));
+		outputArea.setTabSize(3);
 		JScrollPane outputScrollPane = new JScrollPane(outputArea);
 		
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, 
@@ -87,7 +89,13 @@ public class Main {
 		final Interpreter interp = new Interpreter(out);
 		
 		KeyListener keyListener = new KeyListener() {
-			// TODO: interpreter should read one character at a time
+			// TODO: 
+			// - Interpreter should read one character at a time
+			// - A critical piece will have to be deletion, replacing logic
+			// What does it mean for the user to erase or replace content?  I think we'll have to have
+			// the notion of undoing stuff after the caret.  We'll also need the notion of an eval point
+			// so that they can backspace in the middle of an eval expression, we undo that expression, and
+			// wait for them to complete it again.
 			private String _tmpCurrentLine = "";
 			
 			@Override
