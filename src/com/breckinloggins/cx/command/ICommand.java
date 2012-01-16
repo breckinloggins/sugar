@@ -16,18 +16,6 @@ import com.breckinloggins.cx.Environment;
 public interface ICommand {
 	
 	/**
-	 * Gets the human-readable name of this command (note that the current alias may be different)
-	 * @return The name
-	 */
-	String getName();
-	
-	/**
-	 * Gets the human-readable description of this command
-	 * @return The description
-	 */
-	String getDescription();
-	
-	/**
 	 * Executes the comment within the current environment
 	 * @param env The environment in which to execute the command.  The environment's stack
 	 * may be affected by this command

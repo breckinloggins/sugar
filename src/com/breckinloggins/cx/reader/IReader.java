@@ -8,12 +8,6 @@ import com.breckinloggins.cx.Environment;
 
 public interface IReader {
 	/**
-	 * Gets the human-readable description of this reader
-	 * @return the description
-	 */
-	String getDescription();
-	
-	/**
 	 * Sets the print-stream (System.out-like) writer to which all text output from this
 	 * reader will be sent
 	 * @param writer The writer to use

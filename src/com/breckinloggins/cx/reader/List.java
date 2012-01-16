@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.StringReader;
 
 import com.breckinloggins.cx.Environment;
+import com.breckinloggins.cx.IEntry;
 import com.breckinloggins.cx.command.ICommand;
 
 /**
@@ -26,15 +27,19 @@ public class List extends BaseReader {
 		getWriter().println("\nReaders:");
 		for (String alias : env.getReaderAliases())	{
 			IReader reader = env.createReader(alias);
-			getWriter().print(alias + " [" + reader.getDescription() + "]");
-			getWriter().println();
+			if (reader instanceof IEntry)	{
+				getWriter().print(alias + " [" + ((IEntry)reader).getDescription() + "]");
+				getWriter().println();	
+			}
 		}
 		
 		getWriter().println("\nCommands:");
 		for (String alias : env.getCommandAliases())	{
 			ICommand cmd = env.createCommand(alias);
-			getWriter().print(alias + " [" + cmd.getDescription() + "]");
-			getWriter().println();
+			if (cmd instanceof IEntry)	{
+				getWriter().print(alias + " [" + ((IEntry)cmd).getDescription() + "]");
+				getWriter().println();		
+			}
 		}
 		
 		return env.createReader("discriminator");

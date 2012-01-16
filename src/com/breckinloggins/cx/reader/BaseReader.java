@@ -8,17 +8,26 @@ import java.io.PrintStream;
 import java.io.StringReader;
 
 import com.breckinloggins.cx.Environment;
+import com.breckinloggins.cx.IEntry;
 
 /**
  * @author bloggins
  * Base functionality for all readers
  */
-public abstract class BaseReader implements IReader {
+public abstract class BaseReader implements IEntry, IReader {
 	
 	private PrintStream _writer;
 	
+	@Override
 	/*
-	 * @see com.breckinloggins.cx.reader.IReader#getDescription()
+	 * @see com.breckinloggins.cx.IEntry#getName()
+	 */
+	public String getName()	{
+		return this.getClass().getName();
+	}
+	
+	/*
+	 * @see com.breckinloggins.cx.IEntry#getDescription()
 	 */
 	@Override
 	public String getDescription()	{

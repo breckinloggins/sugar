@@ -80,10 +80,8 @@ public class Interpreter {
 		env.setCommandAlias("execute", Execute.class.getName());
 		
 		// TODO:
-		// - add a super-interface for commands and readers (an IEntry)
-		//   this way we can join readers, commands, and other object types into a generic system that we can 
-		//   create by name with #new		
 		// - add a dictionary to the environment that stores a map between a symbol and an IEntry
+		// - The stack should PROBABLY be of IEntries rather than strings... maybe.
 		// - figure out which commands need to be built-in.  For example:
 		//		* add, subtract, multiply, if, loop, etc.
 		// - figure out if the stack needs arg types or if we can keep them all as strings.  I'd prefer to 

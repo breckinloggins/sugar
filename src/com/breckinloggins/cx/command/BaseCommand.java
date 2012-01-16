@@ -6,17 +6,18 @@ package com.breckinloggins.cx.command;
 import java.io.PrintStream;
 
 import com.breckinloggins.cx.Environment;
+import com.breckinloggins.cx.IEntry;
 
 /**
  * @author bloggins
  *
  */
-public abstract class BaseCommand implements ICommand {
+public abstract class BaseCommand implements IEntry, ICommand {
 
 	private PrintStream _writer;
 	
 	/*
-	 * @see com.breckinloggins.cx.command.ICommand#getName()
+	 * @see com.breckinloggins.cx.IEntry#getName()
 	 */
 	@Override
 	public String getName() {
@@ -24,7 +25,7 @@ public abstract class BaseCommand implements ICommand {
 	}
 
 	/*
-	 * @see com.breckinloggins.cx.command.ICommand#getDescription()
+	 * @see com.breckinloggins.cx.IEntry#getDescription()
 	 */
 	@Override
 	public String getDescription() {
