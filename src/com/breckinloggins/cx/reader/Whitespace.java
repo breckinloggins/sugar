@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.StringReader;
 
 import com.breckinloggins.cx.Environment;
+import com.breckinloggins.cx.dictionary.BaseReader;
+import com.breckinloggins.cx.dictionary.IReader;
 
 public class Whitespace extends BaseReader {
 

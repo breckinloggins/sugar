@@ -7,8 +7,10 @@ import java.io.IOException;
 import java.io.StringReader;
 
 import com.breckinloggins.cx.Environment;
-import com.breckinloggins.cx.IEntry;
-import com.breckinloggins.cx.command.ICommand;
+import com.breckinloggins.cx.dictionary.BaseReader;
+import com.breckinloggins.cx.dictionary.ICommand;
+import com.breckinloggins.cx.dictionary.IEntry;
+import com.breckinloggins.cx.dictionary.IReader;
 
 /**
  * @author bloggins

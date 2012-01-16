@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.StringReader;
 
 import com.breckinloggins.cx.Environment;
-import com.breckinloggins.cx.command.ICommand;
+import com.breckinloggins.cx.dictionary.BaseReader;
+import com.breckinloggins.cx.dictionary.ICommand;
+import com.breckinloggins.cx.dictionary.IReader;
 
 /**
  * Reader that takes the name of a command and executes it
@@ -26,7 +28,7 @@ public class Command extends BaseReader {
 			return next;
 		}
 		
-		String alias = env.pop();
+		String alias = env.pop().getName();
 		ICommand cmd = env.createCommand(alias);
 		
 		getWriter().print("r(Command): ");

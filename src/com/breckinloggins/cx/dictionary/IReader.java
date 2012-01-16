@@ -1,4 +1,4 @@
-package com.breckinloggins.cx.reader;
+package com.breckinloggins.cx.dictionary;
 
 import java.io.IOException;
 import java.io.PrintStream;

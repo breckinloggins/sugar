@@ -3,6 +3,9 @@ package com.breckinloggins.cx.reader;
 import java.io.IOException;
 import java.io.StringReader;
 import com.breckinloggins.cx.Environment;
+import com.breckinloggins.cx.dictionary.BaseReader;
+import com.breckinloggins.cx.dictionary.IReader;
+import com.breckinloggins.cx.dictionary.ISymbol;
 
 public class Name extends BaseReader {
 
@@ -44,7 +47,9 @@ public class Name extends BaseReader {
 				// have an EOF directly after a name
 				getWriter().println("r(Name): " + sb.toString());
 				sr.reset();
-				env.push(sb.toString());
+				ISymbol sym = new com.breckinloggins.cx.dictionary.Symbol();
+				sym.setName(sb.toString());
+				env.push(sym);
 				return env.createReader("terminator");
 			}
 			
@@ -64,7 +69,9 @@ public class Name extends BaseReader {
 		((Whitespace)env.createReader("whitespace")).read(sr, env);
 		
 		getWriter().println("r(Name): " + sb.toString());
-		env.push(sb.toString());
+		ISymbol sym = new com.breckinloggins.cx.dictionary.Symbol();
+		sym.setName(sb.toString());
+		env.push(sym);
 		
 		return env.createReader("discriminator");
 	}

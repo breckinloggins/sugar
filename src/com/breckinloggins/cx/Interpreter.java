@@ -7,12 +7,12 @@ import java.io.StringReader;
 import com.breckinloggins.cx.command.Execute;
 import com.breckinloggins.cx.command.Nop;
 import com.breckinloggins.cx.command.Print;
+import com.breckinloggins.cx.dictionary.IReader;
 import com.breckinloggins.cx.reader.BeginPair;
 import com.breckinloggins.cx.reader.Command;
 import com.breckinloggins.cx.reader.Discriminator;
 import com.breckinloggins.cx.reader.EndPair;
 import com.breckinloggins.cx.reader.Error;
-import com.breckinloggins.cx.reader.IReader;
 import com.breckinloggins.cx.reader.List;
 import com.breckinloggins.cx.reader.Name;
 import com.breckinloggins.cx.reader.Pair;
@@ -26,6 +26,13 @@ public class Interpreter {
 	private IReader _reader;
 	private PrintStream _writer;
 
+	// TODO: Let's not try to interpret C-like code right away.  Let's do:
+	// 1. LISP
+	// 2. BASIC
+	// 3. Pascal
+	// 4. C-ish (like Go, with easy parse semantics)
+	// 5. C/C#/Java
+	
 	// TODO: Need an interpreter listener interface that will notify when we have:
 	// 1. Read a char
 	// 2. Changed readers
@@ -81,7 +88,6 @@ public class Interpreter {
 		
 		// TODO:
 		// - add a dictionary to the environment that stores a map between a symbol and an IEntry
-		// - The stack should PROBABLY be of IEntries rather than strings... maybe.
 		// - figure out which commands need to be built-in.  For example:
 		//		* add, subtract, multiply, if, loop, etc.
 		// - figure out if the stack needs arg types or if we can keep them all as strings.  I'd prefer to 

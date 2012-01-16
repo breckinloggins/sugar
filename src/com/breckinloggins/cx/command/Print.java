@@ -4,6 +4,8 @@
 package com.breckinloggins.cx.command;
 
 import com.breckinloggins.cx.Environment;
+import com.breckinloggins.cx.dictionary.BaseCommand;
+import com.breckinloggins.cx.dictionary.IEntry;
 
 /**
  * @author bloggins
@@ -18,9 +20,9 @@ public class Print extends BaseCommand {
 
 	@Override
 	public void execute(Environment env) {
-		String s = env.pop();
-		if (null != s)	{
-			getWriter().print(s);
+		IEntry ent = env.pop();
+		if (null != ent)	{
+			getWriter().print(ent.getName());
 		}
 	}
 }

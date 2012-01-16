@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.breckinloggins.cx;
+package com.breckinloggins.cx.dictionary;
 
 /**
  * Represents an entry in the system's dictionary

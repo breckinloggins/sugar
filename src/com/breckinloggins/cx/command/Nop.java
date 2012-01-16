@@ -4,6 +4,7 @@
 package com.breckinloggins.cx.command;
 
 import com.breckinloggins.cx.Environment;
+import com.breckinloggins.cx.dictionary.BaseCommand;
 
 /**
  * @author bloggins

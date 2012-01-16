@@ -4,6 +4,8 @@
 package com.breckinloggins.cx.command;
 
 import com.breckinloggins.cx.Environment;
+import com.breckinloggins.cx.dictionary.BaseCommand;
+import com.breckinloggins.cx.dictionary.ICommand;
 
 /**
  * Pops an argument off the stack and executes the command by that name
@@ -18,7 +20,7 @@ public class Execute extends BaseCommand {
 
 	@Override
 	public void execute(Environment env) {
-		String cmdName = env.pop();
+		String cmdName = env.pop().getName();
 		
 		if (null == cmdName)	{
 			// TODO: This should be an error cmd

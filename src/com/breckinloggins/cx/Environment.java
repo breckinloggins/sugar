@@ -6,21 +6,22 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.Stack;
 
-import com.breckinloggins.cx.command.ICommand;
-import com.breckinloggins.cx.reader.IReader;
+import com.breckinloggins.cx.dictionary.ICommand;
+import com.breckinloggins.cx.dictionary.IEntry;
+import com.breckinloggins.cx.dictionary.IReader;
 
 public class Environment {
 	
 	private HashMap<String, String> _readers;
 	private HashMap<String, String> _commands;
 	private PrintStream _writer;
-	private Stack<String> _stack;
+	private Stack<IEntry> _stack;
 	
 	public Environment(PrintStream writer)	{
 		_readers = new HashMap<String, String>();
 		_commands = new HashMap<String, String>();
 		_writer = writer;
-		_stack = new Stack<String>();
+		_stack = new Stack<IEntry>();
 	}
 	
 	/**
@@ -145,7 +146,7 @@ public class Environment {
 	 * Pushes an argument onto the environment's stack
 	 * @param arg The argument to push
 	 */
-	public void push(String arg)	{
+	public void push(IEntry arg)	{
 		_stack.push(arg);
 	}
 	
@@ -153,7 +154,7 @@ public class Environment {
 	 * Pops an argument off the environment's stack
 	 * @return The argument, or null if the stack is empty
 	 */
-	public String pop()	{
+	public IEntry pop()	{
 		try	{
 			return _stack.pop();
 		} catch (EmptyStackException e)	{

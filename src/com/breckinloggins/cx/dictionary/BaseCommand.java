@@ -1,12 +1,11 @@
 /**
  * 
  */
-package com.breckinloggins.cx.command;
+package com.breckinloggins.cx.dictionary;
 
 import java.io.PrintStream;
 
 import com.breckinloggins.cx.Environment;
-import com.breckinloggins.cx.IEntry;
 
 /**
  * @author bloggins

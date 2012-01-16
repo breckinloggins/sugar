@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.breckinloggins.cx.command;
+package com.breckinloggins.cx.dictionary;
 
 import java.io.PrintStream;
 

@@ -3,6 +3,8 @@ package com.breckinloggins.cx.reader;
 import java.io.IOException;
 import java.io.StringReader;
 import com.breckinloggins.cx.Environment;
+import com.breckinloggins.cx.dictionary.BaseReader;
+import com.breckinloggins.cx.dictionary.IReader;
 
 public class Reader extends BaseReader {
 	@Override
@@ -26,7 +28,7 @@ public class Reader extends BaseReader {
 			return next;
 		}
 		
-		String alias = env.pop();
+		String alias = env.pop().getName();
 		next = env.createReader(alias);
 		
 		getWriter().print("r(Reader): ");
