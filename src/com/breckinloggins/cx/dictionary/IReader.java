@@ -6,6 +6,15 @@ import java.io.StringReader;
 
 import com.breckinloggins.cx.Environment;
 
+/**
+ * Defines an interface for objects that read zero or more characters from input, perform some action, 
+ * then return a new reader.
+ * 
+ * Note to implementors: readers should be stateless.  All state should be stored in the environment or other
+ * context objects.
+ * @author bloggins
+ *
+ */
 public interface IReader {
 	/**
 	 * Sets the print-stream (System.out-like) writer to which all text output from this

@@ -4,22 +4,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.StringReader;
 
-import com.breckinloggins.cx.command.Execute;
-import com.breckinloggins.cx.command.Nop;
-import com.breckinloggins.cx.command.Print;
 import com.breckinloggins.cx.dictionary.IReader;
-import com.breckinloggins.cx.reader.BeginPair;
-import com.breckinloggins.cx.reader.Command;
-import com.breckinloggins.cx.reader.Discriminator;
-import com.breckinloggins.cx.reader.EndPair;
-import com.breckinloggins.cx.reader.Error;
-import com.breckinloggins.cx.reader.List;
-import com.breckinloggins.cx.reader.Name;
-import com.breckinloggins.cx.reader.Pair;
-import com.breckinloggins.cx.reader.Reader;
-import com.breckinloggins.cx.reader.Symbol;
-import com.breckinloggins.cx.reader.Terminator;
-import com.breckinloggins.cx.reader.Whitespace;
 
 public class Interpreter {
 	private Environment _rootEnvironment;
@@ -69,33 +54,31 @@ public class Interpreter {
 		//
 		// But, again, we ultimately want to hard-code as little of this as possible.
 		Environment env = _rootEnvironment;
-		env.setReaderAlias("command", Command.class.getName());
-		env.setReaderAlias("symbol", Symbol.class.getName());
-		env.setReaderAlias("pair", Pair.class.getName());
-		env.setReaderAlias("beginPair", BeginPair.class.getName());
-		env.setReaderAlias("endPair", EndPair.class.getName());
-		env.setReaderAlias("discriminator", Discriminator.class.getName());
-		env.setReaderAlias("error", Error.class.getName());
-		env.setReaderAlias("list", List.class.getName());	// TODO: Change to an environment query command
-		env.setReaderAlias("name", Name.class.getName());
-		env.setReaderAlias("reader", Reader.class.getName());
-		env.setReaderAlias("terminator", Terminator.class.getName());
-		env.setReaderAlias("whitespace", Whitespace.class.getName());
+		env.setReader("command", new com.breckinloggins.cx.reader.Command());
+		env.setReader("symbol", new com.breckinloggins.cx.reader.Symbol());
+		env.setReader("discriminator", new com.breckinloggins.cx.reader.Discriminator());
+		env.setReader("error", new com.breckinloggins.cx.reader.Error());
+		env.setReader("list", new com.breckinloggins.cx.reader.List());	// TODO: Change to an environment query command
+		env.setReader("name", new com.breckinloggins.cx.reader.Name());
+		env.setReader("reader", new com.breckinloggins.cx.reader.Reader());
+		env.setReader("terminator", new com.breckinloggins.cx.reader.Terminator());
+		env.setReader("whitespace", new com.breckinloggins.cx.reader.Whitespace());
 		
-		env.setCommandAlias("nop", Nop.class.getName());
-		env.setCommandAlias("print", Print.class.getName());
-		env.setCommandAlias("execute", Execute.class.getName());
+		env.setCommand("nop", new com.breckinloggins.cx.command.Nop());
+		env.setCommand("print", new com.breckinloggins.cx.command.Print());
+		env.setCommand("execute", new com.breckinloggins.cx.command.Execute());
+		env.setCommand("error", new com.breckinloggins.cx.command.Error());
 		
 		// TODO:
 		// - add a dictionary to the environment that stores a map between a symbol and an IEntry
 		// - figure out which commands need to be built-in.  For example:
 		//		* add, subtract, multiply, if, loop, etc.
+		// - add reader command (pops first arg off stack and uses it as name of reader)
+		// - refactor setWriter() functionality
 		// - figure out if the stack needs arg types or if we can keep them all as strings.  I'd prefer to 
 		// - have types encoded in commands.  For example, add_int vs add_float vs add_string, etc.
 		// - add an if command
-		// - make readers and commands stateless (we use the environment for state)
 		// - what are evaluators and how do they work?  Do we need them?
-		// - add error command
 		// - add get, unget, mark, reset reader commands
 		// - add set and unset commands, which create and destroy bindings in the current environment
 		// - add accept and expect readers that take as an argument a reader to accept or expect
@@ -111,7 +94,7 @@ public class Interpreter {
 	 */
 	public void TEMP_read(StringReader sr)	{
 		if (null == _reader)	{
-			_reader = _rootEnvironment.createReader("discriminator");
+			_reader = _rootEnvironment.getReader("discriminator");
 		}
 		
 		try {

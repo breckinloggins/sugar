@@ -24,17 +24,15 @@ public class Name extends BaseReader {
 		int c = sr.read();
 		if (c == -1)	{
 			sr.reset();
-			Error e = (Error)env.createReader("error");
-			e.setMessage("Unexpected");
-			return e;
+			env.pushString("Unexpected EOF");
+			return env.getReader("error");
 		}
 		
 		char ch = (char)c;
 		if (!Character.isLetter(ch) && ch != '_')	{
 			sr.reset();
-			Error e = (Error)env.createReader("error");
-			e.setMessage("Unexpected Character");
-			return e;
+			env.pushString("Unexpected Character");
+			return env.getReader("error");
 		}
 		
 		StringBuilder sb = new StringBuilder();
@@ -50,7 +48,7 @@ public class Name extends BaseReader {
 				ISymbol sym = new com.breckinloggins.cx.dictionary.Symbol();
 				sym.setName(sb.toString());
 				env.push(sym);
-				return env.createReader("terminator");
+				return env.getReader("terminator");
 			}
 			
 			ch = (char)c;
@@ -66,14 +64,14 @@ public class Name extends BaseReader {
 		
 		// Optionally eat up some whitespace
 		// TODO: needs to be set by environment or other way to turn this off and on
-		((Whitespace)env.createReader("whitespace")).read(sr, env);
+		((Whitespace)env.getReader("whitespace")).read(sr, env);
 		
 		getWriter().println("r(Name): " + sb.toString());
 		ISymbol sym = new com.breckinloggins.cx.dictionary.Symbol();
 		sym.setName(sb.toString());
 		env.push(sym);
 		
-		return env.createReader("discriminator");
+		return env.getReader("discriminator");
 	}
 
 }

@@ -28,7 +28,7 @@ public class Execute extends BaseCommand {
 			return;
 		}
 		
-		ICommand cmd = env.createCommand(cmdName);
+		ICommand cmd = env.getCommand(cmdName);
 		if (null == cmd)	{
 			// TODO: This should be an error cmd
 			getWriter().println("ERROR: Command \"" + cmdName + "\" not found");

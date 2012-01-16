@@ -28,7 +28,7 @@ public class List extends BaseReader {
 		
 		getWriter().println("\nReaders:");
 		for (String alias : env.getReaderAliases())	{
-			IReader reader = env.createReader(alias);
+			IReader reader = env.getReader(alias);
 			if (reader instanceof IEntry)	{
 				getWriter().print(alias + " [" + ((IEntry)reader).getDescription() + "]");
 				getWriter().println();	
@@ -37,13 +37,13 @@ public class List extends BaseReader {
 		
 		getWriter().println("\nCommands:");
 		for (String alias : env.getCommandAliases())	{
-			ICommand cmd = env.createCommand(alias);
+			ICommand cmd = env.getCommand(alias);
 			if (cmd instanceof IEntry)	{
 				getWriter().print(alias + " [" + ((IEntry)cmd).getDescription() + "]");
 				getWriter().println();		
 			}
 		}
 		
-		return env.createReader("discriminator");
+		return env.getReader("discriminator");
 	}
 }

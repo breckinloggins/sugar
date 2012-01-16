@@ -4,19 +4,12 @@ import java.io.IOException;
 import java.io.StringReader;
 import com.breckinloggins.cx.Environment;
 import com.breckinloggins.cx.dictionary.BaseReader;
+import com.breckinloggins.cx.dictionary.ICommand;
 import com.breckinloggins.cx.dictionary.IReader;
 
 public class Error extends BaseReader {
 
-	protected String _message;
-	
-	public Error()	{
-		_message = "";
-	}
-	
-	public void setMessage(String message)	{
-		_message = message;
-	}
+	// TODO: This should optionally read a string once we have balanced pairs
 	
 	@Override
 	public String getDescription()	{
@@ -25,14 +18,10 @@ public class Error extends BaseReader {
 	
 	@Override
 	public IReader read(StringReader sr, Environment env) throws IOException {
-		int ch = sr.read();
-		if (ch != -1)	{
-			getWriter().println(_message + ": EOF");
-		} else {
-			getWriter().println(_message + Character.toString((char)ch));
-		}
+		ICommand err = env.getCommand("error");
+		err.execute(env);
 		
-		return env.createReader("terminator");
+		return env.getReader("terminator");
 	}
 
 }

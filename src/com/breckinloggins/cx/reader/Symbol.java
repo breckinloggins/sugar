@@ -28,18 +28,16 @@ public class Symbol extends BaseReader {
 		int c = sr.read();
 		if (c == -1)	{
 			sr.reset();
-			Error e = (Error)env.createReader("error");
-			e.setMessage("Unexpected");
-			return e;
+			env.pushString("Unexpected EOF");
+			return env.getReader("error");
 		}
 		
 		char ch = (char)c;
 		if (Character.isWhitespace(ch))	{
 			// TODO: Should be replaced by a dynamic definition of our whitespace set
 			sr.reset();
-			Error e = (Error)env.createReader("error");
-			e.setMessage("Unexpected Whitespace");
-			return e;
+			env.pushString("Unexpected Whitespace");
+			return env.getReader("error");
 		}
 		
 		StringBuilder sb = new StringBuilder();
@@ -55,7 +53,7 @@ public class Symbol extends BaseReader {
 				ISymbol sym = new com.breckinloggins.cx.dictionary.Symbol();
 				sym.setName(sb.toString());
 				env.push(sym);
-				return env.createReader("terminator");
+				return env.getReader("terminator");
 			}
 			
 			ch = (char)c;
@@ -74,6 +72,6 @@ public class Symbol extends BaseReader {
 		sym.setName(sb.toString());
 		env.push(sym);
 		
-		return env.createReader("discriminator");	}
+		return env.getReader("discriminator");	}
 
 }

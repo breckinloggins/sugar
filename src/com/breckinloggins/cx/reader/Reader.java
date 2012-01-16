@@ -16,12 +16,11 @@ public class Reader extends BaseReader {
 	public IReader read(StringReader sr, Environment env) throws IOException {
 		int ch = sr.read();
 		if (ch == -1)	{
-			Error e = (Error)env.createReader("error");
-			e.setMessage("Unexpected");
-			return e;
+			env.pushString("Unexpected EOF");
+			return env.getReader("error");
 		}
 		
-		Name nameReader = (Name)env.createReader("name");
+		Name nameReader = (Name)env.getReader("name");
 		IReader next = nameReader.read(sr, env);
 		
 		if (next instanceof Error)	{
@@ -29,14 +28,12 @@ public class Reader extends BaseReader {
 		}
 		
 		String alias = env.pop().getName();
-		next = env.createReader(alias);
+		next = env.getReader(alias);
 		
 		getWriter().print("r(Reader): ");
 		if (null == next)	{
-			getWriter().println("NOT FOUND FOR " + alias);
-			Error e = (Error)env.createReader("error");
-			e.setMessage("There is no reader by the name " + alias);
-			return e;
+			env.pushString("There is no reader by the name \"" + alias + "\"");
+			return env.getReader("error");
 		}
 		
 		return next;

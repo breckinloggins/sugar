@@ -22,7 +22,7 @@ public class Whitespace extends BaseReader {
 		int c = sr.read();
 		if (c == -1)	{
 			sr.reset();
-			return env.createReader("terminator");
+			return env.getReader("terminator");
 		}
 		
 		boolean hasWhitespace = false;
@@ -36,7 +36,7 @@ public class Whitespace extends BaseReader {
 		if (hasWhitespace)	getWriter().println("r(Whitespace)");
 		
 		sr.reset();
-		return env.createReader("discriminator");
+		return env.getReader("discriminator");
 	}
 
 }

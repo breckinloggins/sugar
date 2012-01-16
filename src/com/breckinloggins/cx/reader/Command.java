@@ -21,7 +21,7 @@ public class Command extends BaseReader {
 
 	@Override
 	public IReader read(StringReader sr, Environment env) throws IOException {
-		Name nameReader = (Name)env.createReader("name");
+		Name nameReader = (Name)env.getReader("name");
 		IReader next = nameReader.read(sr, env);
 		
 		if (next instanceof Error)	{
@@ -29,21 +29,19 @@ public class Command extends BaseReader {
 		}
 		
 		String alias = env.pop().getName();
-		ICommand cmd = env.createCommand(alias);
+		ICommand cmd = env.getCommand(alias);
 		
 		getWriter().print("r(Command): ");
 		if (null == cmd)	{
-			getWriter().println("NOT FOUND FOR " + alias);
-			Error e = (Error)env.createReader("error");
-			e.setMessage("There is no command by the name " + alias);
-			return e;
+			env.pushString("There is no command by the name " + alias);
+			return env.getReader("error");
 		} else {
 			getWriter().println(alias);
 		}
 		
 		cmd.execute(env);
 		
-		return env.createReader("discriminator");
+		return env.getReader("discriminator");
 	}
 
 }
