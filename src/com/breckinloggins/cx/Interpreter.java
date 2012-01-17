@@ -58,20 +58,19 @@ public class Interpreter {
 		env.setReader("symbol", new com.breckinloggins.cx.reader.Symbol());
 		env.setReader("discriminator", new com.breckinloggins.cx.reader.Discriminator());
 		env.setReader("error", new com.breckinloggins.cx.reader.Error());
-		env.setReader("info", new com.breckinloggins.cx.reader.Info());	// TODO: Change to an environment query command
 		env.setReader("name", new com.breckinloggins.cx.reader.Name());
 		env.setReader("reader", new com.breckinloggins.cx.reader.Reader());
 		env.setReader("terminator", new com.breckinloggins.cx.reader.Terminator());
 		env.setReader("whitespace", new com.breckinloggins.cx.reader.Whitespace());
 		
 		env.setCommand("nop", new com.breckinloggins.cx.command.Nop());
+		env.setCommand("env", new com.breckinloggins.cx.command.Env());	// TODO: Change to an environment query command
 		env.setCommand("print", new com.breckinloggins.cx.command.Print());
 		env.setCommand("execute", new com.breckinloggins.cx.command.Execute());
 		env.setCommand("reader", new com.breckinloggins.cx.command.Reader());
 		env.setCommand("error", new com.breckinloggins.cx.command.Error());
 		
 		// TODO:
-		// - info should be a command, not a reader
 		// - add pop command
 		// - readers should push their next reader on the stack rather than return it
 		// - add read command
@@ -110,24 +109,5 @@ public class Interpreter {
 			// TODO Auto-generated catch block
 			e.printStackTrace(_writer);
 		}
-	}
-	
-	/**
-	 * Reads the given character and interprets it
-	 * @param c The character to read
-	 */
-	public void readChar(char c)	{
-		if (null == _reader)	{
-			// TODO: This is not right.  In a null (fresh state), the interpreter should expect that
-			// its first character is the one that will be use to distinguish a reader literal.  In other words, 
-			// the environment should be set up "from nothing" each time.  We can then have a standard preamble that
-			// can be run by clicking a button or something, and in the future that preamble set will be run based
-			// on language selection and/or file extension.
-			//_reader = new Discriminator();
-		}
-		
-		// TODO: Readers need to read a character at a time, returning the same reader if it 
-		// needs to accept more input.
-		//_reader = _reader.read(, env);
 	}
 }

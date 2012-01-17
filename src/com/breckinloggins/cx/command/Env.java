@@ -1,13 +1,10 @@
 /**
  * 
  */
-package com.breckinloggins.cx.reader;
-
-import java.io.IOException;
-import java.io.StringReader;
+package com.breckinloggins.cx.command;
 
 import com.breckinloggins.cx.Environment;
-import com.breckinloggins.cx.dictionary.BaseReader;
+import com.breckinloggins.cx.dictionary.BaseCommand;
 import com.breckinloggins.cx.dictionary.ICommand;
 import com.breckinloggins.cx.dictionary.IEntry;
 import com.breckinloggins.cx.dictionary.IReader;
@@ -16,15 +13,15 @@ import com.breckinloggins.cx.dictionary.IReader;
  * @author bloggins
  *
  */
-public class Info extends BaseReader {
+public class Env extends BaseCommand {
 
 	@Override
 	public String getDescription()	{
-		return "Reads no characters and outputs a list of available readers";
+		return "Prints info about the current environment";
 	}
 	
 	@Override
-	public IReader read(StringReader sr, Environment env) throws IOException {
+	public void execute(Environment env) {
 		
 		getWriter().println("\nStack:");
 		env.printStack();
@@ -46,7 +43,5 @@ public class Info extends BaseReader {
 				getWriter().println();		
 			}
 		}
-		
-		return env.getReader("discriminator");
 	}
 }
