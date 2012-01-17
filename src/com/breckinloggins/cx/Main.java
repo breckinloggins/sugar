@@ -2,8 +2,9 @@ package com.breckinloggins.cx;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 import java.io.PrintStream;
-import java.io.StringReader;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Insets;
@@ -112,6 +113,17 @@ public class Main {
 		System.setOut(new PrintStream(createOutputStreamForTextArea(outputArea)));
 		System.setErr(new PrintStream(createOutputStreamForTextArea(debugArea)));
 		
+		// Set System.in to a piped stream that we will control with our
+		// text area
+		PipedInputStream piStream = new PipedInputStream();
+		final PipedOutputStream poStream = new PipedOutputStream();
+		try {
+			piStream.connect(poStream);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.setIn(piStream);
+		
 		final Interpreter interp = new Interpreter();
 		
 		KeyListener keyListener = new KeyListener() {
@@ -153,14 +165,17 @@ public class Main {
 					return;
 				}
 				
+				_tmpCurrentLine += k;
 				if (k == '\n')	{
-					StringReader sr = new StringReader(_tmpCurrentLine);
-					interp.TEMP_read(sr);
+					try {
+						poStream.write(_tmpCurrentLine.getBytes());
+						poStream.flush();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 					
 					_tmpCurrentLine = "";
-				} else {
-					_tmpCurrentLine += k;
-				}	
+				}
 			}
 			
 		};
@@ -180,6 +195,10 @@ public class Main {
 			
 		};
 		inputArea.addCaretListener(caretListener);
+		
+		Thread t = new Thread(interp);
+		t.start();
+		//interp.run();
 	}
 
 }

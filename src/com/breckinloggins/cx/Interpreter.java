@@ -1,11 +1,13 @@
 package com.breckinloggins.cx;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 
 import com.breckinloggins.cx.dictionary.IReader;
 
-public class Interpreter {
+public class Interpreter implements Runnable {
 	private Environment _rootEnvironment;
 	private IReader _reader;
 	
@@ -69,7 +71,7 @@ public class Interpreter {
 		env.setCommand("error", new com.breckinloggins.cx.command.Error());
 		
 		// TODO:
-		// - reading from input should be a request FROM the interpreter rather than an input INTO the interpreter
+		// - reading should be a command. Interpreter should just execute the stack
 		// - show unrecognized input in red
 		// - readers should push their next reader on the stack rather than return it
 		// - add read command
@@ -85,26 +87,34 @@ public class Interpreter {
 		// - make readers read character by character
 		// - add #new reader reader
 		// - add #new command reader
-		// - replace pair, beingPair, endPair, error, name, and whitespace with dynamically defined readers 
+		// - replace error, name, and whitespace with dynamically defined readers 
 		// - find a way to abstract the notion of types so we don't hard code any (including strings and ints) in the 
 		//	 interpreter
 	}
 	
-	/**
-	 * Reads input from a string reader
-	 * @param sr The string reader from which to read
-	 */
-	public void TEMP_read(StringReader sr)	{
-		if (null == _reader)	{
-			_reader = _rootEnvironment.getReader("discriminator");
-		}
+	@Override
+	public void run() {
+		InputStreamReader converter = new InputStreamReader(System.in);
+		BufferedReader br = new BufferedReader(converter);
 		
 		try {
 			do {
-				_reader = _reader.read(sr, _rootEnvironment);
-			} while (_reader != null && _reader.getClass().getName() != "Terminator");
+				String line = br.readLine();
+				StringReader sr = new StringReader(line);
+				
+				if (null == _reader)	{
+					_reader = _rootEnvironment.getReader("discriminator");
+				}
+				
+				do {
+					try {
+						_reader = _reader.read(sr, _rootEnvironment);
+					} catch (Exception e)	{
+						e.printStackTrace();
+					}
+				} while (_reader != null && _reader.getClass().getName() != "Terminator");	
+			} while(true);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
