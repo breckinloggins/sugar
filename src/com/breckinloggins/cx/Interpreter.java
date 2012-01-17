@@ -1,15 +1,7 @@
 package com.breckinloggins.cx;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.StringReader;
-
-import com.breckinloggins.cx.dictionary.IReader;
-
 public class Interpreter implements Runnable {
 	private Environment _rootEnvironment;
-	private IReader _reader;
 	
 	// TODO: Let's not try to interpret C-like code right away.  Let's do:
 	// 1. LISP
@@ -66,18 +58,17 @@ public class Interpreter implements Runnable {
 		env.setCommand("pop", new com.breckinloggins.cx.command.Pop());
 		env.setCommand("add", new com.breckinloggins.cx.command.Add());
 		env.setCommand("getchar", new com.breckinloggins.cx.command.Getchar());
+		env.setCommand("read", new com.breckinloggins.cx.command.Read());
 		env.setCommand("print", new com.breckinloggins.cx.command.Print());
 		env.setCommand("execute", new com.breckinloggins.cx.command.Execute());
 		env.setCommand("reader", new com.breckinloggins.cx.command.Reader());
 		env.setCommand("error", new com.breckinloggins.cx.command.Error());
 		
 		// TODO:
-		// - reading should be a command. Interpreter should just execute the stack
-		// - show unrecognized input in red
 		// - readers should push their next reader on the stack rather than return it
-		// - add read command
+		// - Interpreter should execute the stack only
 		// - add the concept of a "value" to all entries
-		// - add get, unget, mark, reset reader commands
+		// - add unget, mark, reset reader commands
 		// - figure out which commands need to be built-in.  For example:
 		//		* subtract, multiply, if, loop, etc.
 		// - add an if command
@@ -91,32 +82,15 @@ public class Interpreter implements Runnable {
 		// - replace error, name, and whitespace with dynamically defined readers 
 		// - find a way to abstract the notion of types so we don't hard code any (including strings and ints) in the 
 		//	 interpreter
+		// - show unrecognized input in red
 	}
 	
 	@Override
 	public void run() {
-		InputStreamReader converter = new InputStreamReader(System.in);
-		BufferedReader br = new BufferedReader(converter);
-		
-		try {
-			do {
-				String line = br.readLine();
-				StringReader sr = new StringReader(line);
-				
-				if (null == _reader)	{
-					_reader = _rootEnvironment.getReader("discriminator");
-				}
-				
-				do {
-					try {
-						_reader = _reader.read(sr, _rootEnvironment);
-					} catch (Exception e)	{
-						e.printStackTrace();
-					}
-				} while (_reader != null && _reader.getClass().getName() != "Terminator");	
-			} while(true);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		do {
+			_rootEnvironment.pushString("discriminator");
+			_rootEnvironment.getCommand("reader").execute(_rootEnvironment);
+			_rootEnvironment.getCommand("read").execute(_rootEnvironment);			
+		} while (true);
 	}
 }

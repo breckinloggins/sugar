@@ -127,15 +127,7 @@ public class Main {
 		final Interpreter interp = new Interpreter();
 		
 		KeyListener keyListener = new KeyListener() {
-			// TODO: 
-			// - Interpreter should read one character at a time
-			// - A critical piece will have to be deletion, replacing logic
-			// What does it mean for the user to erase or replace content?  I think we'll have to have
-			// the notion of undoing stuff after the caret.  We'll also need the notion of an eval point
-			// so that they can backspace in the middle of an eval expression, we undo that expression, and
-			// wait for them to complete it again.
-			private String _tmpCurrentLine = "";
-			
+
 			public boolean isIgnored(int keyCode)	{
 				return (keyCode == KeyEvent.VK_BACK_SPACE ||
 						keyCode == KeyEvent.VK_DELETE ||
@@ -165,16 +157,11 @@ public class Main {
 					return;
 				}
 				
-				_tmpCurrentLine += k;
-				if (k == '\n')	{
-					try {
-						poStream.write(_tmpCurrentLine.getBytes());
-						poStream.flush();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					
-					_tmpCurrentLine = "";
+				try {
+					poStream.write(k);
+					poStream.flush();
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
 			}
 		};
