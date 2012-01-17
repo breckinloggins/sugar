@@ -65,6 +65,7 @@ public class Interpreter implements Runnable {
 		env.setCommand("env", new com.breckinloggins.cx.command.Env());
 		env.setCommand("pop", new com.breckinloggins.cx.command.Pop());
 		env.setCommand("add", new com.breckinloggins.cx.command.Add());
+		env.setCommand("getchar", new com.breckinloggins.cx.command.Getchar());
 		env.setCommand("print", new com.breckinloggins.cx.command.Print());
 		env.setCommand("execute", new com.breckinloggins.cx.command.Execute());
 		env.setCommand("reader", new com.breckinloggins.cx.command.Reader());

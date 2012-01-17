@@ -177,7 +177,6 @@ public class Main {
 					_tmpCurrentLine = "";
 				}
 			}
-			
 		};
 		inputArea.addKeyListener(keyListener);	
 		
@@ -190,15 +189,11 @@ public class Main {
 				if (arg0.getDot() < inputArea.getText().length())	{
 					inputArea.setCaretPosition(inputArea.getText().length());
 				}
-				
 			}
-			
 		};
 		inputArea.addCaretListener(caretListener);
 		
 		Thread t = new Thread(interp);
 		t.start();
-		//interp.run();
 	}
-
 }
