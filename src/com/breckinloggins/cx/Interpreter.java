@@ -1,5 +1,8 @@
 package com.breckinloggins.cx;
 
+import com.breckinloggins.cx.dictionary.ICommand;
+import com.breckinloggins.cx.dictionary.IEntry;
+
 public class Interpreter implements Runnable {
 	private Environment _rootEnvironment;
 	
@@ -65,10 +68,9 @@ public class Interpreter implements Runnable {
 		env.setCommand("error", new com.breckinloggins.cx.command.Error());
 		
 		// TODO:
-		// - readers should push their next reader on the stack rather than return it
-		// - Interpreter should execute the stack only
+		// - add putchar command
+		// - modify all readers to use getchar/putchar instead of mark/reset
 		// - add the concept of a "value" to all entries
-		// - add unget, mark, reset reader commands
 		// - figure out which commands need to be built-in.  For example:
 		//		* subtract, multiply, if, loop, etc.
 		// - add an if command
@@ -88,9 +90,19 @@ public class Interpreter implements Runnable {
 	@Override
 	public void run() {
 		do {
-			_rootEnvironment.pushString("discriminator");
-			_rootEnvironment.getCommand("reader").execute(_rootEnvironment);
-			_rootEnvironment.getCommand("read").execute(_rootEnvironment);			
+			
+			_rootEnvironment.pushReader("discriminator");
+			_rootEnvironment.pushCommand("read");
+			
+			IEntry top = _rootEnvironment.peek();
+			do {
+				if (top instanceof ICommand)	{
+					ICommand cmd = (ICommand)_rootEnvironment.pop();
+					cmd.execute(_rootEnvironment);
+				}
+				
+				top = _rootEnvironment.peek();
+			} while (top != null && top instanceof ICommand);
 		} while (true);
 	}
 }

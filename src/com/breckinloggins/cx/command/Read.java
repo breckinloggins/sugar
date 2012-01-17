@@ -3,10 +3,7 @@
  */
 package com.breckinloggins.cx.command;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.StringReader;
 
 import com.breckinloggins.cx.Environment;
 import com.breckinloggins.cx.dictionary.BaseCommand;
@@ -40,19 +37,10 @@ public class Read extends BaseCommand {
 		}
 		
 		IReader reader = (IReader)arg;
-		
-		// TODO: This is wrong, readers should read a character at a time
-		InputStreamReader converter = new InputStreamReader(System.in);
-		BufferedReader br = new BufferedReader(converter);
-		
-		StringReader sr;
 		try {
-			sr = new StringReader(br.readLine());
-			do {
-				reader = reader.read(sr, env);
-			} while (reader != null);
-		} catch (IOException e1) {
-			e1.printStackTrace();
+			reader.read(env);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }

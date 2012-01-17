@@ -91,6 +91,32 @@ public class Environment {
 	}
 	
 	/**
+	 * Pushes the command with the given alias onto the stack
+	 * @param alias The alias by which the command is known in this environment
+	 */
+	public void pushCommand(String alias)	{
+		ICommand cmd = getCommand(alias);
+		push((IEntry)cmd);
+	}
+	
+	/**
+	 * Pushes the reader with the given alias onto the stack
+	 * @param alias The alias by which the reader is known in this environment
+	 */
+	public void pushReader(String alias)	{
+		IReader reader = getReader(alias);
+		push((IEntry)reader);
+	}
+	
+	/**
+	 * Pushes the given reader onto the stack
+	 * @param reader The reader to push onto the stack
+	 */
+	public void pushReader(IReader reader)	{
+		push((IEntry)reader);
+	}
+	
+	/**
 	 * Pops an argument off the environment's stack
 	 * @return The argument, or null if the stack is empty
 	 */
@@ -100,6 +126,18 @@ public class Environment {
 		} catch (EmptyStackException e)	{
 			return null;
 		}
+	}
+	
+	/**
+	 * Gets the element off the top of the stack without removing it from the stack
+	 * @return The top element, or null if the stack is empty
+	 */
+	public IEntry peek()	{
+		if (_stack.isEmpty())	{
+			return null;
+		}
+		
+		return _stack.peek();
 	}
 	
 	/**

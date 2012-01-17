@@ -1,10 +1,9 @@
 package com.breckinloggins.cx.reader;
 
 import java.io.IOException;
-import java.io.StringReader;
+import java.io.InputStream;
 import com.breckinloggins.cx.Environment;
 import com.breckinloggins.cx.dictionary.BaseReader;
-import com.breckinloggins.cx.dictionary.IReader;
 
 public class Reader extends BaseReader {
 	@Override
@@ -13,18 +12,24 @@ public class Reader extends BaseReader {
 	}
 
 	@Override
-	public IReader read(StringReader sr, Environment env) throws IOException {
+	public void read(Environment env) throws IOException {
+		
+		InputStream sr = System.in;
 		int ch = sr.read();
 		if (ch == -1)	{
 			env.pushString("Unexpected EOF");
-			return env.getReader("error");
+			env.pushReader("error");
+			env.pushCommand("read");
+			return;
 		}
 		
+		/*
 		Name nameReader = (Name)env.getReader("name");
 		IReader next = nameReader.read(sr, env);
 		
 		if (next instanceof Error)	{
-			return next;
+			env.pushReader(next);
+			return;
 		}
 		
 		String alias = env.pop().getName();
@@ -33,10 +38,11 @@ public class Reader extends BaseReader {
 		System.err.print("r(Reader): ");
 		if (null == next)	{
 			env.pushString("There is no reader by the name \"" + alias + "\"");
-			return env.getReader("error");
+			env.pushReader("error");
+			return;
 		}
 		
-		return next;
+		env.pushReader(next);
+		*/
 	}
-
 }

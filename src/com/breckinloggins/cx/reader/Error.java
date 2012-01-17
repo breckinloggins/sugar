@@ -1,11 +1,9 @@
 package com.breckinloggins.cx.reader;
 
 import java.io.IOException;
-import java.io.StringReader;
 import com.breckinloggins.cx.Environment;
 import com.breckinloggins.cx.dictionary.BaseReader;
 import com.breckinloggins.cx.dictionary.ICommand;
-import com.breckinloggins.cx.dictionary.IReader;
 
 public class Error extends BaseReader {
 
@@ -17,11 +15,12 @@ public class Error extends BaseReader {
 	}
 	
 	@Override
-	public IReader read(StringReader sr, Environment env) throws IOException {
+	public void read(Environment env) throws IOException {
 		ICommand err = env.getCommand("error");
 		err.execute(env);
 		
-		return env.getReader("terminator");
+		env.pushReader("terminator");
+		env.pushCommand("read");
 	}
 
 }

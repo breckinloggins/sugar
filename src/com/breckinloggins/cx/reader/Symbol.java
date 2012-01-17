@@ -4,11 +4,10 @@
 package com.breckinloggins.cx.reader;
 
 import java.io.IOException;
-import java.io.StringReader;
+import java.io.InputStream;
 
 import com.breckinloggins.cx.Environment;
 import com.breckinloggins.cx.dictionary.BaseReader;
-import com.breckinloggins.cx.dictionary.IReader;
 import com.breckinloggins.cx.dictionary.ISymbol;
 
 /**
@@ -23,13 +22,17 @@ public class Symbol extends BaseReader {
 	}
 
 	@Override
-	public IReader read(StringReader sr, Environment env) throws IOException {
+	public void read(Environment env) throws IOException {
+		
+		InputStream sr = System.in;
 		sr.mark(0);
 		int c = sr.read();
 		if (c == -1)	{
 			sr.reset();
 			env.pushString("Unexpected EOF");
-			return env.getReader("error");
+			env.pushReader("error");
+			env.pushCommand("read");
+			return;
 		}
 		
 		char ch = (char)c;
@@ -37,7 +40,9 @@ public class Symbol extends BaseReader {
 			// TODO: Should be replaced by a dynamic definition of our whitespace set
 			sr.reset();
 			env.pushString("Unexpected Whitespace");
-			return env.getReader("error");
+			env.pushReader("error");
+			env.pushCommand("read");
+			return;
 		}
 		
 		StringBuilder sb = new StringBuilder();
@@ -53,7 +58,9 @@ public class Symbol extends BaseReader {
 				ISymbol sym = new com.breckinloggins.cx.dictionary.Symbol();
 				sym.setName(sb.toString());
 				env.push(sym);
-				return env.getReader("terminator");
+				env.pushReader("terminator");
+				env.pushCommand("read");
+				return;
 			}
 			
 			ch = (char)c;
@@ -71,7 +78,7 @@ public class Symbol extends BaseReader {
 		ISymbol sym = new com.breckinloggins.cx.dictionary.Symbol();
 		sym.setName(sb.toString());
 		env.push(sym);
-		
-		return env.getReader("discriminator");	}
-
+		env.pushReader("discriminator");
+		env.pushCommand("read");
+	}
 }

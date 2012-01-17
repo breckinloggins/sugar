@@ -1,11 +1,10 @@
 package com.breckinloggins.cx.reader;
 
 import java.io.IOException;
-import java.io.StringReader;
+import java.io.InputStream;
 
 import com.breckinloggins.cx.Environment;
 import com.breckinloggins.cx.dictionary.BaseReader;
-import com.breckinloggins.cx.dictionary.IReader;
 
 public class Whitespace extends BaseReader {
 
@@ -15,14 +14,19 @@ public class Whitespace extends BaseReader {
 	}
 	
 	@Override
-	public IReader read(StringReader sr, Environment env) throws IOException {
+	public void read(Environment env) throws IOException {
+		
+		InputStream sr = System.in;
+		
 		// TODO: User should be able to configure what counts as whitespace and any special actions
 		// that might occur (such as to support pythonic languages)
 		sr.mark(0);
 		int c = sr.read();
 		if (c == -1)	{
 			sr.reset();
-			return env.getReader("terminator");
+			env.pushReader("terminator");
+			env.pushCommand("read");
+			return;
 		}
 		
 		boolean hasWhitespace = false;
@@ -36,7 +40,8 @@ public class Whitespace extends BaseReader {
 		if (hasWhitespace)	System.err.println("r(Whitespace)");
 		
 		sr.reset();
-		return env.getReader("discriminator");
+		env.pushReader("discriminator");
+		env.pushCommand("read");
 	}
 
 }

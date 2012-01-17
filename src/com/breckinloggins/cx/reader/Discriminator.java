@@ -1,25 +1,29 @@
 package com.breckinloggins.cx.reader;
 
 import java.io.IOException;
-import java.io.StringReader;
+import java.io.InputStream;
+
 import com.breckinloggins.cx.Environment;
 import com.breckinloggins.cx.dictionary.BaseReader;
-import com.breckinloggins.cx.dictionary.IReader;
 
 public class Discriminator extends BaseReader {
 
 	@Override
 	public String getDescription()	{
-		return "Reads enough characters to determine the most probably next reader";
+		return "Reads enough characters to determine the most probable next reader";
 	}
 	
 	@Override
-	public IReader read(StringReader sr, Environment env) throws IOException {
+	public void read(Environment env) throws IOException {
+		InputStream sr = System.in;
+		
 		sr.mark(0);
 		int ch = sr.read();
 		if (ch == -1)	{
 			// End of stream, send the Terminator
-			return env.getReader("terminator");
+			env.pushReader("terminator");
+			env.pushCommand("read");
+			return;
 		}
 		
 		System.err.println("r(Discriminator): " + Character.toString((char) ch));
@@ -30,15 +34,22 @@ public class Discriminator extends BaseReader {
 		// for them to "duke it out", perhaps with precedence or implicit precedence by voting.
 		if (ch == '#')	{
 			sr.reset();
-			return env.getReader("reader");
+			env.pushReader("reader");
+			env.pushCommand("read");
+			return;
 		} else if (ch == '!')	{
-			return env.getReader("command");
+			env.pushReader("command");
+			env.pushCommand("read");
+			return;
 		} else if (Character.isLetter(ch) || ch == '_')	{
 			sr.reset();
-			return env.getReader("name");
+			env.pushReader("name");
+			env.pushCommand("read");
+			return;
 		}
 		
-		return env.getReader("discriminator");
+		env.pushReader("discriminator");
+		env.pushCommand("read");
 	}
 
 }
