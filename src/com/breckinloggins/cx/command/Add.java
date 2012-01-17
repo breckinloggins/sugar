@@ -20,6 +20,8 @@ public class Add extends BaseCommand {
 
 	@Override
 	public void execute(Environment env) {
+		
+		env.evaluateStack();
 		Object arg0 = env.pop();
 		if (null == arg0)	{
 			env.pushString("Not enough arguments on the stack");
@@ -27,6 +29,7 @@ public class Add extends BaseCommand {
 			return;
 		}
 		
+		env.evaluateStack();
 		Object arg1 = env.pop();
 		if (null == arg1)	{
 			env.pushString("Not enough arguments on the stack");
@@ -34,10 +37,18 @@ public class Add extends BaseCommand {
 			return;
 		}
 		
-		// TODO: This needs to be much more generic and do the appropriate thing for a type
-		com.breckinloggins.cx.type.TSymbol sym = new com.breckinloggins.cx.type.TSymbol();
-		sym.setName(arg0.toString() + arg1.toString());
-		env.push(sym);
+		// TODO: This sucks...
+		if (arg0 instanceof Integer && arg1 instanceof Integer)	{
+			env.push((Integer)arg0 + (Integer)arg1);
+		} else if (arg0 instanceof Double && arg1 instanceof Double)	{
+			env.push((Double)arg0 + (Double)arg1);
+		} else if (arg0 instanceof Integer && arg1 instanceof Double)	{
+			env.push((Double)arg0 + (Integer)arg1);
+		} else if (arg0 instanceof Double && arg1 instanceof Integer)	{
+			env.push((Double)arg0 + (Integer)arg1);
+		} else {
+			env.push(arg0.toString() + arg1.toString());
+		}
 	}
 
 }

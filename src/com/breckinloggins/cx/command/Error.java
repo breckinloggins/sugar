@@ -19,6 +19,7 @@ public class Error extends BaseCommand {
 
 	@Override
 	public void execute(Environment env) {
+		env.evaluateStack();
 		String error = env.pop().toString();
 		
 		if (null == error)	{

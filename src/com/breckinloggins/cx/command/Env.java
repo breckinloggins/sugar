@@ -24,7 +24,7 @@ public class Env extends BaseCommand {
 	public void execute(Environment env) {
 		
 		System.out.println("\nStack:");
-		env.printStack();
+		env.printStack(System.out);
 		
 		System.out.println("\nReaders:");
 		for (String alias : env.getReaderAliases())	{

@@ -21,7 +21,6 @@ public class IsCommand extends BaseCommand {
 	@Override
 	public void execute(Environment env) {
 		
-		env.evaluateStack();
 		Object top = env.peek();
 		if (null == top)	{
 			env.pushString("IsCommand cannot execute, stack is empty");

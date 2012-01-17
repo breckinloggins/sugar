@@ -19,7 +19,7 @@ public class Stack extends BaseCommand {
 
 	@Override
 	public void execute(Environment env) {
-		env.printStack();
+		env.printStack(System.out);
 	}
 
 }

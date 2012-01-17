@@ -1,5 +1,6 @@
 package com.breckinloggins.cx;
 
+import java.io.PrintStream;
 import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.Set;
@@ -172,7 +173,12 @@ public class Environment {
 	/**
 	 * Print's the contents of the current stack to the environment's writer
 	 */
-	public void printStack()	{
+	public void printStack(PrintStream stream)	{
+		
+		if (isStackEmpty())	{
+			stream.println("[STACK EMPTY]");
+			return;
+		}
 		
 		for (int i = _stack.size() - 1; i >= 0; i--)	{
 			Object entry = _stack.get(i);
@@ -180,8 +186,8 @@ public class Environment {
 			value = value.replace("\n", "\\n");
 			value = value.replace("\t", "\\t");
 			value = value.replace("\r", "\\r");
-			System.out.print("[" + (_stack.size() - i - 1) + "] " + value + " <" + entry.getClass().getName() + ">");
-			System.out.println();
+			stream.print("[" + (_stack.size() - i - 1) + "] " + value + " <" + entry.getClass().getName() + ">");
+			stream.println();
 		}
 	}
 }

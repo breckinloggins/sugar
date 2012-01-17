@@ -101,26 +101,9 @@ public class Interpreter implements Runnable {
 			// Temporary code for testing
 			Environment e = _rootEnvironment;
 			
-			e.pushCommand("stack");
-			e.push("\nFinal stack\n");
-			e.pushCommand("print");
-			
-			
-			e.push("Foobar");
-			e.pushCommand("print");
 			e.push(2);
-			e.push(0);
-			e.pushString("true");
-			e.pushCommand("if");
-			
-			e.pushCommand("stack");
-			e.push("\nStarting stack\n");
-			e.pushCommand("print");
-			
-			e.pushCommand("stack");
-			e.push(1);
-			e.pushCommand("isCommand");
-			e.pushCommand("print");
+			e.push(3);
+			e.pushCommand("add");
 			e.pushCommand("print");
 			
 			while(!_rootEnvironment.isStackEmpty()) {
@@ -134,7 +117,8 @@ public class Interpreter implements Runnable {
 				
 				
 				if (cmd instanceof com.breckinloggins.cx.command.Error)	{
-						break;
+					_rootEnvironment.printStack(System.err);	
+					break;
 				}
 				
 			}

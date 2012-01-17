@@ -20,6 +20,7 @@ public class Execute extends BaseCommand {
 
 	@Override
 	public void execute(Environment env) {
+		env.evaluateStack();
 		String cmdName = env.pop().toString();
 		
 		if (null == cmdName)	{

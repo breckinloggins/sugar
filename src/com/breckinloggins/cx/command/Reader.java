@@ -22,6 +22,8 @@ public class Reader extends BaseCommand {
 
 	@Override
 	public void execute(Environment env) {
+		
+		env.evaluateStack();
 		Object readerEntry = env.pop();
 		if (null == readerEntry)	{
 			env.pushString("The stack is empty");

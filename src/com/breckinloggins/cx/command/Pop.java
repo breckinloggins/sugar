@@ -20,6 +20,7 @@ public class Pop extends BaseCommand {
 
 	@Override
 	public void execute(Environment env) {
+		env.evaluateStack();
 		Object popped = env.pop();
 		if (null == popped)	{
 			env.pushString("The stack is empty");

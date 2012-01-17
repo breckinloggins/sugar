@@ -29,8 +29,6 @@ public class If extends BaseCommand {
 		// [n+3..n+3+x]		if branch
 		// [n+4+x..n+4+x+y]	else branch
 		
-		// TODO: We're assuming the item to test is a simple item, not a command, since we 
-		// don't have deep eval yet
 		if (null == env.peek())	{
 			env.pushString("Cannot evaluate if.  Stack is empty");
 			env.pushCommand("error");
@@ -38,8 +36,10 @@ public class If extends BaseCommand {
 		}
 		
 		// Determine truthiness, which will inevitably need some fine tuning
+		env.evaluateStack();
 		Object test = env.pop();
 		
+		env.evaluateStack();
 		Object ifCount = env.pop();
 		if (null == ifCount || !(ifCount instanceof Integer))	{
 			env.pushString("If stack structure is incorrect, invalid if branch count");
@@ -47,6 +47,7 @@ public class If extends BaseCommand {
 			return;
 		}
 		
+		env.evaluateStack();
 		Object elseCount = env.pop();
 		if (null == elseCount || !(elseCount instanceof Integer))	{
 			env.pushString("If stack structure is incorrect, invalid else branch count");

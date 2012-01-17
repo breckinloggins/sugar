@@ -33,8 +33,7 @@ public class Getchar extends BaseCommand {
 	public void execute(Environment env) {
 		try {
 			int ch = _bufferedReader.read();
-			String sch = new Integer(ch).toString();
-			env.pushString(sch);
+			env.push(ch);
 		} catch (IOException e) {
 			env.pushString("Cannot read from standard input");
 			env.getCommand("error").execute(env);
