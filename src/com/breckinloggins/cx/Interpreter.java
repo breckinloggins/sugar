@@ -69,6 +69,12 @@ public class Interpreter implements Runnable {
 		env.setCommand("error", new com.breckinloggins.cx.command.Error());
 		
 		// TODO:
+		// - add IsCommand test.  Looks at the next thing on top of the stack.  If it is a command, pushes
+		// "true", else pushes "false"
+		// - add evaluate command.  If the thing on the top of the stack is a command, it is 
+		//   evaluated, else the stack is undisturbed other than popping off the command
+		//   (NOTE: with a simple IsCommand test command, this doesn't have to be a hard-coded command) 
+		// - move single step stack evaluation logic from interpreter to environment
 		// - add putchar command
 		// - modify all readers to use getchar/putchar instead of mark/reset
 		// - figure out which commands need to be built-in.  For example:
