@@ -64,14 +64,17 @@ public class Interpreter {
 		env.setReader("whitespace", new com.breckinloggins.cx.reader.Whitespace());
 		
 		env.setCommand("nop", new com.breckinloggins.cx.command.Nop());
-		env.setCommand("env", new com.breckinloggins.cx.command.Env());	// TODO: Change to an environment query command
+		env.setCommand("env", new com.breckinloggins.cx.command.Env());
+		env.setCommand("pop", new com.breckinloggins.cx.command.Pop());
 		env.setCommand("print", new com.breckinloggins.cx.command.Print());
 		env.setCommand("execute", new com.breckinloggins.cx.command.Execute());
 		env.setCommand("reader", new com.breckinloggins.cx.command.Reader());
 		env.setCommand("error", new com.breckinloggins.cx.command.Error());
 		
 		// TODO:
-		// - add pop command
+		// - reading from input should be a request FROM the interpreter rather than an input INTO the interpreter
+		// - show unrecognized input in red
+		// - don't allow backspace in text area until we can handle it
 		// - readers should push their next reader on the stack rather than return it
 		// - add read command
 		// - add the concept of a "value" to all entries
