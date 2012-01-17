@@ -56,8 +56,10 @@ public class Interpreter implements Runnable {
 		env.setReader("whitespace", new com.breckinloggins.cx.reader.Whitespace());
 		
 		env.setCommand("nop", new com.breckinloggins.cx.command.Nop());
+		env.setCommand("stack", new com.breckinloggins.cx.command.Stack());
 		env.setCommand("env", new com.breckinloggins.cx.command.Env());
 		env.setCommand("pop", new com.breckinloggins.cx.command.Pop());
+		env.setCommand("if", new com.breckinloggins.cx.command.If());
 		env.setCommand("add", new com.breckinloggins.cx.command.Add());
 		env.setCommand("getchar", new com.breckinloggins.cx.command.Getchar());
 		env.setCommand("read", new com.breckinloggins.cx.command.Read());
@@ -67,12 +69,10 @@ public class Interpreter implements Runnable {
 		env.setCommand("error", new com.breckinloggins.cx.command.Error());
 		
 		// TODO:
-		// - add an evaluateStack() command?
 		// - add putchar command
 		// - modify all readers to use getchar/putchar instead of mark/reset
 		// - figure out which commands need to be built-in.  For example:
 		//		* subtract, multiply, if, loop, etc.
-		// - add an if command
 		// - what are evaluators and how do they work?  Do we need them?
 		// - add set and unset commands, which create and destroy bindings in the current environment
 		// - add accept and expect readers that take as an argument a reader to accept or expect
@@ -90,18 +90,47 @@ public class Interpreter implements Runnable {
 	public void run() {
 		do {
 			
-			_rootEnvironment.pushReader("discriminator");
-			_rootEnvironment.pushCommand("read");
+			//_rootEnvironment.pushReader("discriminator");
+			//_rootEnvironment.pushCommand("read");
+			
+			// Temporary code for testing
+			Environment e = _rootEnvironment;
+			
+			e.pushCommand("stack");
+			e.push("\nFinal stack\n");
+			e.pushCommand("print");
+			
+			
+			e.push("Foobar");
+			e.pushCommand("print");
+			e.push(2);
+			e.push(0);
+			e.pushString("true");
+			e.pushCommand("if");
+			
+			e.pushCommand("stack");
+			e.push("\nStarting stack\n");
+			e.pushCommand("print");
+			
 			
 			Object top = _rootEnvironment.peek();
 			do {
 				if (top instanceof ICommand)	{
 					ICommand cmd = (ICommand)_rootEnvironment.pop();
 					cmd.execute(_rootEnvironment);
+					
+					if (cmd instanceof com.breckinloggins.cx.command.Error)	{
+						break;
+					}
+				} else {
+					_rootEnvironment.pushString("FATAL - STACK CORRUPT");
+					_rootEnvironment.pushCommand("error");
 				}
 				
 				top = _rootEnvironment.peek();
-			} while (top != null && top instanceof ICommand);
-		} while (true);
+			} while (top != null);
+		} while (false);
+		
+		System.err.println("The interpreter has terminated");
 	}
 }

@@ -77,7 +77,7 @@ public class Environment {
 	 * Pushes an argument onto the environment's stack
 	 * @param arg The argument to push
 	 */
-	public void push(IEntry arg)	{
+	public void push(Object arg)	{
 		_stack.push(arg);
 	}
 	
@@ -146,7 +146,11 @@ public class Environment {
 		
 		for (int i = _stack.size() - 1; i >= 0; i--)	{
 			Object entry = _stack.get(i);
-			System.out.print("[" + (_stack.size() - i - 1) + "] " + entry.toString() + " <" + entry.getClass().getName() + ">");
+			String value = entry.toString();
+			value = value.replace("\n", "\\n");
+			value = value.replace("\t", "\\t");
+			value = value.replace("\r", "\\r");
+			System.out.print("[" + (_stack.size() - i - 1) + "] " + value + " <" + entry.getClass().getName() + ">");
 			System.out.println();
 		}
 	}
