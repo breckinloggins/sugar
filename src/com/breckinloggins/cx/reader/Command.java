@@ -31,12 +31,12 @@ public class Command extends BaseReader {
 		String alias = env.pop().getName();
 		ICommand cmd = env.getCommand(alias);
 		
-		getWriter().print("r(Command): ");
+		System.err.print("r(Command): ");
 		if (null == cmd)	{
 			env.pushString("There is no command by the name " + alias);
 			return env.getReader("error");
 		} else {
-			getWriter().println(alias);
+			System.err.println(alias);
 		}
 		
 		cmd.execute(env);

@@ -30,7 +30,7 @@ public class Reader extends BaseReader {
 		String alias = env.pop().getName();
 		next = env.getReader(alias);
 		
-		getWriter().print("r(Reader): ");
+		System.err.print("r(Reader): ");
 		if (null == next)	{
 			env.pushString("There is no reader by the name \"" + alias + "\"");
 			return env.getReader("error");

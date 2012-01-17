@@ -22,7 +22,7 @@ public class Print extends BaseCommand {
 	public void execute(Environment env) {
 		IEntry ent = env.pop();
 		if (null != ent)	{
-			getWriter().print(ent.getName());
+			System.out.print(ent.getName());
 		}
 	}
 }

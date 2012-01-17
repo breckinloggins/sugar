@@ -1,7 +1,6 @@
 package com.breckinloggins.cx;
 
 import java.io.IOException;
-import java.io.PrintStream;
 import java.io.StringReader;
 
 import com.breckinloggins.cx.dictionary.IReader;
@@ -9,8 +8,7 @@ import com.breckinloggins.cx.dictionary.IReader;
 public class Interpreter {
 	private Environment _rootEnvironment;
 	private IReader _reader;
-	private PrintStream _writer;
-
+	
 	// TODO: Let's not try to interpret C-like code right away.  Let's do:
 	// 1. LISP
 	// 2. BASIC
@@ -31,11 +29,9 @@ public class Interpreter {
 	
 	/**
 	 * Constructs a new interpreter
-	 * @param writer The print writer to use for output
 	 */
-	public Interpreter(PrintStream writer)	{
-		_writer = writer;
-		_rootEnvironment = new Environment(_writer);
+	public Interpreter()	{
+		_rootEnvironment = new Environment();
 		
 		// Set up the basic starting environment
 		// TODO: Need to find a better way to do this
@@ -81,7 +77,6 @@ public class Interpreter {
 		// - add get, unget, mark, reset reader commands
 		// - figure out which commands need to be built-in.  For example:
 		//		* subtract, multiply, if, loop, etc.
-		// - refactor setWriter() functionality
 		// - add an if command
 		// - what are evaluators and how do they work?  Do we need them?
 		// - add set and unset commands, which create and destroy bindings in the current environment
@@ -110,7 +105,7 @@ public class Interpreter {
 			} while (_reader != null && _reader.getClass().getName() != "Terminator");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace(_writer);
+			e.printStackTrace();
 		}
 	}
 }

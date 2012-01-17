@@ -23,24 +23,24 @@ public class Env extends BaseCommand {
 	@Override
 	public void execute(Environment env) {
 		
-		getWriter().println("\nStack:");
+		System.out.println("\nStack:");
 		env.printStack();
 		
-		getWriter().println("\nReaders:");
+		System.out.println("\nReaders:");
 		for (String alias : env.getReaderAliases())	{
 			IReader reader = env.getReader(alias);
 			if (reader instanceof IEntry)	{
-				getWriter().print(alias + " [" + ((IEntry)reader).getDescription() + "]");
-				getWriter().println();	
+				System.out.print(alias + " [" + ((IEntry)reader).getDescription() + "]");
+				System.out.println();	
 			}
 		}
 		
-		getWriter().println("\nCommands:");
+		System.out.println("\nCommands:");
 		for (String alias : env.getCommandAliases())	{
 			ICommand cmd = env.getCommand(alias);
 			if (cmd instanceof IEntry)	{
-				getWriter().print(alias + " [" + ((IEntry)cmd).getDescription() + "]");
-				getWriter().println();		
+				System.out.print(alias + " [" + ((IEntry)cmd).getDescription() + "]");
+				System.out.println();		
 			}
 		}
 	}

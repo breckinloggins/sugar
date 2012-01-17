@@ -23,11 +23,11 @@ public class Error extends BaseCommand {
 		
 		if (null == error)	{
 			// TODO: This should be an error cmd
-			getWriter().println("ERROR (no message)");
+			System.err.println("ERROR (no message)");
 			return;
 		}
 		
-		getWriter().println("ERROR: " + error);
+		System.err.println("ERROR: " + error);
 	}
 
 }

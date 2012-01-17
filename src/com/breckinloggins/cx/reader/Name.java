@@ -43,7 +43,7 @@ public class Name extends BaseReader {
 			if (c == -1)	{
 				// It's up to upper level code to determine whether it's ok to 
 				// have an EOF directly after a name
-				getWriter().println("r(Name): " + sb.toString());
+				System.err.println("r(Name): " + sb.toString());
 				sr.reset();
 				ISymbol sym = new com.breckinloggins.cx.dictionary.Symbol();
 				sym.setName(sb.toString());
@@ -66,7 +66,7 @@ public class Name extends BaseReader {
 		// TODO: needs to be set by environment or other way to turn this off and on
 		((Whitespace)env.getReader("whitespace")).read(sr, env);
 		
-		getWriter().println("r(Name): " + sb.toString());
+		System.err.println("r(Name): " + sb.toString());
 		ISymbol sym = new com.breckinloggins.cx.dictionary.Symbol();
 		sym.setName(sb.toString());
 		env.push(sym);

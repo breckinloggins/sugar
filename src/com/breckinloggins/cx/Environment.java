@@ -1,6 +1,5 @@
 package com.breckinloggins.cx;
 
-import java.io.PrintStream;
 import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.Set;
@@ -15,24 +14,20 @@ public class Environment {
 	
 	private HashMap<String, IReader> _readers;
 	private HashMap<String, ICommand> _commands;
-	private PrintStream _writer;
 	private Stack<IEntry> _stack;
 	
-	public Environment(PrintStream writer)	{
+	public Environment()	{
 		_readers = new HashMap<String, IReader>();
 		_commands = new HashMap<String, ICommand>();
-		_writer = writer;
 		_stack = new Stack<IEntry>();
 	}
 	
 	/**
 	 * Sets the alias for the given reader in this environment
-	 * Note that the reader's writer is also set to the environment's writer
 	 * @param alias The alias by which to refer to the reader
 	 * @param reader The name of the class for the reader
 	 */
 	public void setReader(String alias, IReader reader)	{
-		reader.setWriter(_writer);
 		_readers.put(alias, reader);
 	}
 	
@@ -55,12 +50,10 @@ public class Environment {
 	
 	/**
 	 * Sets the alias for the given command in this environment
-	 * Note that the command's writer is also set to the environment's writer
 	 * @param alias The alias by which to refer to the command
 	 * @param command The name of the class for the command
 	 */
 	public void setCommand(String alias, ICommand command)	{
-		command.setWriter(_writer);
 		_commands.put(alias, command);
 	}
 	
@@ -116,8 +109,8 @@ public class Environment {
 		
 		for (int i = _stack.size() - 1; i >= 0; i--)	{
 			IEntry entry = _stack.get(i);
-			_writer.print("[" + (_stack.size() - i - 1) + "] " + entry.getName());
-			_writer.println();
+			System.out.print("[" + (_stack.size() - i - 1) + "] " + entry.getName());
+			System.out.println();
 		}
 	}
 }

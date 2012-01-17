@@ -1,7 +1,6 @@
 package com.breckinloggins.cx.dictionary;
 
 import java.io.IOException;
-import java.io.PrintStream;
 import java.io.StringReader;
 
 import com.breckinloggins.cx.Environment;
@@ -16,13 +15,6 @@ import com.breckinloggins.cx.Environment;
  *
  */
 public interface IReader {
-	/**
-	 * Sets the print-stream (System.out-like) writer to which all text output from this
-	 * reader will be sent
-	 * @param writer The writer to use
-	 */
-	void setWriter(PrintStream writer);
-	
 	/**
 	 * Reads a string from the given string reader, interprets it, and returns the next reader
 	 * @param sr The StringReader from which to read input

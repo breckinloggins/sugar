@@ -51,46 +51,68 @@ public class Main {
 	}
 	
 	/**
+	 * Applies appearance properties to the given text area
+	 * @param textArea The text area to theme
+	 */
+	public static void applyTheme(JTextArea textArea)	{
+		Font f = new Font(Font.MONOSPACED, Font.PLAIN, 12);
+		
+		textArea.setBackground(Color.DARK_GRAY);
+		textArea.setForeground(Color.WHITE);
+		textArea.setCaretColor(Color.LIGHT_GRAY);
+		textArea.setFont(f);
+		textArea.setMargin(new Insets(3, 3, 3, 3));
+		textArea.setTabSize(3);
+	}
+	
+	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Interpreter Window");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		Font f = new Font(Font.MONOSPACED, Font.PLAIN, 12);
 		
+		//
+		// INPUT AREA
+		//
 		final JTextArea inputArea = new JTextArea();
-		inputArea.setBackground(Color.DARK_GRAY);
-		inputArea.setForeground(Color.WHITE);
-		inputArea.setCaretColor(Color.LIGHT_GRAY);
-		inputArea.setFont(f);
-		inputArea.setMargin(new Insets(3, 3, 3, 3));
-		inputArea.setTabSize(3);
+		applyTheme(inputArea);
 		JScrollPane inputScrollPane = new JScrollPane(inputArea);
 		
-		JTextArea outputArea = new JTextArea();
-		outputArea.setBackground(Color.DARK_GRAY);
-		outputArea.setForeground(Color.WHITE);
+		//
+		// OUTPUT AREA
+		//
+		final JTextArea outputArea = new JTextArea();
+		applyTheme(outputArea);
 		outputArea.setEditable(false);
-		outputArea.setFont(f);
-		outputArea.setMargin(new Insets(3, 3, 3, 3));
-		outputArea.setTabSize(3);
 		JScrollPane outputScrollPane = new JScrollPane(outputArea);
 		
-		// TODO: Need a third text area for the debug output as opposed to the command/program output
+		//
+		// DEBUG AREA
+		//
+		final JTextArea debugArea = new JTextArea();
+		applyTheme(debugArea);
+		debugArea.setEditable(false);
+		JScrollPane debugScrollPane = new JScrollPane(debugArea);
 		
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, 
+		JSplitPane ioSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, 
 				inputScrollPane, outputScrollPane);
-		splitPane.setDividerLocation(380);
+		ioSplitPane.setDividerLocation(380);
 		
-		frame.getContentPane().add(splitPane);
+		JSplitPane mainSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, 
+				ioSplitPane, debugScrollPane);
+		mainSplitPane.setDividerLocation(400);
+		
+		frame.getContentPane().add(mainSplitPane);
 		
 		frame.setSize(1050, 600);
 		frame.setVisible(true);
 		
-		PrintStream out = new PrintStream(createOutputStreamForTextArea(outputArea));
+		System.setOut(new PrintStream(createOutputStreamForTextArea(outputArea)));
+		System.setErr(new PrintStream(createOutputStreamForTextArea(debugArea)));
 		
-		final Interpreter interp = new Interpreter(out);
+		final Interpreter interp = new Interpreter();
 		
 		KeyListener keyListener = new KeyListener() {
 			// TODO: 

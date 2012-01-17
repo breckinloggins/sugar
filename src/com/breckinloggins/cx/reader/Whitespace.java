@@ -33,7 +33,7 @@ public class Whitespace extends BaseReader {
 			c = sr.read();
 		}
 		
-		if (hasWhitespace)	getWriter().println("r(Whitespace)");
+		if (hasWhitespace)	System.err.println("r(Whitespace)");
 		
 		sr.reset();
 		return env.getReader("discriminator");

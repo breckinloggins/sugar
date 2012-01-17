@@ -3,8 +3,6 @@
  */
 package com.breckinloggins.cx.dictionary;
 
-import java.io.PrintStream;
-
 import com.breckinloggins.cx.Environment;
 
 /**
@@ -23,11 +21,4 @@ public interface ICommand {
 	 * may be affected by this command
 	 */
 	void execute(Environment env);
-
-	/**
-	 * Sets the PrintStream by which this command can write to string output
-	 * @param writer The PrintStream writer to use
-	 */
-	void setWriter(PrintStream writer);
-	
 }

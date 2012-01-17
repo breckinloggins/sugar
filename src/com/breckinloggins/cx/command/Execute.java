@@ -23,15 +23,15 @@ public class Execute extends BaseCommand {
 		String cmdName = env.pop().getName();
 		
 		if (null == cmdName)	{
-			// TODO: This should be an error cmd
-			getWriter().println("ERROR: Cannot execute a command because the stack is empty");
+			env.pushString("Cannot execute a command because the stack is empty");
+			env.getCommand("error").execute(env);
 			return;
 		}
 		
 		ICommand cmd = env.getCommand(cmdName);
 		if (null == cmd)	{
-			// TODO: This should be an error cmd
-			getWriter().println("ERROR: Command \"" + cmdName + "\" not found");
+			env.pushString("ERROR: Command \"" + cmdName + "\" not found");
+			env.getCommand("error").execute(env);
 			return;
 		}
 		

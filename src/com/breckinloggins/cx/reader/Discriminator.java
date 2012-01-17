@@ -22,7 +22,7 @@ public class Discriminator extends BaseReader {
 			return env.getReader("terminator");
 		}
 		
-		getWriter().println("r(Discriminator): " + Character.toString((char) ch));
+		System.err.println("r(Discriminator): " + Character.toString((char) ch));
 		
 		// TODO: These know WAY too much about what each reader wants.  Instead, the discriminator should
 		// somehow be able to ask each reader if it will accept the input.  It would be nice to do this without
