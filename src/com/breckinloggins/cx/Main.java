@@ -85,7 +85,7 @@ public class Main {
 		
 		frame.getContentPane().add(splitPane);
 		
-		frame.setSize(600, 500);
+		frame.setSize(1050, 600);
 		frame.setVisible(true);
 		
 		PrintStream out = new PrintStream(createOutputStreamForTextArea(outputArea));

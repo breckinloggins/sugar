@@ -66,6 +66,7 @@ public class Interpreter {
 		env.setCommand("nop", new com.breckinloggins.cx.command.Nop());
 		env.setCommand("env", new com.breckinloggins.cx.command.Env());
 		env.setCommand("pop", new com.breckinloggins.cx.command.Pop());
+		env.setCommand("add", new com.breckinloggins.cx.command.Add());
 		env.setCommand("print", new com.breckinloggins.cx.command.Print());
 		env.setCommand("execute", new com.breckinloggins.cx.command.Execute());
 		env.setCommand("reader", new com.breckinloggins.cx.command.Reader());
@@ -79,7 +80,7 @@ public class Interpreter {
 		// - add the concept of a "value" to all entries
 		// - add get, unget, mark, reset reader commands
 		// - figure out which commands need to be built-in.  For example:
-		//		* add, subtract, multiply, if, loop, etc.
+		//		* subtract, multiply, if, loop, etc.
 		// - refactor setWriter() functionality
 		// - add an if command
 		// - what are evaluators and how do they work?  Do we need them?
