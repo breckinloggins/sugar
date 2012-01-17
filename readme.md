@@ -4,4 +4,4 @@
 It comes with a Java-based "IDE" that shows how the language itself can choose the syntax highlighting, completion assist, and 
 other features as it is being written.
 
-*<name> can't be Cx because that implies "C".  Mx maybe?
+*<name> can't be Cx because that implies "C".  Mx maybe?  How about "Nihilo", from the latin "Nothing", which is what we start from?

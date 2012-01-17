@@ -74,7 +74,6 @@ public class Interpreter {
 		// TODO:
 		// - reading from input should be a request FROM the interpreter rather than an input INTO the interpreter
 		// - show unrecognized input in red
-		// - don't allow backspace in text area until we can handle it
 		// - readers should push their next reader on the stack rather than return it
 		// - add read command
 		// - add the concept of a "value" to all entries

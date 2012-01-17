@@ -11,6 +11,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.*;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 
 public class Main {
 
@@ -57,7 +59,7 @@ public class Main {
 		
 		Font f = new Font(Font.MONOSPACED, Font.PLAIN, 12);
 		
-		JTextArea inputArea = new JTextArea();
+		final JTextArea inputArea = new JTextArea();
 		inputArea.setBackground(Color.DARK_GRAY);
 		inputArea.setForeground(Color.WHITE);
 		inputArea.setCaretColor(Color.LIGHT_GRAY);
@@ -100,15 +102,35 @@ public class Main {
 			// wait for them to complete it again.
 			private String _tmpCurrentLine = "";
 			
+			public boolean isIgnored(int keyCode)	{
+				return (keyCode == KeyEvent.VK_BACK_SPACE ||
+						keyCode == KeyEvent.VK_DELETE ||
+						keyCode == KeyEvent.VK_LEFT ||
+						keyCode == KeyEvent.VK_UP);
+						
+			}
+			
 			@Override
-			public void keyPressed(KeyEvent arg0) {}
+			public void keyPressed(KeyEvent arg0) {
+				if (isIgnored(arg0.getKeyCode()))	{
+					arg0.consume();
+				}
+			}
 
 			@Override
-			public void keyReleased(KeyEvent arg0) {}
+			public void keyReleased(KeyEvent arg0) {
+				if (isIgnored(arg0.getKeyCode()))	{
+					arg0.consume();
+				}
+			}
 
 			@Override
 			public void keyTyped(KeyEvent arg0) {
 				char k = arg0.getKeyChar();
+				if (k == '\b')	{
+					return;
+				}
+				
 				if (k == '\n')	{
 					StringReader sr = new StringReader(_tmpCurrentLine);
 					interp.TEMP_read(sr);
@@ -121,6 +143,21 @@ public class Main {
 			
 		};
 		inputArea.addKeyListener(keyListener);	
+		
+		// Attempt to keep the user from using the mouse to move the caret to a previous
+		// spot in the code.  We can remove this as soon as we support undo
+		final CaretListener caretListener = new CaretListener() {
+
+			@Override
+			public void caretUpdate(CaretEvent arg0) {
+				if (arg0.getDot() < inputArea.getText().length())	{
+					inputArea.setCaretPosition(inputArea.getText().length());
+				}
+				
+			}
+			
+		};
+		inputArea.addCaretListener(caretListener);
 	}
 
 }
