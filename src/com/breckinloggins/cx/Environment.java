@@ -140,6 +140,36 @@ public class Environment {
 	}
 	
 	/**
+	 * Gets whether this environment's stack is empty
+	 * @return True if empty, false if not
+	 */
+	public boolean isStackEmpty()	{
+		return _stack.isEmpty();
+	}
+	
+	/**
+	 * If the item at the top of the stack is a command, the command is evaluated, else the stack
+	 * is left alone
+	 * 
+	 * @return The ICommand that was evaluated, or null if the item wasn't a command
+	 */
+	public ICommand evaluateStack()	{
+		// TODO: This doesn't need to be built-in.  An evaluate command is fine for this
+		if (null == peek())	{
+			// It's not an error to evaluate an empty stack
+			return null;
+		}
+		
+		if (peek() instanceof ICommand)	{
+			ICommand cmd = (ICommand)pop();
+			cmd.execute(this);
+			return cmd;
+		}
+		
+		return null;
+	}
+	
+	/**
 	 * Print's the contents of the current stack to the environment's writer
 	 */
 	public void printStack()	{

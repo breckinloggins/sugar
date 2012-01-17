@@ -19,6 +19,8 @@ public class Print extends BaseCommand {
 
 	@Override
 	public void execute(Environment env) {
+		env.evaluateStack();
+		
 		Object ent = env.pop();
 		if (null != ent)	{
 			System.out.print(ent.toString());

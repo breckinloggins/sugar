@@ -59,6 +59,7 @@ public class Interpreter implements Runnable {
 		env.setCommand("stack", new com.breckinloggins.cx.command.Stack());
 		env.setCommand("env", new com.breckinloggins.cx.command.Env());
 		env.setCommand("pop", new com.breckinloggins.cx.command.Pop());
+		env.setCommand("isCommand", new com.breckinloggins.cx.command.IsCommand());
 		env.setCommand("if", new com.breckinloggins.cx.command.If());
 		env.setCommand("add", new com.breckinloggins.cx.command.Add());
 		env.setCommand("getchar", new com.breckinloggins.cx.command.Getchar());
@@ -69,12 +70,10 @@ public class Interpreter implements Runnable {
 		env.setCommand("error", new com.breckinloggins.cx.command.Error());
 		
 		// TODO:
-		// - add IsCommand test.  Looks at the next thing on top of the stack.  If it is a command, pushes
-		// "true", else pushes "false"
+		// - replace isCommand with simple is test command.  IsCommand doesn't have to be hard-coded
 		// - add evaluate command.  If the thing on the top of the stack is a command, it is 
 		//   evaluated, else the stack is undisturbed other than popping off the command
 		//   (NOTE: with a simple IsCommand test command, this doesn't have to be a hard-coded command) 
-		// - move single step stack evaluation logic from interpreter to environment
 		// - add putchar command
 		// - modify all readers to use getchar/putchar instead of mark/reset
 		// - figure out which commands need to be built-in.  For example:
@@ -118,23 +117,27 @@ public class Interpreter implements Runnable {
 			e.push("\nStarting stack\n");
 			e.pushCommand("print");
 			
+			e.pushCommand("stack");
+			e.push(1);
+			e.pushCommand("isCommand");
+			e.pushCommand("print");
+			e.pushCommand("print");
 			
-			Object top = _rootEnvironment.peek();
-			do {
-				if (top instanceof ICommand)	{
-					ICommand cmd = (ICommand)_rootEnvironment.pop();
-					cmd.execute(_rootEnvironment);
-					
-					if (cmd instanceof com.breckinloggins.cx.command.Error)	{
-						break;
-					}
-				} else {
+			while(!_rootEnvironment.isStackEmpty()) {
+				ICommand cmd = _rootEnvironment.evaluateStack();
+				if (null == cmd)	{
+					// Interpreter should always see a command at the top of the stack
 					_rootEnvironment.pushString("FATAL - STACK CORRUPT");
 					_rootEnvironment.pushCommand("error");
+					continue;
 				}
 				
-				top = _rootEnvironment.peek();
-			} while (top != null);
+				
+				if (cmd instanceof com.breckinloggins.cx.command.Error)	{
+						break;
+				}
+				
+			}
 		} while (false);
 		
 		System.err.println("The interpreter has terminated");
