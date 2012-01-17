@@ -58,7 +58,7 @@ public class Interpreter {
 		env.setReader("symbol", new com.breckinloggins.cx.reader.Symbol());
 		env.setReader("discriminator", new com.breckinloggins.cx.reader.Discriminator());
 		env.setReader("error", new com.breckinloggins.cx.reader.Error());
-		env.setReader("list", new com.breckinloggins.cx.reader.List());	// TODO: Change to an environment query command
+		env.setReader("info", new com.breckinloggins.cx.reader.Info());	// TODO: Change to an environment query command
 		env.setReader("name", new com.breckinloggins.cx.reader.Name());
 		env.setReader("reader", new com.breckinloggins.cx.reader.Reader());
 		env.setReader("terminator", new com.breckinloggins.cx.reader.Terminator());
@@ -67,25 +67,30 @@ public class Interpreter {
 		env.setCommand("nop", new com.breckinloggins.cx.command.Nop());
 		env.setCommand("print", new com.breckinloggins.cx.command.Print());
 		env.setCommand("execute", new com.breckinloggins.cx.command.Execute());
+		env.setCommand("reader", new com.breckinloggins.cx.command.Reader());
 		env.setCommand("error", new com.breckinloggins.cx.command.Error());
 		
 		// TODO:
-		// - add a dictionary to the environment that stores a map between a symbol and an IEntry
+		// - info should be a command, not a reader
+		// - add pop command
+		// - readers should push their next reader on the stack rather than return it
+		// - add read command
+		// - add the concept of a "value" to all entries
+		// - add get, unget, mark, reset reader commands
 		// - figure out which commands need to be built-in.  For example:
 		//		* add, subtract, multiply, if, loop, etc.
-		// - add reader command (pops first arg off stack and uses it as name of reader)
 		// - refactor setWriter() functionality
-		// - figure out if the stack needs arg types or if we can keep them all as strings.  I'd prefer to 
-		// - have types encoded in commands.  For example, add_int vs add_float vs add_string, etc.
 		// - add an if command
 		// - what are evaluators and how do they work?  Do we need them?
-		// - add get, unget, mark, reset reader commands
 		// - add set and unset commands, which create and destroy bindings in the current environment
 		// - add accept and expect readers that take as an argument a reader to accept or expect
+		// - add a dictionary to the environment that stores a map between a symbol and an IEntry
 		// - make readers read character by character
 		// - add #new reader reader
 		// - add #new command reader
 		// - replace pair, beingPair, endPair, error, name, and whitespace with dynamically defined readers 
+		// - find a way to abstract the notion of types so we don't hard code any (including strings and ints) in the 
+		//	 interpreter
 	}
 	
 	/**

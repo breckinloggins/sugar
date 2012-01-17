@@ -16,7 +16,7 @@ import com.breckinloggins.cx.dictionary.IReader;
  * @author bloggins
  *
  */
-public class List extends BaseReader {
+public class Info extends BaseReader {
 
 	@Override
 	public String getDescription()	{
@@ -25,6 +25,9 @@ public class List extends BaseReader {
 	
 	@Override
 	public IReader read(StringReader sr, Environment env) throws IOException {
+		
+		getWriter().println("\nStack:");
+		env.printStack();
 		
 		getWriter().println("\nReaders:");
 		for (String alias : env.getReaderAliases())	{

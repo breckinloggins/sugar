@@ -108,4 +108,16 @@ public class Environment {
 			return null;
 		}
 	}
+	
+	/**
+	 * Print's the contents of the current stack to the environment's writer
+	 */
+	public void printStack()	{
+		
+		for (int i = _stack.size() - 1; i >= 0; i--)	{
+			IEntry entry = _stack.get(i);
+			_writer.print("[" + (_stack.size() - i - 1) + "] " + entry.getName());
+			_writer.println();
+		}
+	}
 }
