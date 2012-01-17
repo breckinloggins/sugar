@@ -19,7 +19,7 @@ public class Error extends BaseCommand {
 
 	@Override
 	public void execute(Environment env) {
-		String error = env.pop().getName();
+		String error = env.pop().toString();
 		
 		if (null == error)	{
 			// TODO: This should be an error cmd

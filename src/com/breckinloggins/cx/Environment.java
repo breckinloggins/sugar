@@ -8,18 +8,17 @@ import java.util.Stack;
 import com.breckinloggins.cx.dictionary.ICommand;
 import com.breckinloggins.cx.dictionary.IEntry;
 import com.breckinloggins.cx.dictionary.IReader;
-import com.breckinloggins.cx.dictionary.TString;
 
 public class Environment {
 	
 	private HashMap<String, IReader> _readers;
 	private HashMap<String, ICommand> _commands;
-	private Stack<IEntry> _stack;
+	private Stack<Object> _stack;
 	
 	public Environment()	{
 		_readers = new HashMap<String, IReader>();
 		_commands = new HashMap<String, ICommand>();
-		_stack = new Stack<IEntry>();
+		_stack = new Stack<Object>();
 	}
 	
 	/**
@@ -87,7 +86,7 @@ public class Environment {
 	 * @param s The string to push
 	 */
 	public void pushString(String s)	{
-		_stack.push(new TString(s));
+		_stack.push(s);
 	}
 	
 	/**
@@ -120,7 +119,7 @@ public class Environment {
 	 * Pops an argument off the environment's stack
 	 * @return The argument, or null if the stack is empty
 	 */
-	public IEntry pop()	{
+	public Object pop()	{
 		try	{
 			return _stack.pop();
 		} catch (EmptyStackException e)	{
@@ -132,7 +131,7 @@ public class Environment {
 	 * Gets the element off the top of the stack without removing it from the stack
 	 * @return The top element, or null if the stack is empty
 	 */
-	public IEntry peek()	{
+	public Object peek()	{
 		if (_stack.isEmpty())	{
 			return null;
 		}
@@ -146,8 +145,8 @@ public class Environment {
 	public void printStack()	{
 		
 		for (int i = _stack.size() - 1; i >= 0; i--)	{
-			IEntry entry = _stack.get(i);
-			System.out.print("[" + (_stack.size() - i - 1) + "] " + entry.getName());
+			Object entry = _stack.get(i);
+			System.out.print("[" + (_stack.size() - i - 1) + "] " + entry.toString() + " <" + entry.getClass().getName() + ">");
 			System.out.println();
 		}
 	}

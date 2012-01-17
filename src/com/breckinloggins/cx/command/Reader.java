@@ -22,14 +22,14 @@ public class Reader extends BaseCommand {
 
 	@Override
 	public void execute(Environment env) {
-		IEntry readerEntry = env.pop();
+		Object readerEntry = env.pop();
 		if (null == readerEntry)	{
 			env.pushString("The stack is empty");
 			env.getCommand("error").execute(env);
 			return;
 		}
 		
-		String readerName = readerEntry.getName();
+		String readerName = readerEntry.toString();
 		IReader reader = env.getReader(readerName);
 		if (null == reader)	{
 			env.pushString("There is no reader by the name \"" + readerName + "\"");

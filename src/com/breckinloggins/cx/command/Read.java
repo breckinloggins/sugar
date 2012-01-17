@@ -7,7 +7,6 @@ import java.io.IOException;
 
 import com.breckinloggins.cx.Environment;
 import com.breckinloggins.cx.dictionary.BaseCommand;
-import com.breckinloggins.cx.dictionary.IEntry;
 import com.breckinloggins.cx.dictionary.IReader;
 
 /**
@@ -23,7 +22,7 @@ public class Read extends BaseCommand {
 
 	@Override
 	public void execute(Environment env) {
-		IEntry arg = env.pop();
+		Object arg = env.pop();
 		if (null == arg)	{
 			env.pushString("Cannot execute reader. stack empty");
 			env.getCommand("error").execute(env);
@@ -31,7 +30,7 @@ public class Read extends BaseCommand {
 		}
 		
 		if (!(arg instanceof IReader))	{
-			env.pushString("Argument \"" + arg.getName() + "\" is not a reader");
+			env.pushString("Argument \"" + arg.toString() + "\" is not a reader");
 			env.getCommand("error").execute(env);
 			return;
 		}

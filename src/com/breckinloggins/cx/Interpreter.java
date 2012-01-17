@@ -1,7 +1,6 @@
 package com.breckinloggins.cx;
 
 import com.breckinloggins.cx.dictionary.ICommand;
-import com.breckinloggins.cx.dictionary.IEntry;
 
 public class Interpreter implements Runnable {
 	private Environment _rootEnvironment;
@@ -68,9 +67,9 @@ public class Interpreter implements Runnable {
 		env.setCommand("error", new com.breckinloggins.cx.command.Error());
 		
 		// TODO:
+		// - add an evaluateStack() command?
 		// - add putchar command
 		// - modify all readers to use getchar/putchar instead of mark/reset
-		// - add the concept of a "value" to all entries
 		// - figure out which commands need to be built-in.  For example:
 		//		* subtract, multiply, if, loop, etc.
 		// - add an if command
@@ -94,7 +93,7 @@ public class Interpreter implements Runnable {
 			_rootEnvironment.pushReader("discriminator");
 			_rootEnvironment.pushCommand("read");
 			
-			IEntry top = _rootEnvironment.peek();
+			Object top = _rootEnvironment.peek();
 			do {
 				if (top instanceof ICommand)	{
 					ICommand cmd = (ICommand)_rootEnvironment.pop();

@@ -20,7 +20,7 @@ public class Execute extends BaseCommand {
 
 	@Override
 	public void execute(Environment env) {
-		String cmdName = env.pop().getName();
+		String cmdName = env.pop().toString();
 		
 		if (null == cmdName)	{
 			env.pushString("Cannot execute a command because the stack is empty");

@@ -1,6 +1,8 @@
-package com.breckinloggins.cx.dictionary;
+package com.breckinloggins.cx.type;
 
-public class Symbol implements ISymbol {
+import com.breckinloggins.cx.dictionary.ISymbol;
+
+public class TSymbol implements ISymbol {
 	private String _name;
 	
 	@Override

@@ -22,7 +22,7 @@ public class Command extends BaseReader {
 		Name nameReader = (Name)env.getReader("name");
 		nameReader.read(env);
 		
-		String alias = env.pop().getName();
+		String alias = env.pop().toString();
 		ICommand cmd = env.getCommand(alias);
 		
 		System.err.print("r(Command): ");

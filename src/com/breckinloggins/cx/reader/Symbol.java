@@ -55,7 +55,7 @@ public class Symbol extends BaseReader {
 				// have an EOF directly after a symbol
 				System.err.println("r(Symbol): " + sb.toString());
 				sr.reset();
-				ISymbol sym = new com.breckinloggins.cx.dictionary.Symbol();
+				ISymbol sym = new com.breckinloggins.cx.type.TSymbol();
 				sym.setName(sb.toString());
 				env.push(sym);
 				env.pushReader("terminator");
@@ -75,7 +75,7 @@ public class Symbol extends BaseReader {
 		}
 		
 		System.err.println("r(Symbol): " + sb.toString());
-		ISymbol sym = new com.breckinloggins.cx.dictionary.Symbol();
+		ISymbol sym = new com.breckinloggins.cx.type.TSymbol();
 		sym.setName(sb.toString());
 		env.push(sym);
 		env.pushReader("discriminator");

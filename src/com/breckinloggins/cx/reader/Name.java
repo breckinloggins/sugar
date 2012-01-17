@@ -49,7 +49,7 @@ public class Name extends BaseReader {
 				// have an EOF directly after a name
 				System.err.println("r(Name): " + sb.toString());
 				sr.reset();
-				ISymbol sym = new com.breckinloggins.cx.dictionary.Symbol();
+				ISymbol sym = new com.breckinloggins.cx.type.TSymbol();
 				sym.setName(sb.toString());
 				env.push(sym);
 				env.pushReader("terminator");
@@ -73,7 +73,7 @@ public class Name extends BaseReader {
 		((Whitespace)env.getReader("whitespace")).read(env);
 		
 		System.err.println("r(Name): " + sb.toString());
-		ISymbol sym = new com.breckinloggins.cx.dictionary.Symbol();
+		ISymbol sym = new com.breckinloggins.cx.type.TSymbol();
 		sym.setName(sb.toString());
 		env.push(sym);
 		
