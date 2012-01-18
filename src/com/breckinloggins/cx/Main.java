@@ -70,7 +70,7 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		JFrame frame = new JFrame("Interpreter Window");
+		JFrame frame = new JFrame("Nihilo Interpreter");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		

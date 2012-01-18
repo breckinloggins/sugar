@@ -1,7 +1,6 @@
 package com.breckinloggins.cx.reader;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import com.breckinloggins.cx.Environment;
 import com.breckinloggins.cx.dictionary.BaseReader;
@@ -15,12 +14,16 @@ public class Discriminator extends BaseReader {
 	
 	@Override
 	public void read(Environment env) throws IOException {
-		InputStream sr = System.in;
 		
-		sr.mark(0);
-		int ch = sr.read();
+		readChar(env);
+		if (!(env.peek() instanceof Integer))	{
+			return;
+		}
+		
+		int ch = (Integer)env.peek();
 		if (ch == -1)	{
 			// End of stream, send the Terminator
+			env.pop();
 			env.pushReader("terminator");
 			env.pushCommand("read");
 			return;
@@ -33,23 +36,26 @@ public class Discriminator extends BaseReader {
 		// having created the readers ahead of time.  In case multiple readers accept, there should be some way
 		// for them to "duke it out", perhaps with precedence or implicit precedence by voting.
 		if (ch == '#')	{
-			sr.reset();
+			env.pop();
 			env.pushReader("reader");
 			env.pushCommand("read");
 			return;
 		} else if (ch == '!')	{
+			env.pop();
 			env.pushReader("command");
 			env.pushCommand("read");
 			return;
 		} else if (Character.isLetter(ch) || ch == '_')	{
-			sr.reset();
 			env.pushReader("name");
 			env.pushCommand("read");
 			return;
+		} else if (Character.isWhitespace(ch))	{
+			env.pushReader("whitespace");
+			env.pushCommand("read");
+		} else {
+			env.pushReader("symbol");
+			env.pushCommand("read");	
 		}
-		
-		env.pushReader("discriminator");
-		env.pushCommand("read");
 	}
 
 }

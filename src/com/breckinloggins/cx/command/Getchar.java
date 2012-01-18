@@ -11,7 +11,7 @@ import com.breckinloggins.cx.Environment;
 import com.breckinloggins.cx.dictionary.BaseCommand;
 
 /**
- * Gets the next character from standard input and pushes it on the stack
+ * Gets the next character from standard input and pushes it on the stack.
  * @author bloggins
  */
 public class Getchar extends BaseCommand {
@@ -26,7 +26,7 @@ public class Getchar extends BaseCommand {
 	
 	@Override
 	public String getDescription() {
-		return "Gets the next character from standard input and pushes it on the stack";
+		return "Gets the next character from standard input and pushes it on the stack.";
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class Getchar extends BaseCommand {
 			env.push(ch);
 		} catch (IOException e) {
 			env.pushString("Cannot read from standard input");
-			env.getCommand("error").execute(env);
+			env.pushCommand("error");
 		}
 	}
 

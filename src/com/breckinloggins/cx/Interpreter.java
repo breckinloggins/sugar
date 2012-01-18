@@ -93,37 +93,35 @@ public class Interpreter implements Runnable {
 	
 	@Override
 	public void run() {
-		do {
+		try {
+			do {
 			
-			//_rootEnvironment.pushReader("discriminator");
-			//_rootEnvironment.pushCommand("read");
+				// Temporary code for testing
+				Environment e = _rootEnvironment;
+						
+				e.pushReader("discriminator");
+				e.pushCommand("read");
 			
-			// Temporary code for testing
-			Environment e = _rootEnvironment;
-			
-			e.push(2);
-			e.push(3);
-			e.pushCommand("add");
-			e.pushCommand("print");
-			
-			while(!_rootEnvironment.isStackEmpty()) {
-				ICommand cmd = _rootEnvironment.evaluateStack();
-				if (null == cmd)	{
-					// Interpreter should always see a command at the top of the stack
-					_rootEnvironment.pushString("FATAL - STACK CORRUPT");
-					_rootEnvironment.pushCommand("error");
-					continue;
+				while(!_rootEnvironment.isStackEmpty()) {
+					ICommand cmd = _rootEnvironment.evaluateStack();
+					if (null == cmd)	{
+						// Interpreter should always see a command at the top of the stack
+						_rootEnvironment.pushString("FATAL - STACK CORRUPT");
+						_rootEnvironment.pushCommand("error");
+						continue;
+					}
+				
+					if (cmd instanceof com.breckinloggins.cx.command.Error)	{
+						System.err.println("NIHILO STACK:");
+						_rootEnvironment.printStack(System.err);	
+						throw new Exception("The Nihilo Stack was Corrupt");
+					}
 				}
-				
-				
-				if (cmd instanceof com.breckinloggins.cx.command.Error)	{
-					_rootEnvironment.printStack(System.err);	
-					break;
-				}
-				
-			}
-		} while (false);
+			} while (true);
+		} catch (Exception e)	{
+			System.err.println("The interpreter has terminated");
+			e.printStackTrace(System.err);
+		}
 		
-		System.err.println("The interpreter has terminated");
 	}
 }

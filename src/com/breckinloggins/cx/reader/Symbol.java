@@ -4,7 +4,6 @@
 package com.breckinloggins.cx.reader;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import com.breckinloggins.cx.Environment;
 import com.breckinloggins.cx.dictionary.BaseReader;
@@ -24,37 +23,41 @@ public class Symbol extends BaseReader {
 	@Override
 	public void read(Environment env) throws IOException {
 		
-		InputStream sr = System.in;
-		sr.mark(0);
-		int c = sr.read();
+		readChar(env);
+		if (!(env.peek() instanceof Integer))	{
+			return;
+		}
+		
+		int c = (Integer)env.peek();
 		if (c == -1)	{
-			sr.reset();
+			env.pop();
 			env.pushString("Unexpected EOF");
-			env.pushReader("error");
-			env.pushCommand("read");
+			env.pushCommand("error");
 			return;
 		}
 		
 		char ch = (char)c;
 		if (Character.isWhitespace(ch))	{
 			// TODO: Should be replaced by a dynamic definition of our whitespace set
-			sr.reset();
+			env.pop();
 			env.pushString("Unexpected Whitespace");
-			env.pushReader("error");
-			env.pushCommand("read");
+			env.pushCommand("error");
 			return;
 		}
 		
 		StringBuilder sb = new StringBuilder();
-		sb.append(ch);
 		while (true)	{
-			sr.mark(0);
-			c = sr.read();
+			readChar(env);
+			if (!(env.peek() instanceof Integer))	{
+				return;
+			}
+			c = (Integer)env.peek();
+			
 			if (c == -1)	{
 				// It's up to upper level code to determine whether it's ok to 
 				// have an EOF directly after a symbol
+				env.pop();
 				System.err.println("r(Symbol): " + sb.toString());
-				sr.reset();
 				ISymbol sym = new com.breckinloggins.cx.type.TSymbol();
 				sym.setName(sb.toString());
 				env.push(sym);
@@ -66,19 +69,17 @@ public class Symbol extends BaseReader {
 			ch = (char)c;
 			if (!Character.isWhitespace(ch))	{
 				sb.append(ch);
+				env.pop();
 			}
 			else
 			{
-				sr.reset();
 				break;
-			}
+			}	
 		}
 		
 		System.err.println("r(Symbol): " + sb.toString());
 		ISymbol sym = new com.breckinloggins.cx.type.TSymbol();
 		sym.setName(sb.toString());
 		env.push(sym);
-		env.pushReader("discriminator");
-		env.pushCommand("read");
 	}
 }

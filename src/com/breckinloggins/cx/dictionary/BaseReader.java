@@ -37,4 +37,31 @@ public abstract class BaseReader implements IEntry, IReader {
 		System.err.println("Warning: reader doesn't read anything");
 	}
 
+	/**
+	 * Reads a character from standard input and pushes it on the stack.  If the top of the 
+	 * stack already has an integer, assumes it is a character and leaves it there.
+	 * @param env The environment to run the commands
+	 * @return The character, -1 if EOF, -2 if Error
+	 */
+	protected void readChar(Environment env)	{
+		if (!env.isStackEmpty() && (env.peek() instanceof Integer))	{
+			// We have an integer on top of the stack.  Assume it's a character and leave it
+			return;
+		}
+		
+		env.pushCommand("getchar");
+		env.evaluateStack();
+	}
+	
+	/**
+	 * If there is a whitespace character on the stack, discards it
+	 * @param env The environment to examine
+	 */
+	protected void discardWhitespace(Environment env)	{
+		if (!env.isStackEmpty() && (env.peek() instanceof Integer))	{
+			if (Character.isWhitespace((Integer)env.peek()))	{
+				env.pop();
+			}
+		}
+	}
 }
