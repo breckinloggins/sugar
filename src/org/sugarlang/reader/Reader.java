@@ -39,6 +39,5 @@ public class Reader extends BaseReader {
 		
 		env.pushReader(alias);
 		env.pushCommand("read");
-		env.evaluateStack();
 	}
 }

@@ -41,6 +41,10 @@ public class Discriminator extends BaseReader {
 			env.pushReader("reader");
 			env.pushCommand("read");
 			return;
+		} else if (ch == '`')	{  
+			env.pop();
+			env.pushReader("quoted");
+			env.pushCommand("read");
 		} else if (ch == '!')	{
 			env.pop();
 			env.pushReader("command");

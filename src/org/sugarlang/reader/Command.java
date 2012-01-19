@@ -44,6 +44,5 @@ public class Command extends BaseReader {
 		discardWhitespace(env);
 		
 		env.pushCommand(alias);
-		env.evaluateStack();
 	}
 }
