@@ -70,6 +70,12 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		
+		// TODO:
+		// - Name menu with app name instead of package name
+		// - Add "run" and "stop" menu items to control the interpreter
+		// - Text in output should be in red if interpreter isn't running
+		
 		JFrame frame = new JFrame("Nihilo Interpreter");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		

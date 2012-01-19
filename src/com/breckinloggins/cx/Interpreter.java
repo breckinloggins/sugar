@@ -70,24 +70,23 @@ public class Interpreter implements Runnable {
 		env.setCommand("error", new com.breckinloggins.cx.command.Error());
 		
 		// TODO:
+		// - add a dictionary to the environment that stores a map between a symbol and an Object
+		// - add commands to set, get, unset, and list the dictionary
+		// - add user-defined commands
+		// - replace current _readers and _commands with the single dictionary
 		// - replace isCommand with simple is test command.  IsCommand doesn't have to be hard-coded
 		// - add evaluate command.  If the thing on the top of the stack is a command, it is 
 		//   evaluated, else the stack is undisturbed other than popping off the command
 		//   (NOTE: with a simple IsCommand test command, this doesn't have to be a hard-coded command) 
-		// - add putchar command
-		// - modify all readers to use getchar/putchar instead of mark/reset
 		// - figure out which commands need to be built-in.  For example:
 		//		* subtract, multiply, if, loop, etc.
 		// - what are evaluators and how do they work?  Do we need them?
-		// - add set and unset commands, which create and destroy bindings in the current environment
 		// - add accept and expect readers that take as an argument a reader to accept or expect
-		// - add a dictionary to the environment that stores a map between a symbol and an IEntry
-		// - make readers read character by character
 		// - add #new reader reader
 		// - add #new command reader
 		// - replace error, name, and whitespace with dynamically defined readers 
 		// - find a way to abstract the notion of types so we don't hard code any (including strings and ints) in the 
-		//	 interpreter
+		//	 interpreter.  Probably want to study up on how F# and Haskell does type definitions.
 		// - show unrecognized input in red
 	}
 	
