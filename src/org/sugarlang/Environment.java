@@ -9,6 +9,7 @@ import java.util.Stack;
 import org.sugarlang.dictionary.ICommand;
 import org.sugarlang.dictionary.IEntry;
 import org.sugarlang.dictionary.IReader;
+import org.sugarlang.type.TMark;
 import org.sugarlang.type.TNull;
 import org.sugarlang.type.TSymbol;
 
@@ -174,6 +175,23 @@ public class Environment {
 	}
 	
 	/**
+	 * Pushes objects from the given stack onto this environment's stack
+	 * @param stack The stack to push.  Note that all items will be popped off of this stack
+	 */
+	public void pushStack(Stack<Object> stack)	{
+		while (!stack.isEmpty())	{
+			push(stack.pop());
+		}
+	}
+	
+	/**
+	 * Pushes a stack marker on the stack
+	 */
+	public void pushMark()	{
+		push(new TMark());
+	}
+	
+	/**
 	 * Pops an argument off the environment's stack
 	 * @return The argument, or null if the stack is empty
 	 */
@@ -183,6 +201,26 @@ public class Environment {
 		} catch (EmptyStackException e)	{
 			return null;
 		}
+	}
+	
+	/**
+	 * Pops arguments off the stack until a TMark is found (which is also popped), or the stack is empty
+	 * @return The stack of objects removed, minus the TMark
+	 */
+	public Stack<Object> popToMark()	{
+		Stack<Object> popped = new Stack<Object>();
+		
+		while (!isStackEmpty())	{
+			Object o = peek();
+			if (o instanceof TMark)	{
+				pop();
+				break;
+			}
+			
+			popped.push(pop());
+		}
+		
+		return popped;
 	}
 	
 	/**

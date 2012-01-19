@@ -56,9 +56,11 @@ public class Interpreter implements Runnable {
 		env.setReader("whitespace", new org.sugarlang.reader.Whitespace());
 		
 		env.setCommand("nop", new org.sugarlang.command.Nop());
+		env.setCommand("mark", new org.sugarlang.command.Mark());
 		env.setCommand("stack", new org.sugarlang.command.Stack());
 		env.setCommand("env", new org.sugarlang.command.Env());
 		env.setCommand("pop", new org.sugarlang.command.Pop());
+		env.setCommand("popmark", new org.sugarlang.command.Popmark());
 		env.setCommand("isCommand", new org.sugarlang.command.IsCommand());
 		env.setCommand("if", new org.sugarlang.command.If());
 		env.setCommand("set", new org.sugarlang.command.Set());
@@ -77,8 +79,6 @@ public class Interpreter implements Runnable {
 		// hard-coded
 		// - add bootstrap reader to set up initial discriminator symbols (at least reader and command symbols)
 		// - add integer reader
-		// - add stack marker so that we can see where we start to defined commands
-		// - change if command to use stack markers instead of counts
 		// - add user-defined commands
 		// - add #new reader reader
 		// - add #new command reader
@@ -94,6 +94,8 @@ public class Interpreter implements Runnable {
 		// - replace error, name, and whitespace with dynamically defined readers 
 		// - find a way to abstract the notion of types so we don't hard code any (including strings and ints) in the 
 		//	 interpreter.  Probably want to study up on how F# and Haskell does type definitions.
+		// - add a coerce command to replace the top value on the stack with the same value under the given new type
+		// - move as many readers as possible from hard-coded to user-defined
 		// - show unrecognized input in red
 	}
 	
