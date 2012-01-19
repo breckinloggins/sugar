@@ -20,6 +20,25 @@ public class TSymbol implements ISymbol {
 		// TODO: Probably can come up with a better description
 		return "(symbol)";
 	}
-
+	
+	@Override
+	public boolean equals(Object obj) {
+		boolean result = (!(null == obj) && 
+				(obj instanceof TSymbol) && 
+				((TSymbol)obj).getName().equals(getName()));
+		
+		return result;
+		
+	}
+	
+	@Override
+	public int hashCode() {
+		return "TSymbol".hashCode() + getName().hashCode();
+	}
+	
+	@Override
+	public String toString() {
+		return getName();
+	}
 	
 }

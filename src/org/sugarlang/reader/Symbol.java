@@ -78,6 +78,8 @@ public class Symbol extends BaseReader {
 			}	
 		}
 		
+		discardWhitespace(env);
+		
 		System.err.println("r(Symbol): " + sb.toString());
 		ISymbol sym = new org.sugarlang.type.TSymbol();
 		sym.setName(sb.toString());

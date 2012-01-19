@@ -105,16 +105,13 @@ public class Interpreter implements Runnable {
 				while(!_rootEnvironment.isStackEmpty()) {
 					ICommand cmd = _rootEnvironment.evaluateStack();
 					if (null == cmd)	{
-						// Interpreter should always see a command at the top of the stack
-						_rootEnvironment.pushString("FATAL - STACK CORRUPT");
-						_rootEnvironment.pushCommand("error");
-						continue;
+						break;
 					}
 				
 					if (cmd instanceof org.sugarlang.command.Error)	{
 						System.err.println("SUGAR STACK:");
 						_rootEnvironment.printStack(System.err);	
-						throw new Exception("The Sugar Stack was Corrupt");
+						throw new Exception("A Sugar Error was thrown");
 					}
 				}
 			} while (true);
