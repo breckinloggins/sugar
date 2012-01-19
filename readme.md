@@ -5,3 +5,5 @@ It comes with a Java-based "IDE" that shows how the language itself can choose t
 other features as it is being written.
 
 *<name> can't be Cx because that implies "C".  Mx maybe?  How about "Nihilo", from the latin "Nothing", which is what we start from?
+
+Well Nihilo works but it's hard to pronounce, hard to spell, and sounds evil.  Since the whole idea is that EVERYTHING is syntactic sugar, why not just call it "Sugar"?

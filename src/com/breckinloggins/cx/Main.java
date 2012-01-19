@@ -66,6 +66,10 @@ public class Main {
 		textArea.setTabSize(3);
 	}
 	
+	/**
+	 * Create the Nihilo Interpreter app menu bar
+	 * @return The created menu bar
+	 */
 	public static JMenuBar createMenuBar()	{
 		JMenuBar bar = new JMenuBar();
 		JMenu run = new JMenu("Run");
@@ -83,6 +87,11 @@ public class Main {
 		return bar;
 	}
 	
+	/**
+	 * Sets the properties necessary to move the menus from the frame (Java default)
+	 * to the top of the screen (Apple default)
+	 * @param title The title of the main app menu
+	 */
 	public static void setAppleMenus(String title)	{
 		try {
             System.setProperty("apple.laf.useScreenMenuBar", "true");
@@ -112,7 +121,7 @@ public class Main {
 		// - Add interpreter thread that can be controlled through run and stop menus
 		// - Text in output should be in red if interpreter isn't running
 		
-		String title = "Nihilo Interpreter";
+		String title = "Sugar";
 		
 		setAppleMenus(title);
 		

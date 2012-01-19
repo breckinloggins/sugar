@@ -111,9 +111,9 @@ public class Interpreter implements Runnable {
 					}
 				
 					if (cmd instanceof com.breckinloggins.cx.command.Error)	{
-						System.err.println("NIHILO STACK:");
+						System.err.println("SUGAR STACK:");
 						_rootEnvironment.printStack(System.err);	
-						throw new Exception("The Nihilo Stack was Corrupt");
+						throw new Exception("The Sugar Stack was Corrupt");
 					}
 				}
 			} while (true);
