@@ -8,6 +8,7 @@ import com.breckinloggins.cx.dictionary.BaseCommand;
 import com.breckinloggins.cx.dictionary.ICommand;
 import com.breckinloggins.cx.dictionary.IEntry;
 import com.breckinloggins.cx.dictionary.IReader;
+import com.breckinloggins.cx.type.TSymbol;
 
 /**
  * @author bloggins
@@ -42,6 +43,13 @@ public class Env extends BaseCommand {
 				System.out.print(alias + " [" + ((IEntry)cmd).getDescription() + "]");
 				System.out.println();		
 			}
+		}
+		
+		System.out.println("\nBindings:");
+		for (TSymbol symbol : env.getBindingSymbols())	{
+			Object o = env.getBoundObject(symbol);
+			System.out.print(symbol.getName() + " => " + o + " <" + o.getClass().getName() + ">");
+			System.out.println();
 		}
 	}
 }

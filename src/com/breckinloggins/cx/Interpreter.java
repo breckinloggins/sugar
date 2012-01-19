@@ -61,6 +61,9 @@ public class Interpreter implements Runnable {
 		env.setCommand("pop", new com.breckinloggins.cx.command.Pop());
 		env.setCommand("isCommand", new com.breckinloggins.cx.command.IsCommand());
 		env.setCommand("if", new com.breckinloggins.cx.command.If());
+		env.setCommand("set", new com.breckinloggins.cx.command.Set());
+		env.setCommand("unset", new com.breckinloggins.cx.command.Unset());
+		env.setCommand("get", new com.breckinloggins.cx.command.Get());
 		env.setCommand("add", new com.breckinloggins.cx.command.Add());
 		env.setCommand("getchar", new com.breckinloggins.cx.command.Getchar());
 		env.setCommand("read", new com.breckinloggins.cx.command.Read());
@@ -70,8 +73,6 @@ public class Interpreter implements Runnable {
 		env.setCommand("error", new com.breckinloggins.cx.command.Error());
 		
 		// TODO:
-		// - add a dictionary to the environment that stores a map between a symbol and an Object
-		// - add commands to set, get, unset, and list the dictionary
 		// - add user-defined commands
 		// - replace current _readers and _commands with the single dictionary
 		// - replace isCommand with simple is test command.  IsCommand doesn't have to be hard-coded
@@ -97,10 +98,14 @@ public class Interpreter implements Runnable {
 			
 				// Temporary code for testing
 				Environment e = _rootEnvironment;
-						
+				
 				e.pushReader("discriminator");
 				e.pushCommand("read");
 			
+				e.pushSymbol("FOO");
+				e.pushString("bar");
+				e.pushCommand("set");
+				
 				while(!_rootEnvironment.isStackEmpty()) {
 					ICommand cmd = _rootEnvironment.evaluateStack();
 					if (null == cmd)	{

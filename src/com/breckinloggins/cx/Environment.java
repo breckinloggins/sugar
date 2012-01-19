@@ -9,16 +9,22 @@ import java.util.Stack;
 import com.breckinloggins.cx.dictionary.ICommand;
 import com.breckinloggins.cx.dictionary.IEntry;
 import com.breckinloggins.cx.dictionary.IReader;
+import com.breckinloggins.cx.type.TNull;
+import com.breckinloggins.cx.type.TSymbol;
 
 public class Environment {
 	
 	private HashMap<String, IReader> _readers;
 	private HashMap<String, ICommand> _commands;
+	
+	private HashMap<TSymbol, Object> _dictionary;
 	private Stack<Object> _stack;
 	
 	public Environment()	{
 		_readers = new HashMap<String, IReader>();
 		_commands = new HashMap<String, ICommand>();
+		
+		_dictionary = new HashMap<TSymbol, Object>();
 		_stack = new Stack<Object>();
 	}
 	
@@ -75,6 +81,46 @@ public class Environment {
 	}
 	
 	/**
+	 * Sets a binding in the dictionary between a symbol and an arbitrary object
+	 * @param sym The symbol to which to bind the object.  If a binding already exists for this symbol, it will be
+	 * overwritten
+	 * @param obj The object to set, may be null to represent an unbound symbol
+	 */
+	public void setBinding(TSymbol sym, Object obj)	{
+		if (null == obj)	{
+			obj = new TNull();
+		}
+		
+		_dictionary.put(sym, obj);
+	}
+	
+	/**
+	 * Clears anything bound to the given symbol
+	 * @param sym The symbol to unset
+	 */
+	public void unsetBinding(TSymbol sym)	{
+		_dictionary.remove(sym);
+	}
+	
+	/**
+	 * Gets a binding in the dictionary by the given symbol
+	 * @param sym The symbol to look up
+	 * @return null if the symbol is not bound, TNull if the symbol is bound to null, 
+	 * the bound object otherwise
+	 */
+	public Object getBoundObject(TSymbol sym)	{
+		return _dictionary.get(sym);
+	}
+	
+	/**
+	 * Gets the list of symbols bound in the current environment
+	 * @return The symbol list
+	 */
+	public Set<TSymbol> getBindingSymbols()	{
+		return _dictionary.keySet();
+	}
+	
+	/**
 	 * Pushes an argument onto the environment's stack
 	 * @param arg The argument to push
 	 */
@@ -88,6 +134,16 @@ public class Environment {
 	 */
 	public void pushString(String s)	{
 		_stack.push(s);
+	}
+	
+	/**
+	 * Pushes a symbol onto the environment's stack
+	 * @param s The string of the symbol to push
+	 */
+	public void pushSymbol(String s)	{
+		TSymbol sym = new TSymbol();
+		sym.setName(s);
+		push(sym);
 	}
 	
 	/**

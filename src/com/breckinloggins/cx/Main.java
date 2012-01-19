@@ -118,6 +118,7 @@ public class Main {
 	public static void main(String[] args) {
 		
 		// TODO:
+		// - Rename all packages to sugar
 		// - Add interpreter thread that can be controlled through run and stop menus
 		// - Text in output should be in red if interpreter isn't running
 		
