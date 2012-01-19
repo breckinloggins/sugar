@@ -73,7 +73,15 @@ public class Interpreter implements Runnable {
 		env.setCommand("error", new org.sugarlang.command.Error());
 		
 		// TODO:
+		// - discriminator should check symbol binding for characters to switch on instead of having them 
+		// hard-coded
+		// - add bootstrap reader to set up initial discriminator symbols (at least reader and command symbols)
+		// - add integer reader
+		// - add stack marker so that we can see where we start to defined commands
+		// - change if command to use stack markers instead of counts
 		// - add user-defined commands
+		// - add #new reader reader
+		// - add #new command reader
 		// - replace current _readers and _commands with the single dictionary
 		// - replace isCommand with simple is test command.  IsCommand doesn't have to be hard-coded
 		// - add evaluate command.  If the thing on the top of the stack is a command, it is 
@@ -83,8 +91,6 @@ public class Interpreter implements Runnable {
 		//		* subtract, multiply, if, loop, etc.
 		// - what are evaluators and how do they work?  Do we need them?
 		// - add accept and expect readers that take as an argument a reader to accept or expect
-		// - add #new reader reader
-		// - add #new command reader
 		// - replace error, name, and whitespace with dynamically defined readers 
 		// - find a way to abstract the notion of types so we don't hard code any (including strings and ints) in the 
 		//	 interpreter.  Probably want to study up on how F# and Haskell does type definitions.

@@ -91,4 +91,13 @@ r(balanced)			<-		{\n\tprintf("Hello, World!\n");\n\treturn 0;\n}				=> r(discri
 
 But this is missing the other half of the picture, the evaluator.  We'll need to figure out how that works as well.
 
+----------------------------------------
+
+OK, so we have the notion of a bootstrap reader.  It's easy to to see that the first couple of things we need are to set
+the command symbol, the reader symbol, and the character escape symbol.  But we have to figure out how to bootstrap more 
+complex things, too.  For example, how do we bootstrap a number?  A name vs a regular symbol?  Etc.  I'd like to not have
+to reinvent regular expressions, so maybe regular expressions are a built-in concept instead of numbers and such, and then
+we just have to declare the regular expression symbol.
+
+
 
