@@ -66,6 +66,23 @@ public class Main {
 		textArea.setTabSize(3);
 	}
 	
+	public static JMenuBar createMenuBar()	{
+		JMenuBar bar = new JMenuBar();
+		JMenu run = new JMenu("Run");
+		bar.add(run);
+		
+		JMenuItem runItem = new JMenuItem("Run");
+		runItem.setEnabled(false);
+		
+		JMenuItem stopItem = new JMenuItem("Stop");
+		stopItem.setEnabled(false);
+		
+		run.add(runItem);
+		run.add(stopItem);
+		
+		return bar;
+	}
+	
 	public static void setAppleMenus(String title)	{
 		try {
             System.setProperty("apple.laf.useScreenMenuBar", "true");
@@ -92,7 +109,7 @@ public class Main {
 	public static void main(String[] args) {
 		
 		// TODO:
-		// - Add "run" and "stop" menu items to control the interpreter
+		// - Add interpreter thread that can be controlled through run and stop menus
 		// - Text in output should be in red if interpreter isn't running
 		
 		String title = "Nihilo Interpreter";
@@ -101,6 +118,8 @@ public class Main {
 		
 		JFrame frame = new JFrame(title);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		frame.setJMenuBar(createMenuBar());
 		
 		
 		//
