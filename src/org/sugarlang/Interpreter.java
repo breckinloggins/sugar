@@ -61,6 +61,8 @@ public class Interpreter implements Runnable {
 		env.setCommand("env", new org.sugarlang.command.Env());
 		env.setCommand("pop", new org.sugarlang.command.Pop());
 		env.setCommand("popmark", new org.sugarlang.command.Popmark());
+		env.setCommand("quote", new org.sugarlang.command.Quote());
+		env.setCommand("unquote", new org.sugarlang.command.Unquote());
 		env.setCommand("isCommand", new org.sugarlang.command.IsCommand());
 		env.setCommand("if", new org.sugarlang.command.If());
 		env.setCommand("set", new org.sugarlang.command.Set());
@@ -79,7 +81,12 @@ public class Interpreter implements Runnable {
 		// hard-coded
 		// - add bootstrap reader to set up initial discriminator symbols (at least reader and command symbols)
 		// - add integer reader
+		// - add quoted reader
+		// - add quote command.  This is how we'll create user-defined commands, by quoting a whole stack.  The
+		//   newcommand command will pop everything off the stack that was quoted, unquote it, and store that stack
+		//	 in the dictionary
 		// - add user-defined commands
+		// - add commands to push and pop chained environments
 		// - add #new reader reader
 		// - add #new command reader
 		// - replace current _readers and _commands with the single dictionary
