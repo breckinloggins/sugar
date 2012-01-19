@@ -66,17 +66,40 @@ public class Main {
 		textArea.setTabSize(3);
 	}
 	
+	public static void setAppleMenus(String title)	{
+		try {
+            System.setProperty("apple.laf.useScreenMenuBar", "true");
+            System.setProperty("com.apple.mrj.application.apple.menu.about.name", title);
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		}
+		catch(ClassNotFoundException e) {
+            System.out.println("ClassNotFoundException: " + e.getMessage());
+		}
+		catch(InstantiationException e) {
+            System.out.println("InstantiationException: " + e.getMessage());
+		}
+		catch(IllegalAccessException e) {
+            System.out.println("IllegalAccessException: " + e.getMessage());
+		}
+		catch(UnsupportedLookAndFeelException e) {
+            System.out.println("UnsupportedLookAndFeelException: " + e.getMessage());
+		}
+	}
+	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		
 		// TODO:
-		// - Name menu with app name instead of package name
 		// - Add "run" and "stop" menu items to control the interpreter
 		// - Text in output should be in red if interpreter isn't running
 		
-		JFrame frame = new JFrame("Nihilo Interpreter");
+		String title = "Nihilo Interpreter";
+		
+		setAppleMenus(title);
+		
+		JFrame frame = new JFrame(title);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		
