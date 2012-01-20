@@ -38,7 +38,11 @@ public class Discriminator extends BaseReader {
 		// for them to "duke it out", perhaps with precedence or implicit precedence by voting.
 		if (ch == '#')	{
 			env.pop();
-			env.pushReader("reader");
+			env.pushReader("symbol");
+			env.pushCommand("read");
+			env.evaluateStack();
+			env.pushCommand("reader");
+			env.evaluateStack();
 			env.pushCommand("read");
 			return;
 		} else if (ch == '`')	{  

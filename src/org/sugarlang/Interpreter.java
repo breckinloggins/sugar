@@ -52,7 +52,6 @@ public class Interpreter implements Runnable {
 		env.setBinding("discriminator", new org.sugarlang.reader.Discriminator());
 		env.setBinding("quoted", new org.sugarlang.reader.Quoted());
 		env.setBinding("name", new org.sugarlang.reader.Name());
-		env.setBinding("reader", new org.sugarlang.reader.Reader());
 		env.setBinding("terminator", new org.sugarlang.reader.Terminator());
 		env.setBinding("whitespace", new org.sugarlang.reader.Whitespace());
 		
@@ -79,6 +78,10 @@ public class Interpreter implements Runnable {
 		env.setBinding("error", new org.sugarlang.command.Error());
 		
 		// TODO:
+		// - fix "reader is not a reader" error with # syntax
+		// - start working towards defining a basic LISP syntax
+		//		- hard-coded "list" reader
+		// - add accept and expect readers that take as an argument a reader to accept or expect
 		// - discriminator should check symbol binding for characters to switch on instead of having them 
 		// hard-coded
 		// - add bootstrap reader to set up initial discriminator symbols (at least reader and command symbols)
@@ -91,7 +94,6 @@ public class Interpreter implements Runnable {
 		// - figure out which commands need to be built-in.  For example:
 		//		* subtract, multiply, if, loop, etc.
 		// - what are evaluators and how do they work?  Do we need them?
-		// - add accept and expect readers that take as an argument a reader to accept or expect
 		// - replace error, name, and whitespace with dynamically defined readers 
 		// - find a way to abstract the notion of types so we don't hard code any (including strings and ints) in the 
 		//	 interpreter.  Probably want to study up on how F# and Haskell does type definitions.
