@@ -25,7 +25,7 @@ public class Pop extends BaseCommand {
 		Object popped = env.pop();
 		if (null == popped)	{
 			env.pushString("The stack is empty");
-			env.getCommand("error").execute(env);
+			env.pushCommand("error");
 		}
 	}
 

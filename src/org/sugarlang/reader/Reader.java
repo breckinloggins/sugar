@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import org.sugarlang.Environment;
 import org.sugarlang.dictionary.BaseReader;
-import org.sugarlang.dictionary.IReader;
 import org.sugarlang.type.TSymbol;
 
 
@@ -25,19 +24,13 @@ public class Reader extends BaseReader {
 		}
 		
 		String alias = ((TSymbol)env.pop()).getName();
-		IReader reader = env.getReader(alias);
 		
-		System.err.print("r(Reader): ");
-		if (null == reader)	{
-			env.pushString("There is no reader by the name " + alias);
-			env.pushReader("error");
-			env.pushCommand("read");
-			return;
-		} 
+		// An error will be pushed if alias doesn't refer to a reader
+		env.pushReader(alias);
+		env.pushCommand("read");
 		
 		discardWhitespace(env);
 		
-		env.pushReader(alias);
-		env.pushCommand("read");
+		
 	}
 }

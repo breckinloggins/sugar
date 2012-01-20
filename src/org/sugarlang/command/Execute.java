@@ -5,7 +5,6 @@ package org.sugarlang.command;
 
 import org.sugarlang.Environment;
 import org.sugarlang.dictionary.BaseCommand;
-import org.sugarlang.dictionary.ICommand;
 import org.sugarlang.type.TMacro;
 import org.sugarlang.type.TQuote;
 
@@ -38,13 +37,8 @@ public class Execute extends BaseCommand {
 			}
 		} else {
 			String cmdName = env.pop().toString();
-			ICommand cmd = env.getCommand(cmdName);
-			if (null == cmd)	{
-				env.pushString("ERROR: Command \"" + cmdName + "\" not found");
-				env.pushCommand("error");
-				return;
-			}
 			
+			// pushCommand will handle the error if cmdName isn't a command
 			env.pushCommand(cmdName);
 		}
 	}

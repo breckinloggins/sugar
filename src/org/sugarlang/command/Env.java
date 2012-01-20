@@ -28,27 +28,41 @@ public class Env extends BaseCommand {
 		System.out.println("\nStack:");
 		env.printStack(System.out);
 		
-		System.out.println("\nReaders:");
-		for (String alias : env.getReaderAliases())	{
-			IReader reader = env.getReader(alias);
+		System.out.println("\nReader Bindings:");
+		for (TSymbol sym : env.getBindingSymbols())	{
+			Object o = env.getBoundObject(sym);
+			if (!(o instanceof IReader))	{
+				continue;
+			}
+			
+			IReader reader = (IReader)o;
 			if (reader instanceof IEntry)	{
-				System.out.print(alias + " [" + ((IEntry)reader).getDescription() + "]");
+				System.out.print(sym.getName() + " => [" + ((IEntry)reader).getDescription() + "]");
 				System.out.println();	
 			}
 		}
 		
-		System.out.println("\nCommands:");
-		for (String alias : env.getCommandAliases())	{
-			ICommand cmd = env.getCommand(alias);
+		System.out.println("\nCommand Bindings:");
+		for (TSymbol sym : env.getBindingSymbols())	{
+			Object o = env.getBoundObject(sym);
+			if (!(o instanceof ICommand))	{
+				continue;
+			}
+			
+			ICommand cmd = (ICommand)o;
 			if (cmd instanceof IEntry)	{
-				System.out.print(alias + " [" + ((IEntry)cmd).getDescription() + "]");
+				System.out.print(sym.getName() + " => [" + ((IEntry)cmd).getDescription() + "]");
 				System.out.println();		
 			}
 		}
 		
-		System.out.println("\nBindings:");
+		System.out.println("\nOther Bindings:");
 		for (TSymbol symbol : env.getBindingSymbols())	{
 			Object o = env.getBoundObject(symbol);
+			if (o instanceof ICommand || o instanceof IReader)	{
+				continue;
+			}
+			
 			System.out.print(symbol.getName() + " => " + o + " <" + o.getClass().getName() + ">");
 			System.out.println();
 		}

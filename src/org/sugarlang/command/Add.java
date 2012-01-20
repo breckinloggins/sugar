@@ -26,7 +26,7 @@ public class Add extends BaseCommand {
 		Object arg0 = env.pop();
 		if (null == arg0)	{
 			env.pushString("Not enough arguments on the stack");
-			env.getCommand("error").execute(env);
+			env.pushCommand("error");
 			return;
 		}
 		
@@ -34,7 +34,7 @@ public class Add extends BaseCommand {
 		Object arg1 = env.pop();
 		if (null == arg1)	{
 			env.pushString("Not enough arguments on the stack");
-			env.getCommand("error").execute(env);
+			env.pushCommand("error");
 			return;
 		}
 		

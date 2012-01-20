@@ -26,13 +26,13 @@ public class Read extends BaseCommand {
 		Object arg = env.pop();
 		if (null == arg)	{
 			env.pushString("Cannot execute reader. stack empty");
-			env.getCommand("error").execute(env);
+			env.pushCommand("error");
 			return;
 		}
 		
 		if (!(arg instanceof IReader))	{
 			env.pushString("Argument \"" + arg.toString() + "\" is not a reader");
-			env.getCommand("error").execute(env);
+			env.pushCommand("error");
 			return;
 		}
 		

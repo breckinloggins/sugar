@@ -16,70 +16,12 @@ import org.sugarlang.type.TSymbol;
 
 public class Environment {
 	
-	private HashMap<String, IReader> _readers;
-	private HashMap<String, ICommand> _commands;
-	
 	private HashMap<TSymbol, Object> _dictionary;
 	private Stack<Object> _stack;
 	
-	public Environment()	{
-		_readers = new HashMap<String, IReader>();
-		_commands = new HashMap<String, ICommand>();
-		
+	public Environment()	{		
 		_dictionary = new HashMap<TSymbol, Object>();
 		_stack = new Stack<Object>();
-	}
-	
-	/**
-	 * Sets the alias for the given reader in this environment
-	 * @param alias The alias by which to refer to the reader
-	 * @param reader The name of the class for the reader
-	 */
-	public void setReader(String alias, IReader reader)	{
-		_readers.put(alias, reader);
-	}
-	
-	/**
-	 * Gets a set of all registered reader aliases
-	 * @return The set of aliases
-	 */
-	public Set<String> getReaderAliases()	{
-		return _readers.keySet();
-	}
-	
-	/**
-	 * Gets the reader by the given alias
-	 * @param alias The alias by which the reader is known
-	 * @return The reader, or null if not found
-	 */
-	public IReader getReader(String alias)	{
-		return _readers.get(alias);
-	}
-	
-	/**
-	 * Sets the alias for the given command in this environment
-	 * @param alias The alias by which to refer to the command
-	 * @param command The name of the class for the command
-	 */
-	public void setCommand(String alias, ICommand command)	{
-		_commands.put(alias, command);
-	}
-	
-	/**
-	 * Gets the command by the given alias
-	 * @param alias The alias by which the command is known
-	 * @return The command, or null if not found
-	 */
-	public ICommand getCommand(String alias)	{
-		return _commands.get(alias);
-	}
-	
-	/**
-	 * Gets a set of all registered command aliases
-	 * @return The set of aliases
-	 */
-	public Set<String> getCommandAliases()	{
-		return _commands.keySet();
 	}
 	
 	/**
@@ -94,6 +36,19 @@ public class Environment {
 		}
 		
 		_dictionary.put(sym, obj);
+	}
+	
+	/**
+	 * Sets a binding in the dictionary between a symbol and an arbitrary object
+	 * @param sym The symbol to which to bind the object.  If a binding already exists for this symbol, it will be
+	 * overwritten
+	 * @param obj The object to set, may be null to represent an unbound symbol
+	 */
+	public void setBinding(String sym, Object obj)	{
+		TSymbol tsym = new TSymbol();
+		tsym.setName(sym);
+		
+		setBinding(tsym, obj);
 	}
 	
 	/**
@@ -112,6 +67,18 @@ public class Environment {
 	 */
 	public Object getBoundObject(TSymbol sym)	{
 		return _dictionary.get(sym);
+	}
+	
+	/**
+	 * Gets a binding in the dictionary by the given symbol
+	 * @param sym The symbol to look up
+	 * @return null if the symbol is not bound, TNull if the symbol is bound to null, 
+	 * the bound object otherwise
+	 */
+	public Object getBoundObject(String sym)	{
+		TSymbol tsym = new TSymbol();
+		tsym.setName(sym);
+		return getBoundObject(tsym);
 	}
 	
 	/**
@@ -149,21 +116,35 @@ public class Environment {
 	}
 	
 	/**
-	 * Pushes the command with the given alias onto the stack
+	 * Pushes the command with the given alias onto the stack.  If there is no command
+	 * by that alias, an error is pushed instead
 	 * @param alias The alias by which the command is known in this environment
 	 */
 	public void pushCommand(String alias)	{
-		ICommand cmd = getCommand(alias);
-		push((IEntry)cmd);
+		Object o = getBoundObject(alias);
+		if (null == o || !(o instanceof ICommand))	{
+			pushString("\"" + alias + "\" is not a command");
+			push(new org.sugarlang.command.Error());
+			return;
+		}
+		
+		push(o);
 	}
 	
 	/**
-	 * Pushes the reader with the given alias onto the stack
+	 * Pushes the reader with the given alias onto the stack.  If there is no reader
+	 * by that alias, an error is pushed instead
 	 * @param alias The alias by which the reader is known in this environment
 	 */
 	public void pushReader(String alias)	{
-		IReader reader = getReader(alias);
-		push((IEntry)reader);
+		Object o = getBoundObject(alias);
+		if (null == o || !(o instanceof IReader))	{
+			pushString("\"" + alias + "\" is not a reader");
+			push(new org.sugarlang.command.Error());
+			return;
+		}
+		
+		push(o);
 	}
 	
 	/**

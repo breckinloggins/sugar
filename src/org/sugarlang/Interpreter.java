@@ -46,37 +46,37 @@ public class Interpreter implements Runnable {
 		//
 		// But, again, we ultimately want to hard-code as little of this as possible.
 		Environment env = _rootEnvironment;
-		env.setReader("command", new org.sugarlang.reader.Command());
-		env.setReader("symbol", new org.sugarlang.reader.Symbol());
-		env.setReader("discriminator", new org.sugarlang.reader.Discriminator());
-		env.setReader("quoted", new org.sugarlang.reader.Quoted());
-		env.setReader("error", new org.sugarlang.reader.Error());
-		env.setReader("name", new org.sugarlang.reader.Name());
-		env.setReader("reader", new org.sugarlang.reader.Reader());
-		env.setReader("terminator", new org.sugarlang.reader.Terminator());
-		env.setReader("whitespace", new org.sugarlang.reader.Whitespace());
+	
+		env.setBinding("command", new org.sugarlang.reader.Command());
+		env.setBinding("symbol", new org.sugarlang.reader.Symbol());
+		env.setBinding("discriminator", new org.sugarlang.reader.Discriminator());
+		env.setBinding("quoted", new org.sugarlang.reader.Quoted());
+		env.setBinding("name", new org.sugarlang.reader.Name());
+		env.setBinding("reader", new org.sugarlang.reader.Reader());
+		env.setBinding("terminator", new org.sugarlang.reader.Terminator());
+		env.setBinding("whitespace", new org.sugarlang.reader.Whitespace());
 		
-		env.setCommand("nop", new org.sugarlang.command.Nop());
-		env.setCommand("mark", new org.sugarlang.command.Mark());
-		env.setCommand("stack", new org.sugarlang.command.Stack());
-		env.setCommand("env", new org.sugarlang.command.Env());
-		env.setCommand("pop", new org.sugarlang.command.Pop());
-		env.setCommand("popmark", new org.sugarlang.command.Popmark());
-		env.setCommand("quote", new org.sugarlang.command.Quote());
-		env.setCommand("unquote", new org.sugarlang.command.Unquote());
-		env.setCommand("createmacro", new org.sugarlang.command.CreateMacro());
-		env.setCommand("isCommand", new org.sugarlang.command.IsCommand());
-		env.setCommand("if", new org.sugarlang.command.If());
-		env.setCommand("set", new org.sugarlang.command.Set());
-		env.setCommand("unset", new org.sugarlang.command.Unset());
-		env.setCommand("get", new org.sugarlang.command.Get());
-		env.setCommand("add", new org.sugarlang.command.Add());
-		env.setCommand("getchar", new org.sugarlang.command.Getchar());
-		env.setCommand("read", new org.sugarlang.command.Read());
-		env.setCommand("print", new org.sugarlang.command.Print());
-		env.setCommand("execute", new org.sugarlang.command.Execute());
-		env.setCommand("reader", new org.sugarlang.command.Reader());
-		env.setCommand("error", new org.sugarlang.command.Error());
+		env.setBinding("nop", new org.sugarlang.command.Nop());
+		env.setBinding("mark", new org.sugarlang.command.Mark());
+		env.setBinding("stack", new org.sugarlang.command.Stack());
+		env.setBinding("env", new org.sugarlang.command.Env());
+		env.setBinding("pop", new org.sugarlang.command.Pop());
+		env.setBinding("popmark", new org.sugarlang.command.Popmark());
+		env.setBinding("quote", new org.sugarlang.command.Quote());
+		env.setBinding("unquote", new org.sugarlang.command.Unquote());
+		env.setBinding("createmacro", new org.sugarlang.command.CreateMacro());
+		env.setBinding("isCommand", new org.sugarlang.command.IsCommand());
+		env.setBinding("if", new org.sugarlang.command.If());
+		env.setBinding("set", new org.sugarlang.command.Set());
+		env.setBinding("unset", new org.sugarlang.command.Unset());
+		env.setBinding("get", new org.sugarlang.command.Get());
+		env.setBinding("add", new org.sugarlang.command.Add());
+		env.setBinding("getchar", new org.sugarlang.command.Getchar());
+		env.setBinding("read", new org.sugarlang.command.Read());
+		env.setBinding("print", new org.sugarlang.command.Print());
+		env.setBinding("execute", new org.sugarlang.command.Execute());
+		env.setBinding("reader", new org.sugarlang.command.Reader());
+		env.setBinding("error", new org.sugarlang.command.Error());
 		
 		// TODO:
 		// - discriminator should check symbol binding for characters to switch on instead of having them 
@@ -84,7 +84,6 @@ public class Interpreter implements Runnable {
 		// - add bootstrap reader to set up initial discriminator symbols (at least reader and command symbols)
 		// - add integer reader
 		// - add commands to push and pop chained environments
-		// - replace current _readers and _commands with the single dictionary
 		// - replace isCommand with simple is test command.  IsCommand doesn't have to be hard-coded
 		// - add evaluate command.  If the thing on the top of the stack is a command, it is 
 		//   evaluated, else the stack is undisturbed other than popping off the command
@@ -96,6 +95,8 @@ public class Interpreter implements Runnable {
 		// - replace error, name, and whitespace with dynamically defined readers 
 		// - find a way to abstract the notion of types so we don't hard code any (including strings and ints) in the 
 		//	 interpreter.  Probably want to study up on how F# and Haskell does type definitions.
+		// - since we're going for nearly everything to be redefinable, perhaps we should look more into dependent types:
+		//	 http://www.cs.st-andrews.ac.uk/~eb/writings/idris-tutorial.pdf
 		// - add a coerce command to replace the top value on the stack with the same value under the given new type
 		// - move as many readers as possible from hard-coded to user-defined
 		// - show unrecognized input in red
