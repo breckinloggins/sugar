@@ -6,6 +6,8 @@ public class Interpreter implements Runnable {
 	private Environment _rootEnvironment;
 	private boolean _shouldStop;
 	
+	private Listener _listener;
+	
 	// TODO: Let's not try to interpret C-like code right away.  Let's do:
 	// 1. LISP
 	// 2. BASIC
@@ -80,7 +82,7 @@ public class Interpreter implements Runnable {
 		env.setBinding("error", new org.sugarlang.command.Error());
 		
 		// TODO:
-		// - fix "reader is not a reader" error with # syntax
+		// - Rename ICommand to IOp to make it more clear what it is
 		// - start working towards defining a basic LISP syntax
 		//		- hard-coded "list" reader
 		// - add accept and expect readers that take as an argument a reader to accept or expect
@@ -107,6 +109,20 @@ public class Interpreter implements Runnable {
 	}
 	
 	/**
+	 * @return the listener
+	 */
+	public Listener getListener() {
+		return _listener;
+	}
+
+	/**
+	 * @param listener the listener to set
+	 */
+	public void setListener(Listener listener) {
+		this._listener = listener;
+	}
+
+	/**
 	 * Signals to the thread that it should stop running
 	 */
 	public void stop()	{
@@ -119,6 +135,10 @@ public class Interpreter implements Runnable {
 		_shouldStop = false;
 		
 		System.err.println("Sugar interpreter started");
+		
+		if (null != _listener)	{
+			_listener.interpreterStarted(this);
+		}
 		
 		try {
 			do {
@@ -154,5 +174,17 @@ public class Interpreter implements Runnable {
 			}
 		}
 		
+	}
+	
+	/**
+	 * The listener for this interpreter
+	 * @author bloggins
+	 */
+	public interface Listener	{
+		/**
+		 * Called when the interpreter has started
+		 * @param e The interpreter
+		 */
+		void interpreterStarted(Interpreter e);
 	}
 }

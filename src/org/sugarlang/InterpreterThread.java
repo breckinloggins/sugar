@@ -13,6 +13,14 @@ public class InterpreterThread {
 	}
 	
 	/**
+	 * Gets the interpreter that this InterpreterThread managers
+	 * @return The interpreter
+	 */
+	public Interpreter getInterpreter()	{
+		return _interpreter;
+	}
+	
+	/**
 	 * Starts the interpeter thread
 	 */
 	public void start()	{

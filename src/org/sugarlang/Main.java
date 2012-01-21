@@ -264,8 +264,22 @@ public class Main {
 				_interpreterThread.stop();
 				_runMenuItem.setEnabled(true);
 			}
-			
 		});
 		
+		_interpreterThread.getInterpreter().setListener(new Interpreter.Listener() {
+			
+			@Override
+			public void interpreterStarted(Interpreter e) {
+				System.err.println("Executing prelude.");
+				try {
+					poStream.write(TEMP_Prelude.code.getBytes());
+				} catch (IOException e1) {
+					e1.printStackTrace(System.err);
+				}
+			}
+		});
+		
+		
+		_runMenuItem.doClick();
 	}
 }
