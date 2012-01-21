@@ -83,6 +83,23 @@ public class Interpreter implements Runnable {
 		
 		// TODO:
 		// - Rename ICommand to IOp to make it more clear what it is
+		// - Built-in list type
+		//		- Create TList (can only contain homogeneous members)
+		//		- Can create from Stack: TMark, <el>, <el>, ..., !createlist
+		//		- Ops: head, last, tail, init, null, length
+		// - List reader (use '()' for syntax for now)
+		// - Remainder of Haskell built-in types: Int, Double, Bool, Char
+		// - replace isCommand with simple is test command.  IsCommand doesn't have to be hard-coded
+		// - Create type system (http://cs.wallawalla.edu/research/KU/PR/Haskell.html)
+		//		- User-defined types as an instance of TUserType
+		//		- Simple Type algebra for how the type is defined
+		//		- Op to construct types from arguments
+		//		- Op to coerce one type to another
+		//		- Op to extract values
+		//		- Do we want to do named type (record-like) components or pure structural types?
+		//		  I'm leaning toward structural types.  So we'll probably need to define lists and 
+		//		  tuples as built-in types.  Haskell-like
+		// - replace !createlist, !createmacro, etc. with more generic syntax
 		// - start working towards defining a basic LISP syntax
 		//		- hard-coded "list" reader
 		// - add accept and expect readers that take as an argument a reader to accept or expect
@@ -91,7 +108,6 @@ public class Interpreter implements Runnable {
 		// - add bootstrap reader to set up initial discriminator symbols (at least reader and command symbols)
 		// - add integer reader
 		// - add commands to push and pop chained environments
-		// - replace isCommand with simple is test command.  IsCommand doesn't have to be hard-coded
 		// - add evaluate command.  If the thing on the top of the stack is a command, it is 
 		//   evaluated, else the stack is undisturbed other than popping off the command
 		//   (NOTE: with a simple IsCommand test command, this doesn't have to be a hard-coded command) 
