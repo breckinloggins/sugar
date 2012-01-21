@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.sugarlang.Environment;
 import org.sugarlang.dictionary.BaseReader;
-import org.sugarlang.dictionary.ICommand;
+import org.sugarlang.dictionary.IOp;
 import org.sugarlang.type.TMacro;
 import org.sugarlang.type.TSymbol;
 
@@ -17,14 +17,14 @@ public class Command extends BaseReader {
 
 	@Override
 	public String getDescription() {
-		return "Takes the name of a command and executes that command";
+		return "Takes the name of a command (op, macro, etc.) and executes that command";
 	}
 
 	@Override
 	public void read(Environment env) throws IOException {
 		
 		env.pushReader("symbol");
-		env.pushCommand("read");
+		env.pushOp("read");
 		env.evaluateStack();
 		
 		if (env.isStackEmpty() || !(env.peek() instanceof TSymbol))	{
@@ -36,18 +36,18 @@ public class Command extends BaseReader {
 		Object o = env.getBoundObject(alias);
 		if (null == o)	{
 			env.pushString("The symbol \"" + alias + "\" is not bound");
-			env.pushCommand("error");
+			env.pushOp("error");
 		}
 		
-		if (o instanceof ICommand)	{
+		if (o instanceof IOp)	{
 			// An error will be pushed if alias doesn't refer to a command
-			env.pushCommand(alias); 
+			env.pushOp(alias); 
 		} else if (o instanceof TMacro)	{
 			env.push(o);
-			env.pushCommand("execute");
+			env.pushOp("execute");
 		} else {
 			env.pushString("Don't know how to execute object of type <" + o.getClass().getName() + "> for symbol \"" + alias + "\"");
-			env.pushCommand("error");
+			env.pushOp("error");
 		}
 		
 		discardWhitespace(env);

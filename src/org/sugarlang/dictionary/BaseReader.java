@@ -50,7 +50,7 @@ public abstract class BaseReader implements IEntry, IReader {
 			return;
 		}
 		
-		env.pushCommand("getchar");
+		env.pushOp("getchar");
 		env.evaluateStack();
 	}
 	

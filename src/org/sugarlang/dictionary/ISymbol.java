@@ -1,5 +1,10 @@
 package org.sugarlang.dictionary;
 
+/**
+ * 
+ * @author bloggins
+ * TODO: Do we need this?
+ */
 public interface ISymbol extends IEntry{
 	
 	/**

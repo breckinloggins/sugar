@@ -1,12 +1,12 @@
 /**
  * 
  */
-package org.sugarlang.command;
+package org.sugarlang.op;
 
 import java.util.Stack;
 
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseCommand;
+import org.sugarlang.dictionary.BaseOp;
 
 
 /**
@@ -14,7 +14,7 @@ import org.sugarlang.dictionary.BaseCommand;
  * the stack to be evaluated, if false, leaves the else branch
  * @author bloggins
  */
-public class If extends BaseCommand {
+public class If extends BaseOp {
 
 	@Override
 	public String getDescription() {
@@ -32,7 +32,7 @@ public class If extends BaseCommand {
 		
 		if (null == env.peek())	{
 			env.pushString("Cannot evaluate if.  Stack is empty");
-			env.pushCommand("error");
+			env.pushOp("error");
 			return;
 		}
 		

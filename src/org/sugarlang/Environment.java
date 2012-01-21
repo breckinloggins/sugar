@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.Stack;
 
-import org.sugarlang.dictionary.ICommand;
+import org.sugarlang.dictionary.IOp;
 import org.sugarlang.dictionary.IEntry;
 import org.sugarlang.dictionary.IReader;
 import org.sugarlang.type.TMark;
@@ -116,15 +116,15 @@ public class Environment {
 	}
 	
 	/**
-	 * Pushes the command with the given alias onto the stack.  If there is no command
+	 * Pushes the opcode with the given alias onto the stack.  If there is no opcode
 	 * by that alias, an error is pushed instead
-	 * @param alias The alias by which the command is known in this environment
+	 * @param alias The alias by which the opcode is known in this environment
 	 */
-	public void pushCommand(String alias)	{
+	public void pushOp(String alias)	{
 		Object o = getBoundObject(alias);
-		if (null == o || !(o instanceof ICommand))	{
-			pushString("\"" + alias + "\" is not a command");
-			push(new org.sugarlang.command.Error());
+		if (null == o || !(o instanceof IOp))	{
+			pushString("\"" + alias + "\" is not an opcode");
+			push(new org.sugarlang.op.Error());
 			return;
 		}
 		
@@ -140,7 +140,7 @@ public class Environment {
 		Object o = getBoundObject(alias);
 		if (null == o || !(o instanceof IReader))	{
 			pushString("\"" + alias + "\" is not a reader");
-			push(new org.sugarlang.command.Error());
+			push(new org.sugarlang.op.Error());
 			return;
 		}
 		
@@ -225,22 +225,23 @@ public class Environment {
 	}
 	
 	/**
-	 * If the item at the top of the stack is a command, the command is evaluated, else the stack
+	 * If the item at the top of the stack is an opcode, the opcode is evaluated, else the stack
 	 * is left alone
 	 * 
-	 * @return The ICommand that was evaluated, or null if the item wasn't a command
+	 * @return The IOp that was evaluated, or null if the item wasn't an opcode
 	 */
-	public ICommand evaluateStack()	{
+	public IOp evaluateStack()	{
 		// TODO: This doesn't need to be built-in.  An evaluate command is fine for this
+		// TODO: This also doesn't need to do only opcodes.  Any callable entity should suffice
 		if (null == peek())	{
 			// It's not an error to evaluate an empty stack
 			return null;
 		}
 		
-		if (peek() instanceof ICommand)	{
-			ICommand cmd = (ICommand)pop();
-			cmd.execute(this);
-			return cmd;
+		if (peek() instanceof IOp)	{
+			IOp op = (IOp)pop();
+			op.execute(this);
+			return op;
 		}
 		
 		return null;

@@ -9,7 +9,7 @@ import org.sugarlang.Environment;
  * @author bloggins
  *
  */
-public abstract class BaseCommand implements IEntry, ICommand {
+public abstract class BaseOp implements IEntry, IOp {
 
 	/*
 	 * @see com.breckinloggins.cx.IEntry#getName()
@@ -24,14 +24,14 @@ public abstract class BaseCommand implements IEntry, ICommand {
 	 */
 	@Override
 	public String getDescription() {
-		return "(command)";
+		return "(opcode)";
 	}
 
 	/*
-	 * @see com.breckinloggins.cx.command.ICommand#execute(com.breckinloggins.cx.Environment)
+	 * @see com.breckinloggins.cx.command.IOp#execute(com.breckinloggins.cx.Environment)
 	 */
 	@Override
 	public void execute(Environment env) {
-		System.err.println("WARNING: The command \"" + getName() + "\" has nothing to do");
+		System.err.println("WARNING: The opcode \"" + getName() + "\" has nothing to do");
 	}
 }

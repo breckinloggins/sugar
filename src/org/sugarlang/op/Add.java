@@ -1,10 +1,10 @@
 /**
  * 
  */
-package org.sugarlang.command;
+package org.sugarlang.op;
 
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseCommand;
+import org.sugarlang.dictionary.BaseOp;
 
 
 /**
@@ -12,7 +12,7 @@ import org.sugarlang.dictionary.BaseCommand;
  * @author bloggins
  *
  */
-public class Add extends BaseCommand {
+public class Add extends BaseOp {
 
 	@Override
 	public String getDescription() {
@@ -26,7 +26,7 @@ public class Add extends BaseCommand {
 		Object arg0 = env.pop();
 		if (null == arg0)	{
 			env.pushString("Not enough arguments on the stack");
-			env.pushCommand("error");
+			env.pushOp("error");
 			return;
 		}
 		
@@ -34,7 +34,7 @@ public class Add extends BaseCommand {
 		Object arg1 = env.pop();
 		if (null == arg1)	{
 			env.pushString("Not enough arguments on the stack");
-			env.pushCommand("error");
+			env.pushOp("error");
 			return;
 		}
 		

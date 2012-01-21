@@ -29,7 +29,7 @@ public class Name extends BaseReader {
 		if (c == -1)	{
 			env.pop();
 			env.pushString("Unexpected EOF");
-			env.pushCommand("error");
+			env.pushOp("error");
 			return;
 		}
 		
@@ -37,7 +37,7 @@ public class Name extends BaseReader {
 		if (!Character.isLetter(ch) && ch != '_')	{
 			env.pop();
 			env.pushString("Unexpected Character: '" + ch + "'" );
-			env.pushCommand("error");
+			env.pushOp("error");
 			return;
 		}
 		
@@ -59,7 +59,7 @@ public class Name extends BaseReader {
 				sym.setName(sb.toString());
 				env.push(sym);
 				env.pushReader("terminator");
-				env.pushCommand("read");
+				env.pushOp("read");
 				return;
 			} else if (c == -2)	{
 				// We have an error

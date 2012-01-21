@@ -1,19 +1,19 @@
 /**
  * 
  */
-package org.sugarlang.command;
+package org.sugarlang.op;
 
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseCommand;
+import org.sugarlang.dictionary.BaseOp;
 import org.sugarlang.type.TMacro;
 import org.sugarlang.type.TQuote;
 
 
 /**
- * Pops an argument off the stack and executes the command by that name
+ * Pops an argument off the stack and executes the callable entity by that name
  * @author bloggins
  */
-public class Execute extends BaseCommand {
+public class Execute extends BaseOp {
 
 	@Override
 	public String getDescription() {
@@ -25,7 +25,7 @@ public class Execute extends BaseCommand {
 		env.evaluateStack();
 		if (env.isStackEmpty())	{
 			env.pushString("Cannot execute a command because the stack is empty");
-			env.pushCommand("error");
+			env.pushOp("error");
 			return;
 		}
 		
@@ -36,10 +36,10 @@ public class Execute extends BaseCommand {
 				env.push(q.getInner());
 			}
 		} else {
-			String cmdName = env.pop().toString();
+			String opName = env.pop().toString();
 			
-			// pushCommand will handle the error if cmdName isn't a command
-			env.pushCommand(cmdName);
+			// pushOp will handle the error if opName isn't an op
+			env.pushOp(opName);
 		}
 	}
 }

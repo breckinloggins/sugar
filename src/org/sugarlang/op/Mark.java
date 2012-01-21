@@ -1,16 +1,16 @@
 /**
  * 
  */
-package org.sugarlang.command;
+package org.sugarlang.op;
 
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseCommand;
+import org.sugarlang.dictionary.BaseOp;
 
 /**
  * Pushes a stack marker on the stack
  * @author bloggins
  */
-public class Mark extends BaseCommand {
+public class Mark extends BaseOp {
 
 	@Override
 	public String getDescription() {

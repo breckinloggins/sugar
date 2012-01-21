@@ -33,7 +33,7 @@ public class Symbol extends BaseReader {
 		if (c == -1)	{
 			env.pop();
 			env.pushString("Unexpected EOF");
-			env.pushCommand("error");
+			env.pushOp("error");
 			return;
 		}
 		
@@ -42,7 +42,7 @@ public class Symbol extends BaseReader {
 			// TODO: Should be replaced by a dynamic definition of our whitespace set
 			env.pop();
 			env.pushString("Unexpected Whitespace");
-			env.pushCommand("error");
+			env.pushOp("error");
 			return;
 		}
 		
@@ -63,7 +63,7 @@ public class Symbol extends BaseReader {
 				sym.setName(sb.toString());
 				env.push(sym);
 				env.pushReader("terminator");
-				env.pushCommand("read");
+				env.pushOp("read");
 				return;
 			}
 			

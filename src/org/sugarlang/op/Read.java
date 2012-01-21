@@ -1,12 +1,12 @@
 /**
  * 
  */
-package org.sugarlang.command;
+package org.sugarlang.op;
 
 import java.io.IOException;
 
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseCommand;
+import org.sugarlang.dictionary.BaseOp;
 import org.sugarlang.dictionary.IReader;
 
 
@@ -14,7 +14,7 @@ import org.sugarlang.dictionary.IReader;
  * Executes the reader at the top of the stack
  * @author bloggins
  */
-public class Read extends BaseCommand {
+public class Read extends BaseOp {
 
 	@Override
 	public String getDescription() {
@@ -27,13 +27,13 @@ public class Read extends BaseCommand {
 		Object arg = env.pop();
 		if (null == arg)	{
 			env.pushString("Cannot execute reader. stack empty");
-			env.pushCommand("error");
+			env.pushOp("error");
 			return;
 		}
 		
 		if (!(arg instanceof IReader))	{
 			env.pushString("Argument \"" + arg.toString() + "\" is not a reader");
-			env.pushCommand("error");
+			env.pushOp("error");
 			return;
 		}
 		

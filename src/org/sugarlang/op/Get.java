@@ -1,7 +1,7 @@
-package org.sugarlang.command;
+package org.sugarlang.op;
 
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseCommand;
+import org.sugarlang.dictionary.BaseOp;
 import org.sugarlang.type.TSymbol;
 
 
@@ -11,7 +11,7 @@ import org.sugarlang.type.TSymbol;
  * @author bloggins
  *
  */
-public class Get extends BaseCommand {
+public class Get extends BaseOp {
 
 	@Override
 	public String getDescription() {
@@ -24,21 +24,21 @@ public class Get extends BaseCommand {
 		env.evaluateStack();
 		Object sym = env.pop();
 		if (null == sym)	{
-			env.pushString("Cannot execute get command, the stack is empty");
-			env.pushCommand("error");
+			env.pushString("Cannot execute get op, the stack is empty");
+			env.pushOp("error");
 			return;
 		}
 		
 		if (!(sym instanceof TSymbol))	{
-			env.pushString("Cannot execute get command, object on the stack isn't a symbol");
-			env.pushCommand("error");
+			env.pushString("Cannot execute get op, object on the stack isn't a symbol");
+			env.pushOp("error");
 			return;
 		}
 		
 		Object val = env.getBoundObject((TSymbol)sym);
 		if (null == val)	{
 			env.pushString("The symbol \"" + ((TSymbol)sym).getName() + "\" is not bound");
-			env.pushCommand("error");
+			env.pushOp("error");
 			return;
 		}
 		

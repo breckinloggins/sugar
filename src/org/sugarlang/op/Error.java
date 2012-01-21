@@ -1,17 +1,17 @@
 /**
  * 
  */
-package org.sugarlang.command;
+package org.sugarlang.op;
 
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseCommand;
+import org.sugarlang.dictionary.BaseOp;
 
 
 /**
  * Pops an argument off the stack and displays an error with that string
  * @author bloggins
  */
-public class Error extends BaseCommand {
+public class Error extends BaseOp {
 
 	@Override
 	public String getDescription() {
@@ -24,7 +24,7 @@ public class Error extends BaseCommand {
 		String error = env.pop().toString();
 		
 		if (null == error)	{
-			// TODO: This should be an error cmd
+			// TODO: This should be an error op
 			System.err.println("ERROR (no message)");
 			return;
 		}

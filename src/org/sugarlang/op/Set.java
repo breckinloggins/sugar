@@ -1,10 +1,10 @@
 /**
  * 
  */
-package org.sugarlang.command;
+package org.sugarlang.op;
 
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseCommand;
+import org.sugarlang.dictionary.BaseOp;
 import org.sugarlang.type.TSymbol;
 
 
@@ -12,7 +12,7 @@ import org.sugarlang.type.TSymbol;
  * Sets a binding in the current dictionary
  * @author bloggins
  */
-public class Set extends BaseCommand {
+public class Set extends BaseOp {
 
 	@Override
 	public String getDescription() {
@@ -25,7 +25,7 @@ public class Set extends BaseCommand {
 		Object o = env.pop();
 		if (null == o)	{
 			env.pushString("Cannot set binding object, stack is empty");
-			env.pushCommand("error");
+			env.pushOp("error");
 			return;
 		}
 		
@@ -33,13 +33,13 @@ public class Set extends BaseCommand {
 		Object sym = env.pop();
 		if (null == sym)	{
 			env.pushString("Cannot set binding symbol, stack is empty");
-			env.pushCommand("error");
+			env.pushOp("error");
 			return;
 		}
 		
 		if (!(sym instanceof TSymbol))	{
 			env.pushString("Cannot set binding, object on the stack isn't a symbol");
-			env.pushCommand("error");
+			env.pushOp("error");
 			return;
 		}
 		

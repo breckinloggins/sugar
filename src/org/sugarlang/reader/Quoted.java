@@ -24,12 +24,12 @@ public class Quoted extends BaseReader {
 		// TODO: This could be much more featureful if combined with a new environment
 		
 		env.pushReader("discriminator");
-		env.pushCommand("read");
+		env.pushOp("read");
 		env.evaluateStack();
 		
 		// If we have something on the top of the stack, quote it
 		if (!env.isStackEmpty())	{
-			env.pushCommand("quote");
+			env.pushOp("quote");
 		}
 	}
 

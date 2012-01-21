@@ -1,11 +1,11 @@
 /**
  * 
  */
-package org.sugarlang.command;
+package org.sugarlang.op;
 
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseCommand;
-import org.sugarlang.dictionary.ICommand;
+import org.sugarlang.dictionary.BaseOp;
+import org.sugarlang.dictionary.IOp;
 import org.sugarlang.dictionary.IEntry;
 import org.sugarlang.dictionary.IReader;
 import org.sugarlang.type.TSymbol;
@@ -15,7 +15,7 @@ import org.sugarlang.type.TSymbol;
  * @author bloggins
  *
  */
-public class Env extends BaseCommand {
+public class Env extends BaseOp {
 
 	@Override
 	public String getDescription()	{
@@ -42,16 +42,16 @@ public class Env extends BaseCommand {
 			}
 		}
 		
-		System.out.println("\nCommand Bindings:");
+		System.out.println("\nOpcode Bindings:");
 		for (TSymbol sym : env.getBindingSymbols())	{
 			Object o = env.getBoundObject(sym);
-			if (!(o instanceof ICommand))	{
+			if (!(o instanceof IOp))	{
 				continue;
 			}
 			
-			ICommand cmd = (ICommand)o;
-			if (cmd instanceof IEntry)	{
-				System.out.print(sym.getName() + " => [" + ((IEntry)cmd).getDescription() + "]");
+			IOp op = (IOp)o;
+			if (op instanceof IEntry)	{
+				System.out.print(sym.getName() + " => [" + ((IEntry)op).getDescription() + "]");
 				System.out.println();		
 			}
 		}
@@ -59,7 +59,7 @@ public class Env extends BaseCommand {
 		System.out.println("\nOther Bindings:");
 		for (TSymbol symbol : env.getBindingSymbols())	{
 			Object o = env.getBoundObject(symbol);
-			if (o instanceof ICommand || o instanceof IReader)	{
+			if (o instanceof IOp || o instanceof IReader)	{
 				continue;
 			}
 			

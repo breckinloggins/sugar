@@ -1,21 +1,21 @@
 /**
  * 
  */
-package org.sugarlang.command;
+package org.sugarlang.op;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseCommand;
+import org.sugarlang.dictionary.BaseOp;
 
 
 /**
  * Gets the next character from standard input and pushes it on the stack.
  * @author bloggins
  */
-public class Getchar extends BaseCommand {
+public class Getchar extends BaseOp {
 
 	private InputStreamReader _inputReader;
 	private BufferedReader _bufferedReader;
@@ -37,7 +37,7 @@ public class Getchar extends BaseCommand {
 			env.push(ch);
 		} catch (IOException e) {
 			env.pushString("Cannot read from standard input");
-			env.pushCommand("error");
+			env.pushOp("error");
 		}
 	}
 

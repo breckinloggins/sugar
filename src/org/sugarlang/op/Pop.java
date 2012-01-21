@@ -1,10 +1,10 @@
 /**
  * 
  */
-package org.sugarlang.command;
+package org.sugarlang.op;
 
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseCommand;
+import org.sugarlang.dictionary.BaseOp;
 
 
 /**
@@ -12,7 +12,7 @@ import org.sugarlang.dictionary.BaseCommand;
  * @author bloggins
  *
  */
-public class Pop extends BaseCommand {
+public class Pop extends BaseOp {
 
 	@Override
 	public String getDescription() {
@@ -25,7 +25,7 @@ public class Pop extends BaseCommand {
 		Object popped = env.pop();
 		if (null == popped)	{
 			env.pushString("The stack is empty");
-			env.pushCommand("error");
+			env.pushOp("error");
 		}
 	}
 

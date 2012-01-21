@@ -1,17 +1,17 @@
 /**
  * 
  */
-package org.sugarlang.command;
+package org.sugarlang.op;
 
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseCommand;
+import org.sugarlang.dictionary.BaseOp;
 import org.sugarlang.type.TQuote;
 
 /**
  * Unquotes the quoted item at the top of the stack and pushes the unquoted item
  * @author bloggins
  */
-public class Unquote extends BaseCommand {
+public class Unquote extends BaseOp {
 
 	@Override
 	public String getDescription() {
@@ -23,13 +23,13 @@ public class Unquote extends BaseCommand {
 		env.evaluateStack();
 		if (env.isStackEmpty())	{
 			env.pushString("Cannot unquote, stack is empty");
-			env.pushCommand("error");
+			env.pushOp("error");
 			return;
 		}
 		
 		if (!(env.peek() instanceof TQuote))	{
 			env.pushString("Cannot unquote, object on the stack isn't quoted");
-			env.pushCommand("error");
+			env.pushOp("error");
 			return;
 		}
 		

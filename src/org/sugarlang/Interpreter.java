@@ -1,6 +1,6 @@
 package org.sugarlang;
 
-import org.sugarlang.dictionary.ICommand;
+import org.sugarlang.dictionary.IOp;
 
 public class Interpreter implements Runnable {
 	private Environment _rootEnvironment;
@@ -59,37 +59,36 @@ public class Interpreter implements Runnable {
 		env.setBinding("terminator", new org.sugarlang.reader.Terminator());
 		env.setBinding("whitespace", new org.sugarlang.reader.Whitespace());
 		
-		env.setBinding("nop", new org.sugarlang.command.Nop());
-		env.setBinding("mark", new org.sugarlang.command.Mark());
-		env.setBinding("stack", new org.sugarlang.command.Stack());
-		env.setBinding("env", new org.sugarlang.command.Env());
-		env.setBinding("pop", new org.sugarlang.command.Pop());
-		env.setBinding("popmark", new org.sugarlang.command.Popmark());
-		env.setBinding("quote", new org.sugarlang.command.Quote());
-		env.setBinding("unquote", new org.sugarlang.command.Unquote());
-		env.setBinding("createmacro", new org.sugarlang.command.CreateMacro());
-		env.setBinding("isCommand", new org.sugarlang.command.IsCommand());
-		env.setBinding("if", new org.sugarlang.command.If());
-		env.setBinding("set", new org.sugarlang.command.Set());
-		env.setBinding("unset", new org.sugarlang.command.Unset());
-		env.setBinding("get", new org.sugarlang.command.Get());
-		env.setBinding("add", new org.sugarlang.command.Add());
-		env.setBinding("getchar", new org.sugarlang.command.Getchar());
-		env.setBinding("read", new org.sugarlang.command.Read());
-		env.setBinding("print", new org.sugarlang.command.Print());
-		env.setBinding("execute", new org.sugarlang.command.Execute());
-		env.setBinding("reader", new org.sugarlang.command.Reader());
-		env.setBinding("error", new org.sugarlang.command.Error());
+		env.setBinding("nop", new org.sugarlang.op.Nop());
+		env.setBinding("mark", new org.sugarlang.op.Mark());
+		env.setBinding("stack", new org.sugarlang.op.Stack());
+		env.setBinding("env", new org.sugarlang.op.Env());
+		env.setBinding("pop", new org.sugarlang.op.Pop());
+		env.setBinding("popmark", new org.sugarlang.op.Popmark());
+		env.setBinding("quote", new org.sugarlang.op.Quote());
+		env.setBinding("unquote", new org.sugarlang.op.Unquote());
+		env.setBinding("createmacro", new org.sugarlang.op.CreateMacro());
+		env.setBinding("if", new org.sugarlang.op.If());
+		env.setBinding("set", new org.sugarlang.op.Set());
+		env.setBinding("unset", new org.sugarlang.op.Unset());
+		env.setBinding("get", new org.sugarlang.op.Get());
+		env.setBinding("add", new org.sugarlang.op.Add());
+		env.setBinding("getchar", new org.sugarlang.op.Getchar());
+		env.setBinding("read", new org.sugarlang.op.Read());
+		env.setBinding("print", new org.sugarlang.op.Print());
+		env.setBinding("execute", new org.sugarlang.op.Execute());
+		env.setBinding("reader", new org.sugarlang.op.Reader());
+		env.setBinding("error", new org.sugarlang.op.Error());
 		
 		// TODO:
-		// - Rename ICommand to IOp to make it more clear what it is
 		// - Built-in list type
 		//		- Create TList (can only contain homogeneous members)
 		//		- Can create from Stack: TMark, <el>, <el>, ..., !createlist
 		//		- Ops: head, last, tail, init, null, length
 		// - List reader (use '()' for syntax for now)
+		// - Create an abstraction that IOp and TMacro both inherit from? (ICallable?)
 		// - Remainder of Haskell built-in types: Int, Double, Bool, Char
-		// - replace isCommand with simple is test command.  IsCommand doesn't have to be hard-coded
+		// - Add "is" type test op
 		// - Create type system (http://cs.wallawalla.edu/research/KU/PR/Haskell.html)
 		//		- User-defined types as an instance of TUserType
 		//		- Simple Type algebra for how the type is defined
@@ -102,16 +101,16 @@ public class Interpreter implements Runnable {
 		// - replace !createlist, !createmacro, etc. with more generic syntax
 		// - start working towards defining a basic LISP syntax
 		//		- hard-coded "list" reader
-		// - add accept and expect readers that take as an argument a reader to accept or expect
+		// - add accept and expect readers that take as an argument a type to accept or expect
 		// - discriminator should check symbol binding for characters to switch on instead of having them 
 		// hard-coded
 		// - add bootstrap reader to set up initial discriminator symbols (at least reader and command symbols)
 		// - add integer reader
-		// - add commands to push and pop chained environments
+		// - add ops to push and pop chained environments
 		// - add evaluate command.  If the thing on the top of the stack is a command, it is 
 		//   evaluated, else the stack is undisturbed other than popping off the command
 		//   (NOTE: with a simple IsCommand test command, this doesn't have to be a hard-coded command) 
-		// - figure out which commands need to be built-in.  For example:
+		// - figure out which commands need to be built-in ops.  For example:
 		//		* subtract, multiply, if, loop, etc.
 		// - what are evaluators and how do they work?  Do we need them?
 		// - replace error, name, and whitespace with dynamically defined readers 
@@ -162,19 +161,21 @@ public class Interpreter implements Runnable {
 				Environment e = _rootEnvironment;
 				
 				e.pushReader("discriminator");
-				e.pushCommand("read");
+				e.pushOp("read");
 			
 				while(!_rootEnvironment.isStackEmpty()) {
 					if (_shouldStop)	{
 						throw new Exception("The interpreter has been stopped");
 					}
 					
-					ICommand cmd = _rootEnvironment.evaluateStack();
-					if (null == cmd)	{
+					IOp op = _rootEnvironment.evaluateStack();
+					if (null == op)	{
 						break;
 					}
 				
-					if (cmd instanceof org.sugarlang.command.Error)	{
+					// TODO: Error should be a TYPE, not an op.  There should be a "throw"
+					// op that does this itself
+					if (op instanceof org.sugarlang.op.Error)	{
 						System.err.println("SUGAR STACK:");
 						_rootEnvironment.printStack(System.err);	
 						error = true;

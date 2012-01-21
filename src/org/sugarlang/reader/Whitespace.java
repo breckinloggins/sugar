@@ -27,7 +27,7 @@ public class Whitespace extends BaseReader {
 		if (c == -1)	{
 			env.pop();
 			env.pushReader("terminator");
-			env.pushCommand("read");
+			env.pushOp("read");
 			return;
 		}
 		
@@ -47,7 +47,7 @@ public class Whitespace extends BaseReader {
 		if (hasWhitespace)	System.err.println("r(Whitespace)");
 		
 		env.pushReader("discriminator");
-		env.pushCommand("read");
+		env.pushOp("read");
 	}
 
 }

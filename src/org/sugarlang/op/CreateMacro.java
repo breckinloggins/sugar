@@ -1,10 +1,10 @@
 /**
  * 
  */
-package org.sugarlang.command;
+package org.sugarlang.op;
 
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseCommand;
+import org.sugarlang.dictionary.BaseOp;
 import org.sugarlang.type.TMacro;
 import org.sugarlang.type.TQuote;
 
@@ -12,7 +12,7 @@ import org.sugarlang.type.TQuote;
  * Pops zero or more quoted items off the stack and pushes a TMacro containing those items on the stack
  * @author bloggins
  */
-public class CreateMacro extends BaseCommand {
+public class CreateMacro extends BaseOp {
 
 	@Override
 	public String getDescription() {

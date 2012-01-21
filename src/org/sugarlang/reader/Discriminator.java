@@ -26,7 +26,7 @@ public class Discriminator extends BaseReader {
 			// End of stream, send the Terminator
 			env.pop();
 			env.pushReader("terminator");
-			env.pushCommand("read");
+			env.pushOp("read");
 			return;
 		}
 		
@@ -39,29 +39,29 @@ public class Discriminator extends BaseReader {
 		if (ch == '#')	{
 			env.pop();
 			env.pushReader("symbol");
-			env.pushCommand("read");
-			env.pushCommand("reader");
-			env.pushCommand("read");
+			env.pushOp("read");
+			env.pushOp("reader");
+			env.pushOp("read");
 			return;
 		} else if (ch == '`')	{  
 			env.pop();
 			env.pushReader("quoted");
-			env.pushCommand("read");
+			env.pushOp("read");
 		} else if (ch == '!')	{
 			env.pop();
 			env.pushReader("command");
-			env.pushCommand("read");
+			env.pushOp("read");
 			return;
 		} else if (Character.isLetter(ch) || ch == '_')	{
 			env.pushReader("name");
-			env.pushCommand("read");
+			env.pushOp("read");
 			return;
 		} else if (Character.isWhitespace(ch))	{
 			env.pushReader("whitespace");
-			env.pushCommand("read");
+			env.pushOp("read");
 		} else {
 			env.pushReader("symbol");
-			env.pushCommand("read");	
+			env.pushOp("read");	
 		}
 	}
 

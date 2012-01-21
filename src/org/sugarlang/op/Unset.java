@@ -1,10 +1,10 @@
 /**
  * 
  */
-package org.sugarlang.command;
+package org.sugarlang.op;
 
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseCommand;
+import org.sugarlang.dictionary.BaseOp;
 import org.sugarlang.type.TSymbol;
 
 
@@ -12,7 +12,7 @@ import org.sugarlang.type.TSymbol;
  * Causes the symbol at the top of the stack to be unbound
  * @author bloggins
  */
-public class Unset extends BaseCommand {
+public class Unset extends BaseOp {
 
 	@Override
 	public String getDescription() {
@@ -26,13 +26,13 @@ public class Unset extends BaseCommand {
 		Object sym = env.pop();
 		if (null == sym)	{
 			env.pushString("Cannot unset, stack is empty");
-			env.pushCommand("error");
+			env.pushOp("error");
 			return;
 		}
 		
 		if (!(sym instanceof TSymbol))	{
 			env.pushString("Cannot unset, object on the stack isn't a symbol");
-			env.pushCommand("error");
+			env.pushOp("error");
 			return;
 		}
 		
