@@ -28,8 +28,7 @@ public class Quote extends BaseOp {
 		}
 		
 		Object o = env.pop();
-		TQuote q = new TQuote();
-		q.setInnter(o);
+		TQuote q = new TQuote(o);
 		env.push(q);
 	}
 

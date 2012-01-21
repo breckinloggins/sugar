@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.sugarlang.Environment;
 import org.sugarlang.dictionary.BaseReader;
-import org.sugarlang.dictionary.ISymbol;
+import org.sugarlang.type.TSymbol;
 
 
 public class Name extends BaseReader {
@@ -55,8 +55,7 @@ public class Name extends BaseReader {
 				env.pop();
 				
 				System.err.println("r(Name): " + sb.toString());
-				ISymbol sym = new org.sugarlang.type.TSymbol();
-				sym.setName(sb.toString());
+				TSymbol sym = new org.sugarlang.type.TSymbol(sb.toString());
 				env.push(sym);
 				env.pushReader("terminator");
 				env.pushOp("read");
@@ -80,8 +79,7 @@ public class Name extends BaseReader {
 		discardWhitespace(env);
 		
 		System.err.println("r(Name): " + sb.toString());
-		ISymbol sym = new org.sugarlang.type.TSymbol();
-		sym.setName(sb.toString());
+		TSymbol sym = new org.sugarlang.type.TSymbol(sb.toString());
 		env.push(sym);		
 	}
 

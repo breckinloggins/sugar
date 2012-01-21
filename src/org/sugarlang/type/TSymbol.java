@@ -1,34 +1,37 @@
 package org.sugarlang.type;
 
-import org.sugarlang.dictionary.ISymbol;
+import org.sugarlang.Environment;
+import org.sugarlang.dictionary.BaseType;
 
-public class TSymbol implements ISymbol {
-	private String _name;
+
+public class TSymbol extends BaseType {
+	private String _val;
 	
 	@Override
 	public String getName() {
-		return _name;
-	}
-	@Override
-
-	public void setName(String name) {
-		_name = name;
+		return _val;
 	}
 
-	@Override
-	public String getDescription() {
-		// TODO: Probably can come up with a better description
-		return "(symbol)";
+	/**
+	 * Creates a symbol with the given value
+	 * @param name
+	 */
+	public TSymbol(String val)	{
+		_val = val;
 	}
 	
+	@Override
+	public String getDescription() {
+		return "Represents a collection of non-whitespace characters";
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		boolean result = (!(null == obj) && 
 				(obj instanceof TSymbol) && 
 				((TSymbol)obj).getName().equals(getName()));
 		
-		return result;
-		
+		return result;	
 	}
 	
 	@Override
@@ -38,7 +41,12 @@ public class TSymbol implements ISymbol {
 	
 	@Override
 	public String toString() {
-		return getName();
+		return _val;
+	}
+
+	@Override
+	public void Evaluate(Environment env) {
+		// Nope
 	}
 	
 }

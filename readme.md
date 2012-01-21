@@ -1,9 +1,8 @@
-<name>* is a stack-based language with an emphasis on reading and evaluating source text.  In other words, the purpose is to 
+Sugar is a stack-based language with an emphasis on reading and evaluating source text.  In other words, the purpose is to 
 "transform" it into any language you choose.  The language itself should remind you somewhat of FORTH.
 
-It comes with a Java-based "IDE" that shows how the language itself can choose the syntax highlighting, completion assist, and 
+Sugar comes with a Java-based "IDE" that shows how the language itself can choose the syntax highlighting, completion assist, and 
 other features as it is being written.
 
-*<name> can't be Cx because that implies "C".  Mx maybe?  How about "Nihilo", from the latin "Nothing", which is what we start from?
-
-Well Nihilo works but it's hard to pronounce, hard to spell, and sounds evil.  Since the whole idea is that EVERYTHING is syntactic sugar, why not just call it "Sugar"?
+Fundamentally, Sugar is a functional language.  That is, some operations have side effects (like IO) and can mutate the state of the underlying stack machine, but type values themselves cannot be mutated.  Sugar does have the notion of environment bindings, 
+and these bindings can be changed (in other words, the scope is itself mutable), but the underlying values themselves can't be changed.  Users can, of course, implement mutable types on top of the language if they so choose.

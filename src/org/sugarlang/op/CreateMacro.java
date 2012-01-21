@@ -3,6 +3,7 @@
  */
 package org.sugarlang.op;
 
+import java.util.Stack;
 import org.sugarlang.Environment;
 import org.sugarlang.dictionary.BaseOp;
 import org.sugarlang.type.TMacro;
@@ -21,17 +22,17 @@ public class CreateMacro extends BaseOp {
 
 	@Override
 	public void execute(Environment env) {
-		TMacro m = new TMacro();
+		Stack<Object> macroStack = new Stack<Object>();
 		
 		while(!env.isStackEmpty())	{
 			if (env.peek() instanceof TQuote)	{
-				m.getStack().push(env.pop());
+				macroStack.push(env.pop());
 			} else {
 				break;
 			}
 		}
 		
-		env.push(m);
+		env.push(new TMacro(macroStack));
 	}
 
 }

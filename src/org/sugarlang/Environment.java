@@ -45,8 +45,7 @@ public class Environment {
 	 * @param obj The object to set, may be null to represent an unbound symbol
 	 */
 	public void setBinding(String sym, Object obj)	{
-		TSymbol tsym = new TSymbol();
-		tsym.setName(sym);
+		TSymbol tsym = new TSymbol(sym);
 		
 		setBinding(tsym, obj);
 	}
@@ -76,8 +75,7 @@ public class Environment {
 	 * the bound object otherwise
 	 */
 	public Object getBoundObject(String sym)	{
-		TSymbol tsym = new TSymbol();
-		tsym.setName(sym);
+		TSymbol tsym = new TSymbol(sym);
 		return getBoundObject(tsym);
 	}
 	
@@ -110,8 +108,7 @@ public class Environment {
 	 * @param s The string of the symbol to push
 	 */
 	public void pushSymbol(String s)	{
-		TSymbol sym = new TSymbol();
-		sym.setName(s);
+		TSymbol sym = new TSymbol(s);
 		push(sym);
 	}
 	

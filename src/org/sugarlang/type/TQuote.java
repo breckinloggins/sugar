@@ -15,21 +15,21 @@ public class TQuote extends BaseType {
 	private Object _inner;
 	
 	/**
+	 * Constructs a quoted object with the given inner object
+	 * @param inner
+	 */
+	public TQuote(Object inner)	{
+		_inner = inner;
+	}
+	
+	/**
 	 * Gets the quoted object
 	 * @return The object quoted
 	 */
 	public Object getInner()	{
 		return _inner;
 	}
-	
-	/**
-	 * Sets the quoted object
-	 * @param inner The object quoted
-	 */
-	public void setInnter(Object inner)	{
-		_inner = inner;
-	}
-	
+		
 	@Override
 	public String getName() {
 		return "TQuote`"+getInner().toString()+" <" + getInner().getClass().getName() + ">`";

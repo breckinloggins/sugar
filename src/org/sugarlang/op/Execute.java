@@ -3,6 +3,7 @@
  */
 package org.sugarlang.op;
 
+import java.util.Stack;
 import org.sugarlang.Environment;
 import org.sugarlang.dictionary.BaseOp;
 import org.sugarlang.type.TMacro;
@@ -31,9 +32,15 @@ public class Execute extends BaseOp {
 		
 		if (env.peek() instanceof TMacro)	{
 			TMacro m = (TMacro)env.pop();
-			while (!m.getStack().isEmpty())	{
-				TQuote q = (TQuote)m.getStack().pop();
-				env.push(q.getInner());
+			Stack<Object> macroStack = new Stack<Object>();
+			for (Object o : m.getStackList())	{	
+				TQuote q = (TQuote)o;
+				macroStack.push(q.getInner());
+			}
+			
+			// Transfer the stack to the environment
+			while (!macroStack.isEmpty())	{
+				env.push(macroStack.pop());
 			}
 		} else {
 			String opName = env.pop().toString();
