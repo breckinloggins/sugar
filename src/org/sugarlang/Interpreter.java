@@ -4,6 +4,7 @@ import org.sugarlang.dictionary.ICommand;
 
 public class Interpreter implements Runnable {
 	private Environment _rootEnvironment;
+	private boolean _shouldStop;
 	
 	// TODO: Let's not try to interpret C-like code right away.  Let's do:
 	// 1. LISP
@@ -28,6 +29,7 @@ public class Interpreter implements Runnable {
 	 */
 	public Interpreter()	{
 		_rootEnvironment = new Environment();
+		_shouldStop = false;
 		
 		// Set up the basic starting environment
 		// TODO: Need to find a better way to do this
@@ -104,11 +106,22 @@ public class Interpreter implements Runnable {
 		// - show unrecognized input in red
 	}
 	
+	/**
+	 * Signals to the thread that it should stop running
+	 */
+	public void stop()	{
+		_shouldStop = true;
+	}
+	
 	@Override
 	public void run() {
+		boolean error = false;
+		_shouldStop = false;
+		
+		System.err.println("Sugar interpreter started");
+		
 		try {
 			do {
-			
 				// Temporary code for testing
 				Environment e = _rootEnvironment;
 				
@@ -116,6 +129,10 @@ public class Interpreter implements Runnable {
 				e.pushCommand("read");
 			
 				while(!_rootEnvironment.isStackEmpty()) {
+					if (_shouldStop)	{
+						throw new Exception("The interpreter has been stopped");
+					}
+					
 					ICommand cmd = _rootEnvironment.evaluateStack();
 					if (null == cmd)	{
 						break;
@@ -124,13 +141,17 @@ public class Interpreter implements Runnable {
 					if (cmd instanceof org.sugarlang.command.Error)	{
 						System.err.println("SUGAR STACK:");
 						_rootEnvironment.printStack(System.err);	
+						error = true;
 						throw new Exception("A Sugar Error was thrown");
 					}
 				}
 			} while (true);
 		} catch (Exception e)	{
 			System.err.println("The interpreter has terminated");
-			e.printStackTrace(System.err);
+			
+			if (error)	{
+				e.printStackTrace(System.err);
+			}
 		}
 		
 	}

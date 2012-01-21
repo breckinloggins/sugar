@@ -23,6 +23,7 @@ public class Read extends BaseCommand {
 
 	@Override
 	public void execute(Environment env) {
+		env.evaluateStack();
 		Object arg = env.pop();
 		if (null == arg)	{
 			env.pushString("Cannot execute reader. stack empty");

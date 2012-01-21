@@ -8,6 +8,8 @@ import java.io.PrintStream;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -17,6 +19,10 @@ import javax.swing.event.CaretListener;
 
 public class Main {
 
+	private static InterpreterThread _interpreterThread;
+	private static JMenuItem _runMenuItem;
+	private static JMenuItem _stopMenuItem;
+	
 	/**
 	 * Creates an output stream that writes to a text area instead of to the console
 	 * @param textArea The JTextArea to which to write
@@ -68,6 +74,7 @@ public class Main {
 	
 	/**
 	 * Create the Nihilo Interpreter app menu bar
+	 * @param interpreterThread the thread that items in the run menu will manipulate
 	 * @return The created menu bar
 	 */
 	public static JMenuBar createMenuBar()	{
@@ -76,13 +83,16 @@ public class Main {
 		bar.add(run);
 		
 		JMenuItem runItem = new JMenuItem("Run");
-		runItem.setEnabled(false);
-		
 		JMenuItem stopItem = new JMenuItem("Stop");
+		
+		runItem.setEnabled(false);
 		stopItem.setEnabled(false);
 		
 		run.add(runItem);
 		run.add(stopItem);
+		
+		_runMenuItem = runItem;
+		_stopMenuItem = stopItem;
 		
 		return bar;
 	}
@@ -118,18 +128,15 @@ public class Main {
 	public static void main(String[] args) {
 		
 		// TODO:
-		// - Add interpreter thread that can be controlled through run and stop menus
+		// - Fix reconnection of input stream after thread terminated
 		// - Text in output should be in red if interpreter isn't running
-		
+	
 		String title = "Sugar";
 		
 		setAppleMenus(title);
 		
 		JFrame frame = new JFrame(title);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		frame.setJMenuBar(createMenuBar());
-		
 		
 		//
 		// INPUT AREA
@@ -172,7 +179,7 @@ public class Main {
 		
 		// Set System.in to a piped stream that we will control with our
 		// text area
-		PipedInputStream piStream = new PipedInputStream();
+		final PipedInputStream piStream = new PipedInputStream();
 		final PipedOutputStream poStream = new PipedOutputStream();
 		try {
 			piStream.connect(poStream);
@@ -180,8 +187,6 @@ public class Main {
 			e.printStackTrace();
 		}
 		System.setIn(piStream);
-		
-		final Interpreter interp = new Interpreter();
 		
 		KeyListener keyListener = new KeyListener() {
 
@@ -237,7 +242,30 @@ public class Main {
 		};
 		inputArea.addCaretListener(caretListener);
 		
-		Thread t = new Thread(interp);
-		t.start();
+		// Has to be done after the input streams are redirected or the new thread won't see the 
+		// piped stream
+		_interpreterThread = new InterpreterThread();
+		frame.setJMenuBar(createMenuBar());
+		_runMenuItem.setEnabled(true);
+		_runMenuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				_runMenuItem.setEnabled(false);
+				_stopMenuItem.setEnabled(true);
+				_interpreterThread.start();
+			}
+			
+		});
+		
+		_stopMenuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				_stopMenuItem.setEnabled(false);
+				_interpreterThread.stop();
+				_runMenuItem.setEnabled(true);
+			}
+			
+		});
+		
 	}
 }

@@ -40,9 +40,7 @@ public class Discriminator extends BaseReader {
 			env.pop();
 			env.pushReader("symbol");
 			env.pushCommand("read");
-			env.evaluateStack();
 			env.pushCommand("reader");
-			env.evaluateStack();
 			env.pushCommand("read");
 			return;
 		} else if (ch == '`')	{  
