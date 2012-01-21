@@ -7,7 +7,6 @@ import java.util.Set;
 import java.util.Stack;
 
 import org.sugarlang.dictionary.IOp;
-import org.sugarlang.dictionary.IEntry;
 import org.sugarlang.dictionary.IReader;
 import org.sugarlang.type.TMark;
 import org.sugarlang.type.TNull;
@@ -149,7 +148,7 @@ public class Environment {
 	 * @param reader The reader to push onto the stack
 	 */
 	public void pushReader(IReader reader)	{
-		push((IEntry)reader);
+		push(reader);
 	}
 	
 	/**

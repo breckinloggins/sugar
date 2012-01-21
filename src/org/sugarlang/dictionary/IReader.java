@@ -15,7 +15,7 @@ import org.sugarlang.Environment;
  * 
  * TODO: Get rid of (almost) all of these.  We should be able to implement readers in Sugar
  */
-public interface IReader {
+public interface IReader extends IValue {
 	/**
 	 * Reads a string from the given string reader and interprets it
 	 * @param env The current scope environment

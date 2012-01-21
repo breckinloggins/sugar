@@ -13,7 +13,7 @@ import org.sugarlang.Environment;
  * 
  * Note to implementors: all op classes should be stateless.  Any state must be stored in the environment.
  */
-public interface IOp {
+public interface IOp extends IValue {
 	
 	/**
 	 * Executes the op within the current environment

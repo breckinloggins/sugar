@@ -31,7 +31,7 @@ public class Command extends BaseReader {
 			return;
 		}
 		
-		String alias = ((TSymbol)env.pop()).getName();
+		String alias = ((TSymbol)env.pop()).toString();
 		
 		Object o = env.getBoundObject(alias);
 		if (null == o)	{

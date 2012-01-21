@@ -6,22 +6,34 @@ package org.sugarlang.dictionary;
 import java.io.IOException;
 
 import org.sugarlang.Environment;
+import org.sugarlang.type.TypeException;
 
 
 /**
  * @author bloggins
  * Base functionality for all readers
  */
-public abstract class BaseReader implements IEntry, IReader {
+public abstract class BaseReader implements IReader {
+	
+	private boolean _isSealed = false;
 	
 	@Override
-	/*
-	 * @see com.breckinloggins.cx.IEntry#getName()
-	 */
-	public String getName()	{
-		return this.getClass().getName();
+	public IType getType() {
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
+
+	@Override
+	public void seal() throws TypeException {
+		throwIfSealed();
+		_isSealed = true;
+	}
+
+	@Override
+	public boolean isSealed() {
+		return _isSealed;
+	}
+
 	/*
 	 * @see com.breckinloggins.cx.IEntry#getDescription()
 	 */
@@ -63,6 +75,16 @@ public abstract class BaseReader implements IEntry, IReader {
 			if (Character.isWhitespace((Integer)env.peek()))	{
 				env.pop();
 			}
+		}
+	}
+	
+	/**
+	 * Throws a TypeException if the object is sealed
+	 * @throws TypeException Thrown if object is sealed
+	 */
+	protected void throwIfSealed() throws TypeException	{
+		if (_isSealed)	{
+			throw new TypeException("Invalid operation; object is sealed");
 		}
 	}
 }

@@ -37,7 +37,7 @@ public class Get extends BaseOp {
 		
 		Object val = env.getBoundObject((TSymbol)sym);
 		if (null == val)	{
-			env.pushString("The symbol \"" + ((TSymbol)sym).getName() + "\" is not bound");
+			env.pushString("The symbol \"" + ((TSymbol)sym).toString() + "\" is not bound");
 			env.pushOp("error");
 			return;
 		}

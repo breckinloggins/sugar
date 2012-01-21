@@ -45,8 +45,7 @@ public class Bootstrap extends BaseReader {
 		env.setBinding(Character.toString((char) ch), reader);
 		env.pop();
 		
-		System.err.println("r(Bootstrap): " + Character.toString((char) ch) + " => " + reader.getClass().getName());
-		
+		System.err.println("r(Bootstrap): " + Character.toString((char) ch) + " => " + reader.getClass().getName());	
 	}
 
 }

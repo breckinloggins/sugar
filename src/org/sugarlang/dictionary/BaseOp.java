@@ -4,19 +4,31 @@
 package org.sugarlang.dictionary;
 
 import org.sugarlang.Environment;
+import org.sugarlang.type.TypeException;
 
 /**
  * @author bloggins
  *
  */
-public abstract class BaseOp implements IEntry, IOp {
+public abstract class BaseOp implements IOp {
 
-	/*
-	 * @see com.breckinloggins.cx.IEntry#getName()
-	 */
+	private boolean _isSealed = false;
+	
 	@Override
-	public String getName() {
-		return this.getClass().getName();
+	public IType getType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void seal() throws TypeException {
+		throwIfSealed();
+		_isSealed = true;
+	}
+
+	@Override
+	public boolean isSealed() {
+		return _isSealed;
 	}
 
 	/*
@@ -32,6 +44,16 @@ public abstract class BaseOp implements IEntry, IOp {
 	 */
 	@Override
 	public void execute(Environment env) {
-		System.err.println("WARNING: The opcode \"" + getName() + "\" has nothing to do");
+		System.err.println("WARNING: The opcode \"" + getClass().getName() + "\" has nothing to do");
+	}
+	
+	/**
+	 * Throws a TypeException if the object is sealed
+	 * @throws TypeException Thrown if object is sealed
+	 */
+	protected void throwIfSealed() throws TypeException	{
+		if (_isSealed)	{
+			throw new TypeException("Invalid operation; object is sealed");
+		}
 	}
 }

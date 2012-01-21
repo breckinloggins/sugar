@@ -5,7 +5,6 @@ package org.sugarlang.type;
 
 import java.util.ArrayList;
 
-import org.sugarlang.Environment;
 import org.sugarlang.dictionary.BaseType;
 import org.sugarlang.dictionary.IType;
 
@@ -74,14 +73,6 @@ public class TTypeConstructor extends BaseType {
 		return false;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.sugarlang.dictionary.IType#Evaluate(org.sugarlang.Environment)
-	 */
-	@Override
-	public void Evaluate(Environment env) {
-		// nope
-	}
-
 	/**
 	 * Throws a TypeException if the object is not finalized
 	 * @throws TypeException

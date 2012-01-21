@@ -3,7 +3,6 @@
  */
 package org.sugarlang.type;
 
-import org.sugarlang.Environment;
 import org.sugarlang.dictionary.BaseType;
 
 /**
@@ -31,25 +30,12 @@ public class TQuote extends BaseType {
 	}
 		
 	@Override
-	public String getName() {
-		return "TQuote`"+getInner().toString()+" <" + getInner().getClass().getName() + ">`";
-	}
-
-	@Override
 	public String getDescription() {
 		return "Quotes an item to prevent it from being immediately evaluated";
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.sugarlang.dictionary.IType#Evaluate(org.sugarlang.Environment)
-	 */
-	@Override
-	public void Evaluate(Environment env) {
-		// probably don't need this
-	}
-
 	@Override
 	public String toString()	{
-		return getName();
+		return "TQuote`"+getInner().toString()+" <" + getInner().getClass().getName() + ">`";
 	}
 }

@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
-import org.sugarlang.Environment;
 import org.sugarlang.dictionary.BaseType;
 
 /**
@@ -35,26 +34,13 @@ public class TMacro extends BaseType {
 	}
 	
 	@Override
-	public String getName() {
-		return "TMacro (" + _stack.size() + " objects)";
-	}
-
-	@Override
 	public String getDescription() {
 		return "Type representing a stack of quoted instructions, the unquoted form of which can be placed on the interpreter's stack and evaluated";
 	}
 
 	@Override
 	public String toString() {
-		return getName();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.sugarlang.dictionary.IType#Evaluate(org.sugarlang.Environment)
-	 */
-	@Override
-	public void Evaluate(Environment env) {
-		// remove
+		return "TMacro (" + _stack.size() + " objects)";
 	}
 
 }

@@ -6,8 +6,8 @@ package org.sugarlang.op;
 import org.sugarlang.Environment;
 import org.sugarlang.dictionary.BaseOp;
 import org.sugarlang.dictionary.IOp;
-import org.sugarlang.dictionary.IEntry;
 import org.sugarlang.dictionary.IReader;
+import org.sugarlang.dictionary.IValue;
 import org.sugarlang.type.TSymbol;
 
 
@@ -36,8 +36,8 @@ public class Env extends BaseOp {
 			}
 			
 			IReader reader = (IReader)o;
-			if (reader instanceof IEntry)	{
-				System.out.print(sym.getName() + " => [" + ((IEntry)reader).getDescription() + "]");
+			if (reader instanceof IValue)	{
+				System.out.print(sym.toString() + " => [" + ((IValue)reader).getDescription() + "]");
 				System.out.println();	
 			}
 		}
@@ -50,8 +50,8 @@ public class Env extends BaseOp {
 			}
 			
 			IOp op = (IOp)o;
-			if (op instanceof IEntry)	{
-				System.out.print(sym.getName() + " => [" + ((IEntry)op).getDescription() + "]");
+			if (op instanceof IValue)	{
+				System.out.print(sym.toString() + " => [" + ((IValue)op).getDescription() + "]");
 				System.out.println();		
 			}
 		}
@@ -63,7 +63,7 @@ public class Env extends BaseOp {
 				continue;
 			}
 			
-			System.out.print(symbol.getName() + " => " + o + " <" + o.getClass().getName() + ">");
+			System.out.print(symbol.toString() + " => " + o + " <" + o.getClass().getName() + ">");
 			System.out.println();
 		}
 	}
