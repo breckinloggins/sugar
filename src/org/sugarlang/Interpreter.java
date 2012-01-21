@@ -81,8 +81,14 @@ public class Interpreter implements Runnable {
 		env.setBinding("error", new org.sugarlang.op.Error());
 		
 		// TODO:
+		// - Abstract TTypeConstructor's finalizable semantics to an interface and ensure that all
+		// objects on the stack and binding environment are of type IFinalizable.  The interpreter should
+		// check whether an object is finalized before being allowed to be put on the stack or set in the
+		// environment.  This will ensure that we can use a convenient API on Java classes but that they
+		// will be immutable after being finalized.
 		// - Built-in list type
 		//		- Create TList (can only contain homogeneous members)
+		//		- Lazy
 		//		- Can create from Stack: TMark, <el>, <el>, ..., !createlist
 		//		- Ops: head, last, tail, init, null, length
 		// - List reader (use '()' for syntax for now)
