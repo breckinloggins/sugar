@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import org.sugarlang.Environment;
 import org.sugarlang.dictionary.BaseReader;
+import org.sugarlang.dictionary.IReader;
+import org.sugarlang.type.TMacro;
 
 
 public class Discriminator extends BaseReader {
@@ -32,26 +34,15 @@ public class Discriminator extends BaseReader {
 		
 		System.err.println("r(Discriminator): " + Character.toString((char) ch));
 		
-		// TODO: These know WAY too much about what each reader wants.  Instead, the discriminator should
-		// somehow be able to ask each reader if it will accept the input.  It would be nice to do this without
-		// having created the readers ahead of time.  In case multiple readers accept, there should be some way
-		// for them to "duke it out", perhaps with precedence or implicit precedence by voting.
-		if (ch == '#')	{
+		Object o = env.getBoundObject(Character.toString((char)ch));
+		if (null != o && o instanceof IReader)	{
 			env.pop();
-			env.pushReader("symbol");
+			env.pushReader((IReader)o);
 			env.pushOp("read");
-			env.pushOp("reader");
-			env.pushOp("read");
-			return;
-		} else if (ch == '`')	{  
+		} else if (null != o && o instanceof TMacro)	{
 			env.pop();
-			env.pushReader("quoted");
-			env.pushOp("read");
-		} else if (ch == '!')	{
-			env.pop();
-			env.pushReader("command");
-			env.pushOp("read");
-			return;
+			env.push(o);
+			env.pushOp("execute");
 		} else if (Character.isLetter(ch) || ch == '_')	{
 			env.pushReader("name");
 			env.pushOp("read");

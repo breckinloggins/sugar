@@ -6,12 +6,15 @@ package org.sugarlang;
  *
  */
 public class TEMP_Prelude {
+	//public static String code = "";
 	public static String code = 
-	"test_foo\n" +
-	"`bar\n" +
-	"`foo\n" +
-	"`!add\n" +
-	"`!print\n" +
-	"!createmacro\n" +
+	"!`"+
+	"#\n"+
+	"`symbol\n"+
+	"`!reader\n"+
+	"`!read\n"+
+	"`!reader\n"+
+	"`!read\n"+
+	"!createmacro\n"+
 	"!set\n";
 }

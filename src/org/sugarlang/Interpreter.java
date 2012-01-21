@@ -51,6 +51,7 @@ public class Interpreter implements Runnable {
 		// But, again, we ultimately want to hard-code as little of this as possible.
 		Environment env = _rootEnvironment;
 	
+		env.setBinding("bootstrap", new org.sugarlang.reader.Bootstrap());
 		env.setBinding("command", new org.sugarlang.reader.Command());
 		env.setBinding("symbol", new org.sugarlang.reader.Symbol());
 		env.setBinding("discriminator", new org.sugarlang.reader.Discriminator());
@@ -108,9 +109,6 @@ public class Interpreter implements Runnable {
 		// - start working towards defining a basic LISP syntax
 		//		- hard-coded "list" reader
 		// - add accept and expect readers that take as an argument a type to accept or expect
-		// - discriminator should check symbol binding for characters to switch on instead of having them 
-		// hard-coded
-		// - add bootstrap reader to set up initial discriminator symbols (at least reader and command symbols)
 		// - add integer reader
 		// - add ops to push and pop chained environments
 		// - add evaluate command.  If the thing on the top of the stack is a command, it is 
@@ -162,9 +160,12 @@ public class Interpreter implements Runnable {
 		}
 		
 		try {
+			Environment e = _rootEnvironment;
+			e.pushReader("bootstrap");
+			e.pushOp("read");
+			e.evaluateStack();
+			
 			do {
-				// Temporary code for testing
-				Environment e = _rootEnvironment;
 				
 				e.pushReader("discriminator");
 				e.pushOp("read");
