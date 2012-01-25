@@ -1,0 +1,120 @@
+NEXT ACTIONS:
+	- Add type-op: pops a symbol and returns the type bound to that symbol
+	- Add overloaded method for all types that pop up to n-args off the stack and create a new value of that type (in other words, a data constructor for each type)
+	- Add create-op: pops a type and a bunch of args (as needed by the type), and instantiates a new value for that type, pushing it on the stack, using that type's
+		data constructor
+	- Remove createmacro-op and replace with the above infrastructure
+	- Define createmacro as the first macro
+	- Create ProductType (takes one or more other types and represents a tuple of those types)
+	- Create SumType (takes one or more types and represents any of those types, but not multiple at once)
+	- Define the Any type, which represents any type that ISN'T null
+	- Define the All type, which represents any type including null
+	- In the prelude, create the Bool type, such that:
+		True :: Any
+		False :: Null
+		Bool :: True | False
+
+
+RESEARCH/THOUGHTS/BACKLOG:
+
+- Let's not try to interpret C-like code right away.  Let's do:
+ 1. Haskell-like type construction syntax
+ 2. LISP
+ 3. BASIC
+ 4. Pascal
+ 5. C-ish (like Go, with easy parse semantics)
+ 6. C/C#/Java
+
+		// As stated below, reader should start from nothing.
+		// First character is the reader metachar (usually '#' but can be anything).  After that, 
+		// there it would be nice if we could configure most or all of these readers from source itself.
+		// In other words, what is the minimum set of "hard coded" readers.  I'm thinking the reader system
+		// will end up being a stack-based system.
+		//
+		// I think the best way to do this is to start with single characters only.  There's an order that everything
+		// has to be initialized in.  If you don't need certain features, you should be able to "not say", so we'll need
+		// a "NULL" symbol.  For future compatibility with algebraic data types, it's pretty clear that this should be '_'
+		// by default.
+		//
+		// If we do it this way, that's fine, but we need a way to document what order the characters need to be typed in.
+		//
+		// Lastly, when we have a way to chain environments, we need a way to "hide" symbols from the parent environment
+		//
+		// Should even define syntax highlighting from the reader, so that maybe we start with:
+		// ReaderType (name) gets a certain behavior and has certain "metadata", and we can start with
+		// fontWeight, backgroundColor, foregroundColor.  This will have to be made more generic in the future, of 
+		// course, but it will do for now.  So we declare (for example) ReaderType = name (foregroundColor = blue) and
+		// then every time we read a NAME the text area will be able to see the source location and turn it blue.
+		//
+		// But, again, we ultimately want to hard-code as little of this as possible.
+
+
+- Define the character escape types.  By default this just lets you escape \xxxx unicode code points, 
+		so we'll want a way to define the traditional \n, \r, and so forth escapes as the user sees fit.
+		We want this because some languages don't use \n, etc. for their escapes, they use stuff like \Space.
+		After we have this we can do things like print tabs and newlines.
+
+- User defined types based on Product and Sum Types 
+
+- Implement readers for \U+0008 (backspace) so we can correct spelling mistakes
+		- This is more complicated than it sounds.  EVERY reader needs to be able to undo at every point, and we
+		need the notion of stack history.  ALL IO needs to be defined as reversible.  Then we need to implement
+		"cleave points" so the user can put their cursor at any point and edit in place.  Doing so will require going
+		back in time in the stack history. And reexecuting based on new edits, BUT this will require token synchronization so
+		as the user is typing we don't execute a bunch of nonsense afterward.
+
+- Add structural checking for is-op (structural equivalence)
+- I'm pretty sure we can build cons cells from type constructors
+- Built-in list type
+		- Create TList (can only contain homogeneous members)
+		- Lazy
+		- Can create from Stack: TMark, <el>, <el>, ..., !createlist
+		- Ops: head, last, tail, init, null, length
+- List reader (use '()' for syntax for now)
+- Create an abstraction that IOp and TMacro both inherit from? (ICallable?)
+- Remainder of Haskell built-in types: Int, Double, Bool, Char
+- Create type system (http://cs.wallawalla.edu/research/KU/PR/Haskell.html)
+		- User-defined types as an instance of TUserType
+		- Simple Type algebra for how the type is defined
+		- Op to construct types from arguments
+		- Op to coerce one type to another
+		- Op to extract values
+		- Do we want to do named type (record-like) components or pure structural types?
+		  I'm leaning toward structural types.  So we'll probably need to define lists and 
+		  tuples as built-in types.  Haskell-like
+- replace !createlist, !createmacro, etc. with more generic syntax
+- start working towards defining a basic LISP syntax
+		- hard-coded "list" reader
+- add accept and expect readers that take as an argument a type to accept or expect
+- add integer reader
+- Environment manipulation
+		- env-op should push the environment bindings onto the stack as an alternating sequence of 
+			objects and symbols
+		- the current environment printing should be redefined as a prelude macro
+		- stack-op should push a quoted version of the stack onto the stack
+		- current stack printing should be changed to a way to print quoted stack elements
+		- new ops to push and pop chained environments
+		- way to hide symbols from the parent environments
+- Java FFI... should be able to get rid of the "Print" op and probably
+ 	 a few others once we have that
+		- http://www.javapractices.com/topic/TopicAction.do?Id=113
+		- http://stackoverflow.com/questions/160970/how-do-i-invoke-a-java-method-when-given-the-method-name-as-a-string
+		- Implement JavaType type so we can talk about Java Class Types
+		- Add type op to push a type on the stack given its name (useful elsewhere)
+		- Constructing an instance of a JavaType should cause the underlying VM to create the corresponding
+			class instance (in other words, a JavaType is a UDT, but one the VM knows about)
+		- Add invoke op (generic FFI)
+- add evaluate command.  If the thing on the top of the stack is a command, it is 
+   evaluated, else the stack is undisturbed other than popping off the command
+   (NOTE: with a simple IsCommand test command, this doesn't have to be a hard-coded command) 
+- figure out which commands need to be built-in ops.  For example:
+		* subtract, multiply, if, loop, etc.
+- add a coerce command to replace the top value on the stack with the same value under the given new type
+- move as many readers as possible from hard-coded to user-defined
+- show unrecognized input in red
+- "Talk back" to the editor
+		- Configurable via command line parameter
+		- Uses System.err as the communications channel
+		- Writes JSON or something else simple
+		- Allows for errors, warnings, diagnostic information, editor metadata (like syntax highlighting), 
+			editor control (e.g. auto parens), autocomplete
