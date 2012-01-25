@@ -6,9 +6,11 @@ package org.sugarlang.reader;
 import java.io.IOException;
 
 import org.sugarlang.Environment;
+import org.sugarlang.base.IValue;
 import org.sugarlang.type.TypeException;
 import org.sugarlang.value.VChar;
 import org.sugarlang.value.VSymbol;
+import org.sugarlang.value.VWhitespace;
 
 
 /**
@@ -42,9 +44,8 @@ public class Symbol extends BaseReader {
 		}
 		
 		char ch = (char)c;
-		if (Character.isWhitespace(ch))	{
-			// TODO: Should be replaced by a dynamic definition of our whitespace set
-			env.pop();
+		IValue v = env.getBoundObject(Character.toString((char)ch));
+		if (null != v && v instanceof VWhitespace)	{
 			env.pushError("Unexpected Whitespace");
 			return;
 		}
@@ -70,17 +71,16 @@ public class Symbol extends BaseReader {
 			}
 			
 			ch = (char)c;
-			if (!Character.isWhitespace(ch))	{
-				sb.append(ch);
-				env.pop();
-			}
-			else
-			{
+			v = env.getBoundObject(Character.toString((char)ch));
+			env.pop();
+			
+			if (null != v && v instanceof VWhitespace)	{
 				break;
-			}	
+			}
+			
+			sb.append(ch);
+				
 		}
-		
-		discardWhitespace(env);
 		
 		System.err.println("r(Symbol): " + sb.toString());
 		VSymbol sym = new org.sugarlang.value.VSymbol(sb.toString());

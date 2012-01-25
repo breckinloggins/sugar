@@ -6,7 +6,6 @@ import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.io.PrintStream;
-import java.lang.reflect.InvocationTargetException;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Insets;

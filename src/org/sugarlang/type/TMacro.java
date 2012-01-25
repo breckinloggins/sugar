@@ -6,9 +6,7 @@ package org.sugarlang.type;
 /**
  * Type representing a stack of quoted instructions, the unquoted form of which can be 
  * placed on the interpreter's stack and evaluated
- * @author bloggins
- * 
- * TODO: Make immutable
+ * @author bloggins 
  */
 public class TMacro extends BaseType {
 

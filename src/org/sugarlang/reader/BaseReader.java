@@ -96,18 +96,6 @@ public abstract class BaseReader implements IReader {
 	}
 	
 	/**
-	 * If there is a whitespace character on the stack, discards it
-	 * @param env The environment to examine
-	 */
-	protected void discardWhitespace(Environment env)	{
-		if (!env.isStackEmpty() && (env.peek() instanceof VChar))	{
-			if (Character.isWhitespace(((VChar)env.peek()).getChar()))	{
-				env.pop();
-			}
-		}
-	}
-	
-	/**
 	 * Throws a TypeException if the object is sealed
 	 * @throws TypeException Thrown if object is sealed
 	 */

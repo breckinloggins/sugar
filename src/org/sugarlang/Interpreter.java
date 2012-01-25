@@ -17,17 +17,6 @@ public class Interpreter implements Runnable {
 	// 4. C-ish (like Go, with easy parse semantics)
 	// 5. C/C#/Java
 	
-	// TODO: Need an interpreter listener interface that will notify when we have:
-	// 1. Read a char
-	// 2. Changed readers
-	// 3. Evaluated something
-	//
-	// This will be the start of syntax highlighting in the input pane.  For example, it should
-	// be listening for a "reader selector" or "name" and can highlight appropriately.
-	//
-	// For syntax highlighting, we'll also need to carry "SourceLocations" with us as we read so 
-	// we can figure out what to go back and highlight.
-	
 	/**
 	 * Constructs a new interpreter
 	 */
@@ -114,7 +103,8 @@ public class Interpreter implements Runnable {
 		}
 		
 		// TODO:
-		// - Bootstrap should define all whitespace characters
+		// - Add null symbol so you can skip definitions of things you don't need
+		//		- Should be an op that pushes TNull on the stack, the bootstrapper can then interpret that accordingly
 		// - User defined types based on Product and Sum Types 
 		// - Add inheritance concept and add to the is op (edit: nope, is should do structural checking)
 		// - I'm pretty sure we can build cons cells from type constructors
@@ -141,6 +131,7 @@ public class Interpreter implements Runnable {
 		// - add accept and expect readers that take as an argument a type to accept or expect
 		// - add integer reader
 		// - add ops to push and pop chained environments
+		//		- way to hide symbols from the parent environments
 		// - Java FFI... should be able to get rid of the "Print" op and probably
 				// 	 a few others once we have that
 				//		- http://www.javapractices.com/topic/TopicAction.do?Id=113

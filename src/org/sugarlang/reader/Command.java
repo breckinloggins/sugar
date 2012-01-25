@@ -53,9 +53,5 @@ public class Command extends BaseReader {
 		} else {
 			env.pushError("Don't know how to execute object of type <" + v.getType().toString() + "> for symbol \"" + alias + "\"");
 		}
-		
-		discardWhitespace(env);
-		
-		
 	}
 }
