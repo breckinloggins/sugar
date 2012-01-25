@@ -4,6 +4,7 @@
 package org.sugarlang.op;
 
 import org.sugarlang.Environment;
+import org.sugarlang.base.IValue;
 import org.sugarlang.type.TypeException;
 
 
@@ -24,9 +25,8 @@ public class Pop extends BaseOp {
 	}
 
 	@Override
-	public void executeInternal(Environment env) {
-		env.evaluateStack();
-		Object popped = env.pop();
+	public void executeInternal(Environment env) throws TypeException {
+		IValue popped = env.pop();
 		if (null == popped)	{
 			env.pushError("The stack is empty");
 		}

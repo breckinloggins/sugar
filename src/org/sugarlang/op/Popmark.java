@@ -22,7 +22,7 @@ public class Popmark extends BaseOp {
 	}
 
 	@Override
-	public void executeInternal(Environment env) {
+	public void executeInternal(Environment env) throws TypeException {
 		env.popToMark();
 	}
 

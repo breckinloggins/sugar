@@ -1,8 +1,8 @@
 NEXT ACTIONS:
-	- Add single register to environment
-	- Modify pop-op to saves whatever was popped into the register
-	- Create push-op to push whatever is in the register onto the stack
-
+	- Add pushenv-op to push a new local environment
+	- Add popenv-op to destroy the local environment, pushing everything on the local environment's stack to the parent stack
+	- Create dup and swap macros
+	
 TYPE SYSTEM:
 	- Add type macro: pops a symbol and returns the type bound to that symbol
 	- Add overloaded method for all types that pop up to n-args off the stack and create a new value of that type (in other words, a data constructor for each type)
@@ -61,6 +61,8 @@ RESEARCH/THOUGHTS/BACKLOG:
 		After we have this we can do things like print tabs and newlines.
 
 - User defined types based on Product and Sum Types 
+
+- What do we need to implement a function macro?
 
 - Implement readers for \U+0008 (backspace) so we can correct spelling mistakes
 		- This is more complicated than it sounds.  EVERY reader needs to be able to undo at every point, and we

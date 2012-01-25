@@ -254,7 +254,7 @@ public class Environment {
 	 * Gets the element off the top of the stack without removing it from the stack
 	 * @return The top element, or null if the stack is empty
 	 */
-	public Object peek()	{
+	public IValue peek()	{
 		if (_stack.isEmpty())	{
 			return null;
 		}
@@ -293,24 +293,27 @@ public class Environment {
 		return null;
 	}
 	
-	/**
-	 * Print's the contents of the current stack to the environment's writer
-	 */
-	public void printStack(PrintStream stream)	{
-		
-		if (isStackEmpty())	{
+	private void printStack(Stack<IValue> stack, PrintStream stream)	{
+		if (stack.isEmpty())	{
 			stream.println("[STACK EMPTY]");
 			return;
 		}
 		
-		for (int i = _stack.size() - 1; i >= 0; i--)	{
-			IValue entry = _stack.get(i);
+		for (int i = stack.size() - 1; i >= 0; i--)	{
+			IValue entry = stack.get(i);
 			String value = entry.toString();
 			value = value.replace("\n", "\\n");
 			value = value.replace("\t", "\\t");
 			value = value.replace("\r", "\\r");
-			stream.print("[" + (_stack.size() - i - 1) + "] " + value + " <" + entry.getType().toString() + ">");
+			stream.print("[" + (stack.size() - i - 1) + "] " + value + " <" + entry.getType().toString() + ">");
 			stream.println();
 		}
+	}
+	
+	/**
+	 * Print's the contents of the current stack to the environment's writer
+	 */
+	public void printStack(PrintStream stream)	{
+		printStack(_stack, stream);
 	}
 }

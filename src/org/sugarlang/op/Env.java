@@ -29,9 +29,6 @@ public class Env extends BaseOp {
 	@Override
 	public void executeInternal(Environment env) throws TypeException {
 		
-		System.out.println("\nStack:");
-		env.printStack(System.out);
-		
 		System.out.println("\nReader Bindings:");
 		for (VSymbol sym : env.getBindingSymbols())	{
 			Object o = env.getBoundObject(sym);
@@ -81,5 +78,8 @@ public class Env extends BaseOp {
 			System.out.print(sym + " => " + v + " <" + v.getType().toString() + ">");
 			System.out.println();
 		}
+		
+		System.out.println("\nStack:");
+		env.printStack(System.out);
 	}
 }

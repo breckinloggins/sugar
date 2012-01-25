@@ -35,6 +35,7 @@ one or more contiguous non whitespace characters.  The environment already has s
 symbols bound to opcodes, types, and readers, so we now have enough syntax to execute
 commands and create macros. 
 -
+- The reader macro.  Invokes a reader by the given name -
 #				- The symbol we'll bind this macro to -
 `symbol
 `!reader
