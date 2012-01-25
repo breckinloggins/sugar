@@ -3,10 +3,15 @@ package org.sugarlang.reader;
 import java.io.IOException;
 
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseReader;
+import org.sugarlang.type.TypeException;
+import org.sugarlang.value.VChar;
 
 
 public class Whitespace extends BaseReader {
+
+	public Whitespace() throws TypeException {
+		super();
+	}
 
 	@Override
 	public String getDescription()	{
@@ -14,16 +19,16 @@ public class Whitespace extends BaseReader {
 	}
 	
 	@Override
-	public void read(Environment env) throws IOException {
+	public void readInternal(Environment env) throws IOException, TypeException {
 		
 		readChar(env);
-		if (!(env.peek() instanceof Integer))	{
+		if (!(env.peek() instanceof VChar))	{
 			return;
 		}
 		
 		// TODO: User should be able to configure what counts as whitespace and any special actions
 		// that might occur (such as to support pythonic languages)
-		int c = (Integer)env.peek();
+		int c = ((VChar)env.peek()).getChar();
 		if (c == -1)	{
 			env.pop();
 			env.pushReader("terminator");
@@ -38,10 +43,10 @@ public class Whitespace extends BaseReader {
 			env.pop();
 			
 			readChar(env);
-			if (!(env.peek() instanceof Integer))	{
+			if (!(env.peek() instanceof VChar))	{
 				return;
 			}
-			c = (Integer)env.peek();
+			c = ((VChar)env.peek()).getChar();
 		}
 		
 		if (hasWhitespace)	System.err.println("r(Whitespace)");

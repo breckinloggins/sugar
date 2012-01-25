@@ -1,6 +1,7 @@
 package org.sugarlang;
 
-import org.sugarlang.dictionary.IOp;
+import org.sugarlang.base.IOp;
+import org.sugarlang.type.TypeException;
 
 public class Interpreter implements Runnable {
 	private Environment _rootEnvironment;
@@ -51,37 +52,43 @@ public class Interpreter implements Runnable {
 		// But, again, we ultimately want to hard-code as little of this as possible.
 		Environment env = _rootEnvironment;
 	
-		env.setBinding("bootstrap", new org.sugarlang.reader.Bootstrap());
-		env.setBinding("command", new org.sugarlang.reader.Command());
-		env.setBinding("symbol", new org.sugarlang.reader.Symbol());
-		env.setBinding("discriminator", new org.sugarlang.reader.Discriminator());
-		env.setBinding("quoted", new org.sugarlang.reader.Quoted());
-		env.setBinding("name", new org.sugarlang.reader.Name());
-		env.setBinding("terminator", new org.sugarlang.reader.Terminator());
-		env.setBinding("whitespace", new org.sugarlang.reader.Whitespace());
-		
-		env.setBinding("nop", new org.sugarlang.op.Nop());
-		env.setBinding("mark", new org.sugarlang.op.Mark());
-		env.setBinding("stack", new org.sugarlang.op.Stack());
-		env.setBinding("env", new org.sugarlang.op.Env());
-		env.setBinding("pop", new org.sugarlang.op.Pop());
-		env.setBinding("popmark", new org.sugarlang.op.Popmark());
-		env.setBinding("quote", new org.sugarlang.op.Quote());
-		env.setBinding("unquote", new org.sugarlang.op.Unquote());
-		env.setBinding("createmacro", new org.sugarlang.op.CreateMacro());
-		env.setBinding("if", new org.sugarlang.op.If());
-		env.setBinding("set", new org.sugarlang.op.Set());
-		env.setBinding("unset", new org.sugarlang.op.Unset());
-		env.setBinding("get", new org.sugarlang.op.Get());
-		env.setBinding("add", new org.sugarlang.op.Add());
-		env.setBinding("getchar", new org.sugarlang.op.Getchar());
-		env.setBinding("read", new org.sugarlang.op.Read());
-		env.setBinding("print", new org.sugarlang.op.Print());
-		env.setBinding("execute", new org.sugarlang.op.Execute());
-		env.setBinding("reader", new org.sugarlang.op.Reader());
-		env.setBinding("error", new org.sugarlang.op.Error());
+		try {
+			env.setBinding("bootstrap", new org.sugarlang.reader.Bootstrap());
+			env.setBinding("command", new org.sugarlang.reader.Command());
+			env.setBinding("symbol", new org.sugarlang.reader.Symbol());
+			env.setBinding("discriminator", new org.sugarlang.reader.Discriminator());
+			env.setBinding("quoted", new org.sugarlang.reader.Quoted());
+			env.setBinding("name", new org.sugarlang.reader.Name());
+			env.setBinding("terminator", new org.sugarlang.reader.Terminator());
+			env.setBinding("whitespace", new org.sugarlang.reader.Whitespace());
+			
+			env.setBinding("nop", new org.sugarlang.op.Nop());
+			env.setBinding("mark", new org.sugarlang.op.Mark());
+			env.setBinding("stack", new org.sugarlang.op.Stack());
+			env.setBinding("env", new org.sugarlang.op.Env());
+			env.setBinding("pop", new org.sugarlang.op.Pop());
+			env.setBinding("popmark", new org.sugarlang.op.Popmark());
+			env.setBinding("quote", new org.sugarlang.op.Quote());
+			env.setBinding("unquote", new org.sugarlang.op.Unquote());
+			env.setBinding("createmacro", new org.sugarlang.op.CreateMacro());
+			env.setBinding("if", new org.sugarlang.op.If());
+			env.setBinding("set", new org.sugarlang.op.Set());
+			env.setBinding("unset", new org.sugarlang.op.Unset());
+			env.setBinding("get", new org.sugarlang.op.Get());
+			env.setBinding("add", new org.sugarlang.op.Add());
+			env.setBinding("getchar", new org.sugarlang.op.Getchar());
+			env.setBinding("read", new org.sugarlang.op.Read());
+			env.setBinding("print", new org.sugarlang.op.Print());
+			env.setBinding("execute", new org.sugarlang.op.Execute());
+			env.setBinding("reader", new org.sugarlang.op.Reader());
+			env.setBinding("error", new org.sugarlang.op.Error());
+		} catch (TypeException e) {
+			e.printStackTrace(System.err);
+			return;
+		}
 		
 		// TODO:
+		// - Built-in types should be singleton or there should be a static "built-in types" class
 		// - Abstract TTypeConstructor's finalizable semantics to an interface and ensure that all
 		// objects on the stack and binding environment are of type IFinalizable.  The interpreter should
 		// check whether an object is finalized before being allowed to be put on the stack or set in the

@@ -5,9 +5,10 @@ package org.sugarlang.op;
 
 import java.util.Stack;
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseOp;
-import org.sugarlang.type.TMacro;
-import org.sugarlang.type.TQuote;
+import org.sugarlang.base.IValue;
+import org.sugarlang.type.TypeException;
+import org.sugarlang.value.VMacro;
+import org.sugarlang.value.VQuote;
 
 
 /**
@@ -16,25 +17,28 @@ import org.sugarlang.type.TQuote;
  */
 public class Execute extends BaseOp {
 
+	public Execute() throws TypeException {
+		super();
+	}
+
 	@Override
 	public String getDescription() {
 		return "Pops an argument off the stack and executes it";
 	}
 
 	@Override
-	public void execute(Environment env) {
+	public void executeInternal(Environment env) throws TypeException {
 		env.evaluateStack();
 		if (env.isStackEmpty())	{
-			env.pushString("Cannot execute a command because the stack is empty");
-			env.pushOp("error");
+			env.pushError("Cannot execute a command because the stack is empty");
 			return;
 		}
 		
-		if (env.peek() instanceof TMacro)	{
-			TMacro m = (TMacro)env.pop();
-			Stack<Object> macroStack = new Stack<Object>();
+		if (env.peek() instanceof VMacro)	{
+			VMacro m = (VMacro)env.pop();
+			Stack<IValue> macroStack = new Stack<IValue>();
 			for (Object o : m.getStackList())	{	
-				TQuote q = (TQuote)o;
+				VQuote q = (VQuote)o;
 				macroStack.push(q.getInner());
 			}
 			

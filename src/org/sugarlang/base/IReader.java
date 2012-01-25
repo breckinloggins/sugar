@@ -1,4 +1,4 @@
-package org.sugarlang.dictionary;
+package org.sugarlang.base;
 
 import java.io.IOException;
 

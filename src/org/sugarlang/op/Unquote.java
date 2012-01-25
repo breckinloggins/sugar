@@ -4,8 +4,8 @@
 package org.sugarlang.op;
 
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseOp;
-import org.sugarlang.type.TQuote;
+import org.sugarlang.type.TypeException;
+import org.sugarlang.value.VQuote;
 
 /**
  * Unquotes the quoted item at the top of the stack and pushes the unquoted item
@@ -13,27 +13,29 @@ import org.sugarlang.type.TQuote;
  */
 public class Unquote extends BaseOp {
 
+	public Unquote() throws TypeException {
+		super();
+	}
+
 	@Override
 	public String getDescription() {
 		return "Unquotes the quoted item at the top of the stack and pushes the unquoted item";
 	}
 
 	@Override
-	public void execute(Environment env) {
+	public void executeInternal(Environment env) throws TypeException {
 		env.evaluateStack();
 		if (env.isStackEmpty())	{
-			env.pushString("Cannot unquote, stack is empty");
-			env.pushOp("error");
+			env.pushError("Cannot unquote, stack is empty");
 			return;
 		}
 		
-		if (!(env.peek() instanceof TQuote))	{
-			env.pushString("Cannot unquote, object on the stack isn't quoted");
-			env.pushOp("error");
+		if (!(env.peek() instanceof VQuote))	{
+			env.pushError("Cannot unquote, object on the stack isn't quoted");
 			return;
 		}
 		
-		TQuote q = (TQuote)env.pop();
+		VQuote q = (VQuote)env.pop();
 		env.push(q.getInner());
 	}
 }

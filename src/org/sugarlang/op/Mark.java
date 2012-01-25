@@ -4,7 +4,7 @@
 package org.sugarlang.op;
 
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseOp;
+import org.sugarlang.type.TypeException;
 
 /**
  * Pushes a stack marker on the stack
@@ -12,13 +12,17 @@ import org.sugarlang.dictionary.BaseOp;
  */
 public class Mark extends BaseOp {
 
+	public Mark() throws TypeException {
+		super();
+	}
+
 	@Override
 	public String getDescription() {
 		return "Pushes a stack marker on the stack";
 	}
 
 	@Override
-	public void execute(Environment env) {
+	public void executeInternal(Environment env) {
 		env.pushMark();
 	}
 

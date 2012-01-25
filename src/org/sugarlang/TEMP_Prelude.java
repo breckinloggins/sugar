@@ -6,8 +6,8 @@ package org.sugarlang;
  *
  */
 public class TEMP_Prelude {
-	//public static String code = "";
-	public static String code = 
+	
+	public static String normalCode = 
 	"!`"+
 	"#\n"+
 	"`symbol\n"+
@@ -17,4 +17,7 @@ public class TEMP_Prelude {
 	"`!read\n"+
 	"!createmacro\n"+
 	"!set\n";
+	
+	//public static String code = "";
+	public static String code = normalCode;
 }

@@ -3,8 +3,9 @@ package org.sugarlang.reader;
 import java.io.IOException;
 
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseReader;
-import org.sugarlang.type.TSymbol;
+import org.sugarlang.type.TypeException;
+import org.sugarlang.value.VChar;
+import org.sugarlang.value.VSymbol;
 
 
 public class Name extends BaseReader {
@@ -12,42 +13,44 @@ public class Name extends BaseReader {
 	// TODO: The user needs to be able to define the acceptable character sequences
 	// of a name
 	
+	public Name() throws TypeException {
+		super();
+	}
+
 	@Override
 	public String getDescription()	{
 		return "Reads an identifier and pushes it onto the stack";
 	}
 	
 	@Override
-	public void read(Environment env) throws IOException {
+	public void readInternal(Environment env) throws IOException, TypeException {
 		
 		readChar(env);
-		if (!(env.peek() instanceof Integer))	{
+		if (!(env.peek() instanceof VChar))	{
 			return;
 		}
 		
-		int c = (Integer)env.peek();
+		int c = ((VChar)env.peek()).getChar();
 		if (c == -1)	{
 			env.pop();
-			env.pushString("Unexpected EOF");
-			env.pushOp("error");
+			env.pushError("Unexpected EOF");
 			return;
 		}
 		
 		char ch = (char)c;
 		if (!Character.isLetter(ch) && ch != '_')	{
 			env.pop();
-			env.pushString("Unexpected Character: '" + ch + "'" );
-			env.pushOp("error");
+			env.pushError("Unexpected Character: '" + ch + "'" );
 			return;
 		}
 		
 		StringBuilder sb = new StringBuilder();
 		while (true)	{
 			readChar(env);
-			if (!(env.peek() instanceof Integer))	{
+			if (!(env.peek() instanceof VChar))	{
 				return;
 			}
-			c = (Integer)env.peek();
+			c = ((VChar)env.peek()).getChar();
 				
 			if (c == -1)	{
 				// It's up to upper level code to determine whether it's ok to 
@@ -55,7 +58,7 @@ public class Name extends BaseReader {
 				env.pop();
 				
 				System.err.println("r(Name): " + sb.toString());
-				TSymbol sym = new org.sugarlang.type.TSymbol(sb.toString());
+				VSymbol sym = new org.sugarlang.value.VSymbol(sb.toString());
 				env.push(sym);
 				env.pushReader("terminator");
 				env.pushOp("read");
@@ -79,7 +82,7 @@ public class Name extends BaseReader {
 		discardWhitespace(env);
 		
 		System.err.println("r(Name): " + sb.toString());
-		TSymbol sym = new org.sugarlang.type.TSymbol(sb.toString());
+		VSymbol sym = new org.sugarlang.value.VSymbol(sb.toString());
 		env.push(sym);		
 	}
 

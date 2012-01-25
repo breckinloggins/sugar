@@ -3,7 +3,6 @@
  */
 package org.sugarlang.type;
 
-import org.sugarlang.dictionary.BaseType;
 
 /**
  * A special meta-type that marks the stack but otherwise does nothing

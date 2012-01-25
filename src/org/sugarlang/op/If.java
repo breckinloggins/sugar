@@ -6,7 +6,8 @@ package org.sugarlang.op;
 import java.util.Stack;
 
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseOp;
+import org.sugarlang.base.IValue;
+import org.sugarlang.type.TypeException;
 
 
 /**
@@ -16,13 +17,17 @@ import org.sugarlang.dictionary.BaseOp;
  */
 public class If extends BaseOp {
 
+	public If() throws TypeException {
+		super();
+	}
+
 	@Override
 	public String getDescription() {
 		return "Evaluates the item at the top of the stack.  If true, leaves the if branch at the top of the stack to be evaluated.  If false, leaves the else branch";
 	}
 
 	@Override
-	public void execute(Environment env) {
+	public void executeInternal(Environment env) throws TypeException {
 		// The stack structure (TOP on top)
 		// [eval items] (either a single non-command or a command)
 		// [if branch]
@@ -31,8 +36,7 @@ public class If extends BaseOp {
 		// [else mark]
 		
 		if (null == env.peek())	{
-			env.pushString("Cannot evaluate if.  Stack is empty");
-			env.pushOp("error");
+			env.pushError("Cannot evaluate if.  Stack is empty");
 			return;
 		}
 		
@@ -40,8 +44,8 @@ public class If extends BaseOp {
 		env.evaluateStack();
 		Object test = env.pop();
 		
-		Stack<Object> ifBranch = env.popToMark();
-		Stack<Object> elseBranch = env.popToMark();
+		Stack<IValue> ifBranch = env.popToMark();
+		Stack<IValue> elseBranch = env.popToMark();
 		
 		if (test == null || test.toString() == "0" || test.toString().toLowerCase() == "false")	{
 			

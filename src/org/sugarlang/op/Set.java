@@ -4,8 +4,9 @@
 package org.sugarlang.op;
 
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseOp;
-import org.sugarlang.type.TSymbol;
+import org.sugarlang.base.IValue;
+import org.sugarlang.type.TypeException;
+import org.sugarlang.value.VSymbol;
 
 
 /**
@@ -14,36 +15,37 @@ import org.sugarlang.type.TSymbol;
  */
 public class Set extends BaseOp {
 
+	public Set() throws TypeException {
+		super();
+	}
+
 	@Override
 	public String getDescription() {
 		return "Sets a binding in the current dictionary (top-1: symbol, top: object)";
 	}
 
 	@Override
-	public void execute(Environment env) {
+	public void executeInternal(Environment env) throws TypeException {
 		env.evaluateStack();
-		Object o = env.pop();
-		if (null == o)	{
-			env.pushString("Cannot set binding object, stack is empty");
-			env.pushOp("error");
+		IValue v = env.pop();
+		if (null == v)	{
+			env.pushError("Cannot set binding object, stack is empty");
 			return;
 		}
 		
 		env.evaluateStack();
-		Object sym = env.pop();
+		IValue sym = env.pop();
 		if (null == sym)	{
-			env.pushString("Cannot set binding symbol, stack is empty");
-			env.pushOp("error");
+			env.pushError("Cannot set binding symbol, stack is empty");
 			return;
 		}
 		
-		if (!(sym instanceof TSymbol))	{
-			env.pushString("Cannot set binding, object on the stack isn't a symbol");
-			env.pushOp("error");
+		if (!(sym instanceof VSymbol))	{
+			env.pushError("Cannot set binding, object on the stack (<" + sym.getType().toString() + ">) isn't a symbol");
 			return;
 		}
 		
-		env.setBinding((TSymbol)sym, o);
+		env.setBinding((VSymbol)sym, v);
 	}
 
 }

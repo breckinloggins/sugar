@@ -6,8 +6,9 @@ package org.sugarlang.reader;
 import java.io.IOException;
 
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseReader;
-import org.sugarlang.type.TSymbol;
+import org.sugarlang.type.TypeException;
+import org.sugarlang.value.VChar;
+import org.sugarlang.value.VSymbol;
 
 
 /**
@@ -16,24 +17,27 @@ import org.sugarlang.type.TSymbol;
  */
 public class Symbol extends BaseReader {
 
+	public Symbol() throws TypeException {
+		super();
+	}
+
 	@Override
 	public String getDescription() {
 		return "Reads one or more non-WHITESPACE characters and pushes them onto the stack";
 	}
 
 	@Override
-	public void read(Environment env) throws IOException {
+	public void readInternal(Environment env) throws IOException, TypeException {
 		
 		readChar(env);
-		if (!(env.peek() instanceof Integer))	{
+		if (!(env.peek() instanceof VChar))	{
 			return;
 		}
 		
-		int c = (Integer)env.peek();
+		int c = ((VChar)env.peek()).getChar();
 		if (c == -1)	{
 			env.pop();
-			env.pushString("Unexpected EOF");
-			env.pushOp("error");
+			env.pushError("Unexpected EOF");
 			return;
 		}
 		
@@ -41,25 +45,24 @@ public class Symbol extends BaseReader {
 		if (Character.isWhitespace(ch))	{
 			// TODO: Should be replaced by a dynamic definition of our whitespace set
 			env.pop();
-			env.pushString("Unexpected Whitespace");
-			env.pushOp("error");
+			env.pushError("Unexpected Whitespace");
 			return;
 		}
 		
 		StringBuilder sb = new StringBuilder();
 		while (true)	{
 			readChar(env);
-			if (!(env.peek() instanceof Integer))	{
+			if (!(env.peek() instanceof VChar))	{
 				return;
 			}
-			c = (Integer)env.peek();
+			c = ((VChar)env.peek()).getChar();
 			
 			if (c == -1)	{
 				// It's up to upper level code to determine whether it's ok to 
 				// have an EOF directly after a symbol
 				env.pop();
 				System.err.println("r(Symbol): " + sb.toString());
-				TSymbol sym = new org.sugarlang.type.TSymbol(sb.toString());
+				VSymbol sym = new org.sugarlang.value.VSymbol(sb.toString());
 				env.push(sym);
 				env.pushReader("terminator");
 				env.pushOp("read");
@@ -80,7 +83,7 @@ public class Symbol extends BaseReader {
 		discardWhitespace(env);
 		
 		System.err.println("r(Symbol): " + sb.toString());
-		TSymbol sym = new org.sugarlang.type.TSymbol(sb.toString());
+		VSymbol sym = new org.sugarlang.value.VSymbol(sb.toString());
 		env.push(sym);
 	}
 }

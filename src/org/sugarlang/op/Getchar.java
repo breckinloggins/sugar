@@ -8,7 +8,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseOp;
+import org.sugarlang.type.TypeException;
+import org.sugarlang.value.VChar;
 
 
 /**
@@ -20,7 +21,9 @@ public class Getchar extends BaseOp {
 	private InputStreamReader _inputReader;
 	private BufferedReader _bufferedReader;
 	
-	public Getchar()	{
+	public Getchar() throws TypeException	{
+		super();
+		
 		_inputReader = new InputStreamReader(System.in);
 		_bufferedReader = new BufferedReader(_inputReader);
 	}
@@ -31,13 +34,12 @@ public class Getchar extends BaseOp {
 	}
 
 	@Override
-	public void execute(Environment env) {
+	public void executeInternal(Environment env) throws TypeException {
 		try {
 			int ch = _bufferedReader.read();
-			env.push(ch);
+			env.push(new VChar(ch));
 		} catch (IOException e) {
-			env.pushString("Cannot read from standard input");
-			env.pushOp("error");
+			env.pushError("Cannot read from standard input");
 		}
 	}
 

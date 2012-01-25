@@ -1,12 +1,16 @@
 /**
  * 
  */
-package org.sugarlang.dictionary;
+package org.sugarlang.reader;
 
 import java.io.IOException;
 
 import org.sugarlang.Environment;
+import org.sugarlang.base.IReader;
+import org.sugarlang.base.IType;
+import org.sugarlang.type.TReader;
 import org.sugarlang.type.TypeException;
+import org.sugarlang.value.VChar;
 
 
 /**
@@ -16,11 +20,23 @@ import org.sugarlang.type.TypeException;
 public abstract class BaseReader implements IReader {
 	
 	private boolean _isSealed = false;
+	private IType _type;
+	
+	public BaseReader() throws TypeException	{
+		setType(new TReader());
+		
+		seal();
+	}
+	
+	protected void setType(IType type) throws TypeException	{
+		throwIfSealed();
+		
+		_type = type;
+	}
 	
 	@Override
 	public IType getType() {
-		// TODO Auto-generated method stub
-		return null;
+		return _type;
 	}
 
 	@Override
@@ -46,9 +62,22 @@ public abstract class BaseReader implements IReader {
 	 * @see com.breckinloggins.cx.reader.IReader#read(com.breckinloggins.cx.Environment)
 	 */
 	@Override
-	public void read(Environment env) throws IOException {
-		System.err.println("Warning: reader doesn't read anything");
+	final public void read(Environment env) throws IOException {
+		try	{
+			readInternal(env);
+		} catch (TypeException e)	{
+			e.printStackTrace();
+			env.pushError(e.getMessage());
+		}
 	}
+	
+	/**
+	 * Override to perform actual reading
+	 * @param env The environment in which to perform the read
+	 * @throws IOException
+	 * @throws TypeException
+	 */
+	protected abstract void readInternal(Environment env) throws IOException, TypeException;
 
 	/**
 	 * Reads a character from standard input and pushes it on the stack.  If the top of the 
@@ -56,9 +85,9 @@ public abstract class BaseReader implements IReader {
 	 * @param env The environment to run the commands
 	 * @return The character, -1 if EOF, -2 if Error
 	 */
-	protected void readChar(Environment env)	{
-		if (!env.isStackEmpty() && (env.peek() instanceof Integer))	{
-			// We have an integer on top of the stack.  Assume it's a character and leave it
+	protected void readChar(Environment env) throws TypeException	{
+		if (!env.isStackEmpty() && (env.peek() instanceof VChar))	{
+			// We have a character on top of the stack.  Assume it's a character and leave it
 			return;
 		}
 		
@@ -71,8 +100,8 @@ public abstract class BaseReader implements IReader {
 	 * @param env The environment to examine
 	 */
 	protected void discardWhitespace(Environment env)	{
-		if (!env.isStackEmpty() && (env.peek() instanceof Integer))	{
-			if (Character.isWhitespace((Integer)env.peek()))	{
+		if (!env.isStackEmpty() && (env.peek() instanceof VChar))	{
+			if (Character.isWhitespace(((VChar)env.peek()).getChar()))	{
 				env.pop();
 			}
 		}

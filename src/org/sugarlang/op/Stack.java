@@ -4,7 +4,7 @@
 package org.sugarlang.op;
 
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseOp;
+import org.sugarlang.type.TypeException;
 
 
 /**
@@ -13,13 +13,17 @@ import org.sugarlang.dictionary.BaseOp;
  */
 public class Stack extends BaseOp {
 
+	public Stack() throws TypeException {
+		super();
+	}
+
 	@Override
 	public String getDescription() {
 		return "Writes the contents of the current stack to stdout";
 	}
 
 	@Override
-	public void execute(Environment env) {
+	public void executeInternal(Environment env) {
 		env.printStack(System.out);
 	}
 

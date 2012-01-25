@@ -1,6 +1,5 @@
 package org.sugarlang.type;
 
-import org.sugarlang.dictionary.BaseType;
 
 
 /**

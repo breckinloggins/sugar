@@ -5,9 +5,10 @@ package org.sugarlang.op;
 
 import java.util.Stack;
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseOp;
-import org.sugarlang.type.TMacro;
-import org.sugarlang.type.TQuote;
+import org.sugarlang.base.IValue;
+import org.sugarlang.type.TypeException;
+import org.sugarlang.value.VMacro;
+import org.sugarlang.value.VQuote;
 
 /**
  * Pops zero or more quoted items off the stack and pushes a TMacro containing those items on the stack
@@ -15,24 +16,28 @@ import org.sugarlang.type.TQuote;
  */
 public class CreateMacro extends BaseOp {
 
+	public CreateMacro() throws TypeException {
+		super();
+	}
+
 	@Override
 	public String getDescription() {
 		return "Pops zero or more quoted items off the stack and pushes a TMacro containing those items on the stack";
 	}
 
 	@Override
-	public void execute(Environment env) {
-		Stack<Object> macroStack = new Stack<Object>();
+	public void executeInternal(Environment env) throws TypeException {
+		Stack<IValue> macroStack = new Stack<IValue>();
 		
 		while(!env.isStackEmpty())	{
-			if (env.peek() instanceof TQuote)	{
+			if (env.peek() instanceof VQuote)	{
 				macroStack.push(env.pop());
 			} else {
 				break;
 			}
 		}
 		
-		env.push(new TMacro(macroStack));
+		env.push(new VMacro(macroStack));
 	}
 
 }

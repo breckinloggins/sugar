@@ -1,9 +1,9 @@
 /**
  * 
  */
-package org.sugarlang.dictionary;
+package org.sugarlang.type;
 
-import org.sugarlang.type.TypeException;
+import org.sugarlang.base.IType;
 
 /**
  * @author bloggins

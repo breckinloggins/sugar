@@ -3,12 +3,18 @@ package org.sugarlang.reader;
 import java.io.IOException;
 
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseReader;
-import org.sugarlang.dictionary.IReader;
-import org.sugarlang.type.TMacro;
+import org.sugarlang.base.IReader;
+import org.sugarlang.base.IValue;
+import org.sugarlang.type.TypeException;
+import org.sugarlang.value.VChar;
+import org.sugarlang.value.VMacro;
 
 
 public class Discriminator extends BaseReader {
+
+	public Discriminator() throws TypeException {
+		super();
+	}
 
 	@Override
 	public String getDescription()	{
@@ -16,14 +22,14 @@ public class Discriminator extends BaseReader {
 	}
 	
 	@Override
-	public void read(Environment env) throws IOException {
+	public void readInternal(Environment env) throws IOException, TypeException {
 		
 		readChar(env);
-		if (!(env.peek() instanceof Integer))	{
+		if (!(env.peek() instanceof VChar))	{
 			return;
 		}
 		
-		int ch = (Integer)env.peek();
+		int ch = ((VChar)env.peek()).getChar();
 		if (ch == -1)	{
 			// End of stream, send the Terminator
 			env.pop();
@@ -34,14 +40,14 @@ public class Discriminator extends BaseReader {
 		
 		System.err.println("r(Discriminator): " + Character.toString((char) ch));
 		
-		Object o = env.getBoundObject(Character.toString((char)ch));
-		if (null != o && o instanceof IReader)	{
+		IValue v = env.getBoundObject(Character.toString((char)ch));
+		if (null != v && v instanceof IReader)	{
 			env.pop();
-			env.pushReader((IReader)o);
+			env.pushReader((IReader)v);
 			env.pushOp("read");
-		} else if (null != o && o instanceof TMacro)	{
+		} else if (null != v && v instanceof VMacro)	{
 			env.pop();
-			env.push(o);
+			env.push(v);
 			env.pushOp("execute");
 		} else if (Character.isLetter(ch) || ch == '_')	{
 			env.pushReader("name");

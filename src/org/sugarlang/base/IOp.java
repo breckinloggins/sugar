@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.sugarlang.dictionary;
+package org.sugarlang.base;
 
 import org.sugarlang.Environment;
 

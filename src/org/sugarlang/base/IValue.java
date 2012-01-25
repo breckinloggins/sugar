@@ -1,4 +1,4 @@
-package org.sugarlang.dictionary;
+package org.sugarlang.base;
 
 /**
  * Represents an object with immutable type and value

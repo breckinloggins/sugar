@@ -4,11 +4,11 @@
 package org.sugarlang.op;
 
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseOp;
-import org.sugarlang.dictionary.IOp;
-import org.sugarlang.dictionary.IReader;
-import org.sugarlang.dictionary.IValue;
-import org.sugarlang.type.TSymbol;
+import org.sugarlang.base.IOp;
+import org.sugarlang.base.IReader;
+import org.sugarlang.base.IValue;
+import org.sugarlang.type.TypeException;
+import org.sugarlang.value.VSymbol;
 
 
 /**
@@ -17,19 +17,23 @@ import org.sugarlang.type.TSymbol;
  */
 public class Env extends BaseOp {
 
+	public Env() throws TypeException {
+		super();
+	}
+
 	@Override
 	public String getDescription()	{
 		return "Prints info about the current environment";
 	}
 	
 	@Override
-	public void execute(Environment env) {
+	public void executeInternal(Environment env) throws TypeException {
 		
 		System.out.println("\nStack:");
 		env.printStack(System.out);
 		
 		System.out.println("\nReader Bindings:");
-		for (TSymbol sym : env.getBindingSymbols())	{
+		for (VSymbol sym : env.getBindingSymbols())	{
 			Object o = env.getBoundObject(sym);
 			if (!(o instanceof IReader))	{
 				continue;
@@ -43,7 +47,7 @@ public class Env extends BaseOp {
 		}
 		
 		System.out.println("\nOpcode Bindings:");
-		for (TSymbol sym : env.getBindingSymbols())	{
+		for (VSymbol sym : env.getBindingSymbols())	{
 			Object o = env.getBoundObject(sym);
 			if (!(o instanceof IOp))	{
 				continue;
@@ -57,13 +61,13 @@ public class Env extends BaseOp {
 		}
 		
 		System.out.println("\nOther Bindings:");
-		for (TSymbol symbol : env.getBindingSymbols())	{
-			Object o = env.getBoundObject(symbol);
-			if (o instanceof IOp || o instanceof IReader)	{
+		for (VSymbol symbol : env.getBindingSymbols())	{
+			IValue v = env.getBoundObject(symbol);
+			if (v instanceof IOp || v instanceof IReader)	{
 				continue;
 			}
 			
-			System.out.print(symbol.toString() + " => " + o + " <" + o.getClass().getName() + ">");
+			System.out.print(symbol.toString() + " => " + v + " <" + v.getType().toString() + ">");
 			System.out.println();
 		}
 	}

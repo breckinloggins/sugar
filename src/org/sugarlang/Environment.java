@@ -6,21 +6,24 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.Stack;
 
-import org.sugarlang.dictionary.IOp;
-import org.sugarlang.dictionary.IReader;
+import org.sugarlang.base.IOp;
+import org.sugarlang.base.IReader;
+import org.sugarlang.base.IValue;
 import org.sugarlang.type.TMark;
 import org.sugarlang.type.TNull;
-import org.sugarlang.type.TSymbol;
+import org.sugarlang.type.TypeException;
+import org.sugarlang.value.VString;
+import org.sugarlang.value.VSymbol;
 
 
 public class Environment {
 	
-	private HashMap<TSymbol, Object> _dictionary;
-	private Stack<Object> _stack;
+	private HashMap<VSymbol, IValue> _dictionary;
+	private Stack<IValue> _stack;
 	
 	public Environment()	{		
-		_dictionary = new HashMap<TSymbol, Object>();
-		_stack = new Stack<Object>();
+		_dictionary = new HashMap<VSymbol, IValue>();
+		_stack = new Stack<IValue>();
 	}
 	
 	/**
@@ -28,10 +31,19 @@ public class Environment {
 	 * @param sym The symbol to which to bind the object.  If a binding already exists for this symbol, it will be
 	 * overwritten
 	 * @param obj The object to set, may be null to represent an unbound symbol
+	 * @throws TypeException Thrown if attempt to bind to an unsealed object
 	 */
-	public void setBinding(TSymbol sym, Object obj)	{
+	public void setBinding(VSymbol sym, IValue obj) throws TypeException	{
 		if (null == obj)	{
 			obj = new TNull();
+		}
+		
+		if (!obj.isSealed())	{
+			String type = "null";
+			if (null != obj.getType())	{
+				type = obj.getType().toString();
+			}
+			throw new TypeException("Cannot bind to an unsealed object (" + obj.toString() + " <" + type + ">)");
 		}
 		
 		_dictionary.put(sym, obj);
@@ -42,18 +54,19 @@ public class Environment {
 	 * @param sym The symbol to which to bind the object.  If a binding already exists for this symbol, it will be
 	 * overwritten
 	 * @param obj The object to set, may be null to represent an unbound symbol
+	 * @throws TypeException Thrown if attempt to bind to an unsealed object
 	 */
-	public void setBinding(String sym, Object obj)	{
-		TSymbol tsym = new TSymbol(sym);
+	public void setBinding(String sym, IValue obj) throws TypeException	{
+		VSymbol vsym = new VSymbol(sym);
 		
-		setBinding(tsym, obj);
+		setBinding(vsym, obj);
 	}
 	
 	/**
 	 * Clears anything bound to the given symbol
 	 * @param sym The symbol to unset
 	 */
-	public void unsetBinding(TSymbol sym)	{
+	public void unsetBinding(VSymbol sym)	{
 		_dictionary.remove(sym);
 	}
 	
@@ -63,7 +76,7 @@ public class Environment {
 	 * @return null if the symbol is not bound, TNull if the symbol is bound to null, 
 	 * the bound object otherwise
 	 */
-	public Object getBoundObject(TSymbol sym)	{
+	public IValue getBoundObject(VSymbol sym)	{
 		return _dictionary.get(sym);
 	}
 	
@@ -72,42 +85,54 @@ public class Environment {
 	 * @param sym The symbol to look up
 	 * @return null if the symbol is not bound, TNull if the symbol is bound to null, 
 	 * the bound object otherwise
+	 * @throws TypeException Thrown if sym is null
 	 */
-	public Object getBoundObject(String sym)	{
-		TSymbol tsym = new TSymbol(sym);
-		return getBoundObject(tsym);
+	public IValue getBoundObject(String sym) throws TypeException	{
+		VSymbol vsym = new VSymbol(sym);
+		return getBoundObject(vsym);
 	}
 	
 	/**
 	 * Gets the list of symbols bound in the current environment
 	 * @return The symbol list
 	 */
-	public Set<TSymbol> getBindingSymbols()	{
+	public Set<VSymbol> getBindingSymbols()	{
 		return _dictionary.keySet();
 	}
 	
 	/**
 	 * Pushes an argument onto the environment's stack
 	 * @param arg The argument to push
+	 * @throws TypeException Thrown if attempt to push null or unsealed object
 	 */
-	public void push(Object arg)	{
+	public void push(IValue arg) throws TypeException	{
+		if (null == arg)	{
+			throw new TypeException("Cannot push null value onto stack.  Use TNull");
+		}
+		
+		if (!arg.isSealed())	{
+			throw new TypeException("Cannot push an unsealed object onto the stack");
+		}
+		
 		_stack.push(arg);
 	}
 	
 	/**
 	 * Pushes a string onto the environment's stack
 	 * @param s The string to push
+	 * @throws TypeException Thrown if the string is null
 	 */
-	public void pushString(String s)	{
-		_stack.push(s);
+	public void pushString(String s) throws TypeException	{
+		_stack.push(new VString(s));
 	}
 	
 	/**
 	 * Pushes a symbol onto the environment's stack
 	 * @param s The string of the symbol to push
+	 * @throws TypeException Thrown if s is null
 	 */
-	public void pushSymbol(String s)	{
-		TSymbol sym = new TSymbol(s);
+	public void pushSymbol(String s) throws TypeException	{
+		VSymbol sym = new VSymbol(s);
 		push(sym);
 	}
 	
@@ -115,47 +140,51 @@ public class Environment {
 	 * Pushes the opcode with the given alias onto the stack.  If there is no opcode
 	 * by that alias, an error is pushed instead
 	 * @param alias The alias by which the opcode is known in this environment
+	 * @throws TypeException Thrown if alias is null
 	 */
-	public void pushOp(String alias)	{
-		Object o = getBoundObject(alias);
-		if (null == o || !(o instanceof IOp))	{
+	public void pushOp(String alias) throws TypeException	{
+		IValue v = getBoundObject(alias);
+		if (null == v || !(v instanceof IOp))	{
 			pushString("\"" + alias + "\" is not an opcode");
 			push(new org.sugarlang.op.Error());
 			return;
 		}
 		
-		push(o);
+		push(v);
 	}
 	
 	/**
 	 * Pushes the reader with the given alias onto the stack.  If there is no reader
 	 * by that alias, an error is pushed instead
 	 * @param alias The alias by which the reader is known in this environment
+	 * @throws TypeException Thrown if alias is null 
 	 */
-	public void pushReader(String alias)	{
-		Object o = getBoundObject(alias);
-		if (null == o || !(o instanceof IReader))	{
+	public void pushReader(String alias) throws TypeException	{
+		IValue v = getBoundObject(alias);
+		if (null == v || !(v instanceof IReader))	{
 			pushString("\"" + alias + "\" is not a reader");
 			push(new org.sugarlang.op.Error());
 			return;
 		}
 		
-		push(o);
+		push(v);
 	}
 	
 	/**
 	 * Pushes the given reader onto the stack
 	 * @param reader The reader to push onto the stack
+	 * @throws TypeException Thrown if reader is null
 	 */
-	public void pushReader(IReader reader)	{
+	public void pushReader(IReader reader) throws TypeException	{
 		push(reader);
 	}
 	
 	/**
 	 * Pushes objects from the given stack onto this environment's stack
 	 * @param stack The stack to push.  Note that all items will be popped off of this stack
+	 * @throws TypeException Thrown if any element in the stack is null
 	 */
-	public void pushStack(Stack<Object> stack)	{
+	public void pushStack(Stack<IValue> stack) throws TypeException	{
 		while (!stack.isEmpty())	{
 			push(stack.pop());
 		}
@@ -165,14 +194,35 @@ public class Environment {
 	 * Pushes a stack marker on the stack
 	 */
 	public void pushMark()	{
-		push(new TMark());
+		try {
+			push(new TMark());
+		} catch (TypeException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Pushes an error message on the stack
+	 * @param message The message to push
+	 */
+	public void pushError(String message)	{
+		if (null == message)	{
+			message = "";
+		}
+		
+		try	{
+			pushString(message);
+			pushOp("error");
+		} catch (TypeException e)	{
+			e.printStackTrace();
+		}
 	}
 	
 	/**
 	 * Pops an argument off the environment's stack
 	 * @return The argument, or null if the stack is empty
 	 */
-	public Object pop()	{
+	public IValue pop()	{
 		try	{
 			return _stack.pop();
 		} catch (EmptyStackException e)	{
@@ -184,8 +234,8 @@ public class Environment {
 	 * Pops arguments off the stack until a TMark is found (which is also popped), or the stack is empty
 	 * @return The stack of objects removed, minus the TMark
 	 */
-	public Stack<Object> popToMark()	{
-		Stack<Object> popped = new Stack<Object>();
+	public Stack<IValue> popToMark()	{
+		Stack<IValue> popped = new Stack<IValue>();
 		
 		while (!isStackEmpty())	{
 			Object o = peek();
@@ -254,12 +304,12 @@ public class Environment {
 		}
 		
 		for (int i = _stack.size() - 1; i >= 0; i--)	{
-			Object entry = _stack.get(i);
+			IValue entry = _stack.get(i);
 			String value = entry.toString();
 			value = value.replace("\n", "\\n");
 			value = value.replace("\t", "\\t");
 			value = value.replace("\r", "\\r");
-			stream.print("[" + (_stack.size() - i - 1) + "] " + value + " <" + entry.getClass().getName() + ">");
+			stream.print("[" + (_stack.size() - i - 1) + "] " + value + " <" + entry.getType().toString() + ">");
 			stream.println();
 		}
 	}

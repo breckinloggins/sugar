@@ -4,7 +4,7 @@
 package org.sugarlang.op;
 
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseOp;
+import org.sugarlang.type.TypeException;
 
 /**
  * Pops an item off the stack and pushes a reader by that name
@@ -14,19 +14,22 @@ import org.sugarlang.dictionary.BaseOp;
  */
 public class Reader extends BaseOp {
 
+	public Reader() throws TypeException {
+		super();
+	}
+
 	@Override
 	public String getDescription() {
 		return "Pops an item off the stack and pushes a reader by that name";
 	}
 
 	@Override
-	public void execute(Environment env) {
+	public void executeInternal(Environment env) throws TypeException {
 		
 		env.evaluateStack();
 		Object readerEntry = env.pop();
 		if (null == readerEntry)	{
-			env.pushString("The stack is empty");
-			env.pushOp("error");
+			env.pushError("The stack is empty");
 			return;
 		}
 		

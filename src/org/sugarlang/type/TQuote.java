@@ -3,30 +3,20 @@
  */
 package org.sugarlang.type;
 
-import org.sugarlang.dictionary.BaseType;
 
 /**
- * Quotes an item to prevent it from being immediately evaluated
+ * Represents a quoted item
  * @author bloggins
  */
 public class TQuote extends BaseType {
-
-	private Object _inner;
 	
 	/**
-	 * Constructs a quoted object with the given inner object
+	 * Constructs a quoted object type
 	 * @param inner
+	 * @throws TypeException 
 	 */
-	public TQuote(Object inner)	{
-		_inner = inner;
-	}
-	
-	/**
-	 * Gets the quoted object
-	 * @return The object quoted
-	 */
-	public Object getInner()	{
-		return _inner;
+	public TQuote() throws TypeException	{
+		seal();
 	}
 		
 	@Override
@@ -36,6 +26,6 @@ public class TQuote extends BaseType {
 	
 	@Override
 	public String toString()	{
-		return "TQuote`"+getInner().toString()+" <" + getInner().getClass().getName() + ">`";
+		return "Quote";
 	}
 }

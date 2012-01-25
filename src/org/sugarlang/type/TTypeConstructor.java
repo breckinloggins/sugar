@@ -4,9 +4,8 @@
 package org.sugarlang.type;
 
 import java.util.ArrayList;
-
-import org.sugarlang.dictionary.BaseType;
-import org.sugarlang.dictionary.IType;
+import org.sugarlang.base.IType;
+import org.sugarlang.value.VSymbol;
 
 /**
  * Represents an immutable algebraic data type, consisting of a union of one or more types.
@@ -17,30 +16,18 @@ import org.sugarlang.dictionary.IType;
  */
 public class TTypeConstructor extends BaseType {
 	
-	private boolean _isFinalized = false;
-	
-	private ArrayList<TSymbol> _typeVariables = new ArrayList<TSymbol>();
+	private ArrayList<VSymbol> _typeVariables = new ArrayList<VSymbol>();
 	//private ArrayList<IType> _types = new ArrayList<IType>();
 	
-	
+	/**
+	 * Creates a new Type Constructor
+	 */
 	public TTypeConstructor()	{
-	}
-	
-	/**
-	 * Gets whether the type has been finalized
-	 * @return
-	 */
-	public boolean isFinalized()	{
-		return _isFinalized;
-	}
-	
-	/**
-	 * Marks the Type Constructor as final, that is, changes to the type constructor are no longer allowed
-	 * @throws TypeException thrown if the type has already been finalized
-	 */
-	public void finalize() throws TypeException {
-		throwIfFinalized();
-		_isFinalized = true;
+		try {
+			seal();
+		} catch (TypeException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -48,8 +35,8 @@ public class TTypeConstructor extends BaseType {
 	 * @param sym The symbol to add
 	 * @throws TypeException Thrown if type has been finalized
 	 */
-	public void addTypeVariable(TSymbol sym) throws TypeException	{
-		throwIfFinalized();
+	public void addTypeVariable(VSymbol sym) throws TypeException	{
+		throwIfSealed();
 		_typeVariables.add(sym);
 	}
 	
@@ -59,7 +46,7 @@ public class TTypeConstructor extends BaseType {
 	 * @throws TypeException Thrown if type has been finalized
 	 */
 	public void addTypeVariable(String s) throws TypeException {
-		addTypeVariable(new TSymbol(s));
+		addTypeVariable(new VSymbol(s));
 	}
 	
 	/**
@@ -69,27 +56,6 @@ public class TTypeConstructor extends BaseType {
 	 * @throws TypeException Thrown if type has not been finalized
 	 */
 	public boolean matchType(IType t) throws TypeException	{
-		throwIfNotFinalized();
 		return false;
-	}
-	
-	/**
-	 * Throws a TypeException if the object is not finalized
-	 * @throws TypeException
-	 */
-	private void throwIfNotFinalized() throws TypeException	{
-		if (!isFinalized())	{
-			throw new TypeException("Invalid operation, type is not finalized");
-		}
-	}
-	
-	/**
-	 * Throws a TypeException if the object is finalized
-	 * @throws TypeException
-	 */
-	private void throwIfFinalized() throws TypeException {
-		if (isFinalized())	{
-			throw new TypeException("Invalid operation, type is finalized");
-		}
 	}
 }

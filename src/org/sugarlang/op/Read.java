@@ -6,8 +6,8 @@ package org.sugarlang.op;
 import java.io.IOException;
 
 import org.sugarlang.Environment;
-import org.sugarlang.dictionary.BaseOp;
-import org.sugarlang.dictionary.IReader;
+import org.sugarlang.base.IReader;
+import org.sugarlang.type.TypeException;
 
 
 /**
@@ -16,24 +16,26 @@ import org.sugarlang.dictionary.IReader;
  */
 public class Read extends BaseOp {
 
+	public Read() throws TypeException {
+		super();
+	}
+
 	@Override
 	public String getDescription() {
 		return "Executes the reader at the top of the stack";
 	}
 
 	@Override
-	public void execute(Environment env) {
+	public void executeInternal(Environment env) {
 		env.evaluateStack();
 		Object arg = env.pop();
 		if (null == arg)	{
-			env.pushString("Cannot execute reader. stack empty");
-			env.pushOp("error");
+			env.pushError("Cannot execute reader. stack empty");
 			return;
 		}
 		
 		if (!(arg instanceof IReader))	{
-			env.pushString("Argument \"" + arg.toString() + "\" is not a reader");
-			env.pushOp("error");
+			env.pushError("Argument \"" + arg.toString() + "\" is not a reader");
 			return;
 		}
 		
