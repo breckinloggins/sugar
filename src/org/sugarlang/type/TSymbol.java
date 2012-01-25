@@ -4,7 +4,8 @@ package org.sugarlang.type;
 
 public class TSymbol extends BaseType {
 	
-	public TSymbol()	{
+	public TSymbol() throws TypeException	{
+		seal();
 	}
 	
 	@Override

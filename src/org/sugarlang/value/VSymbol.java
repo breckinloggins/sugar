@@ -3,7 +3,7 @@
  */
 package org.sugarlang.value;
 
-import org.sugarlang.type.TSymbol;
+import org.sugarlang.type.BuiltinTypes;
 import org.sugarlang.type.TypeException;
 
 /**
@@ -20,7 +20,7 @@ public class VSymbol extends BaseValue {
 	 * @throws TypeException Thrown if val is null
 	 */
 	public VSymbol(String val) throws TypeException {
-		setType(new TSymbol());
+		setType(BuiltinTypes.Symbol);
 		
 		if (null == val)	{
 			throw new TypeException("Cannot create a null VSymbol");

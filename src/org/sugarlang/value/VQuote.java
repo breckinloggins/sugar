@@ -4,7 +4,7 @@
 package org.sugarlang.value;
 
 import org.sugarlang.base.IValue;
-import org.sugarlang.type.TQuote;
+import org.sugarlang.type.BuiltinTypes;
 import org.sugarlang.type.TypeException;
 
 /**
@@ -16,7 +16,7 @@ public class VQuote extends BaseValue {
 	private IValue _inner;
 	
 	public VQuote(IValue inner) throws TypeException	{
-		setType(new TQuote());
+		setType(BuiltinTypes.Quote);
 		
 		if (null == inner)	{
 			throw new TypeException("Cannot quote null.  Perhaps you meant TNull?");

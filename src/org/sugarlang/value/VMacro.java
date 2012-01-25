@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 import org.sugarlang.base.IValue;
-import org.sugarlang.type.TMacro;
+import org.sugarlang.type.BuiltinTypes;
 import org.sugarlang.type.TypeException;
 
 /**
@@ -24,7 +24,7 @@ public class VMacro extends BaseValue {
 	 * @throws TypeException Thrown if null is passed
 	 */
 	public VMacro(Stack<IValue> stack) throws TypeException	{
-		setType(new TMacro());
+		setType(BuiltinTypes.Macro);
 		
 		if (null == stack)	{
 			throw new TypeException("Cannot create a null VMacro");

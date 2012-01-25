@@ -9,4 +9,18 @@ package org.sugarlang.type;
  */
 public class TNull extends BaseType {
 
+	public TNull() throws TypeException	{
+		seal();
+	}
+	
+	@Override
+	public String getDescription() {
+		return "The Null Type";
+	}
+
+	@Override
+	public String toString() {
+		return "Null";
+	}
+
 }

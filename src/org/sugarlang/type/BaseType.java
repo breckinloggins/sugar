@@ -12,11 +12,14 @@ import org.sugarlang.base.IType;
 public abstract class BaseType implements IType {
 	
 	private boolean _isSealed = false;
+	private IType _type;
 	
 	@Override
 	public IType getType() {
-		// TODO Auto-generated method stub
-		return null;
+		if (null == _type)	{
+			_type = BuiltinTypes.Type;
+		}
+		return _type;
 	}
 
 	@Override

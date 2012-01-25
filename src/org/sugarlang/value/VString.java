@@ -3,7 +3,7 @@
  */
 package org.sugarlang.value;
 
-import org.sugarlang.type.TString;
+import org.sugarlang.type.BuiltinTypes;
 import org.sugarlang.type.TypeException;
 
 /**
@@ -20,7 +20,7 @@ public class VString extends BaseValue {
 	 * @throws TypeException Thrown if null is passed
 	 */
 	public VString(String val) throws TypeException	{
-		setType(new TString());
+		setType(BuiltinTypes.String);
 		
 		if (null == val)	{
 			throw new TypeException("Cannot create a null VString");

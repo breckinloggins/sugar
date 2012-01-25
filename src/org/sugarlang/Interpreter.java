@@ -1,6 +1,7 @@
 package org.sugarlang;
 
 import org.sugarlang.base.IOp;
+import org.sugarlang.type.BuiltinTypes;
 import org.sugarlang.type.TypeException;
 
 public class Interpreter implements Runnable {
@@ -53,6 +54,19 @@ public class Interpreter implements Runnable {
 		Environment env = _rootEnvironment;
 	
 		try {
+			
+			BuiltinTypes.initialize();
+			
+			env.setBinding("Type", BuiltinTypes.Type);
+			env.setBinding("Char", BuiltinTypes.Char);
+			env.setBinding("Macro", BuiltinTypes.Macro);
+			env.setBinding("Null", BuiltinTypes.Null);
+			env.setBinding("Op", BuiltinTypes.Op);
+			env.setBinding("Quote", BuiltinTypes.Quote);
+			env.setBinding("Reader", BuiltinTypes.Reader);
+			env.setBinding("String", BuiltinTypes.String);
+			env.setBinding("Symbol", BuiltinTypes.Symbol);
+			
 			env.setBinding("bootstrap", new org.sugarlang.reader.Bootstrap());
 			env.setBinding("command", new org.sugarlang.reader.Command());
 			env.setBinding("symbol", new org.sugarlang.reader.Symbol());
@@ -88,12 +102,6 @@ public class Interpreter implements Runnable {
 		}
 		
 		// TODO:
-		// - Built-in types should be singleton or there should be a static "built-in types" class
-		// - Abstract TTypeConstructor's finalizable semantics to an interface and ensure that all
-		// objects on the stack and binding environment are of type IFinalizable.  The interpreter should
-		// check whether an object is finalized before being allowed to be put on the stack or set in the
-		// environment.  This will ensure that we can use a convenient API on Java classes but that they
-		// will be immutable after being finalized.
 		// - Built-in list type
 		//		- Create TList (can only contain homogeneous members)
 		//		- Lazy

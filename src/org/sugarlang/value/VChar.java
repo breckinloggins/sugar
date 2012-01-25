@@ -3,7 +3,7 @@
  */
 package org.sugarlang.value;
 
-import org.sugarlang.type.TChar;
+import org.sugarlang.type.BuiltinTypes;
 import org.sugarlang.type.TypeException;
 
 /**
@@ -16,7 +16,7 @@ public class VChar extends BaseValue {
 	
 	public VChar(int c) throws TypeException	{
 		
-		setType(new TChar());
+		setType(BuiltinTypes.Char);
 		
 		_c = c;
 		seal();
