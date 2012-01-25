@@ -4,7 +4,6 @@
 package org.sugarlang.reader;
 
 import java.io.IOException;
-import java.util.HashSet;
 
 import org.sugarlang.Environment;
 import org.sugarlang.base.IReader;
@@ -17,7 +16,9 @@ import org.sugarlang.value.VWhitespace;
  * @author bloggins
  */
 public class Bootstrap extends BaseReader {
-
+	
+	public char _nullChar;
+	
 	public Bootstrap() throws TypeException {
 		super();
 	}
@@ -29,10 +30,61 @@ public class Bootstrap extends BaseReader {
 
 	@Override
 	public void readInternal(Environment env) throws IOException, TypeException {
+		System.err.println("Expecting character for Null");
+		readNullCharacter(env);
+		
+		System.err.println("Expecting character for ignored input (comments).  Null to ignore");
 		readIgnoredCharacter(env);
+		
+		System.err.println("Expecting character for command invocation.  Null to ignore");
 		readAndBindToReader(env, new org.sugarlang.reader.Command());
+		
+		System.err.println("Expecting character for stack quotation.  Null to ignore");
 		readAndBindToReader(env, new org.sugarlang.reader.Quoted());
+		
+		System.err.println("Expecting characters to define as whitespace.  Null to finish");
 		readWhitespace(env);
+		
+		System.err.println("System is bootstrapped; welcome to Sugar.");
+	}
+	
+	private void readNullCharacter(Environment env) throws IOException, TypeException {
+		readChar(env);
+		if (!(env.peek() instanceof VChar))	{
+			env.pushError("Argument on the stack is not a Char");
+			return;
+		}
+		
+		int ch = ((VChar)env.peek()).getChar();
+		if (ch == -1)	{
+			// End of stream, send the Terminator
+			env.pop();
+			env.pushReader("terminator");
+			env.pushOp("read");
+			return;
+		}
+		
+		env.pop();
+		env.setBinding(Character.toString((char)ch), new org.sugarlang.op.Null());
+		
+		_nullChar = (char)ch;
+		System.err.println(Character.toString((char)ch) + " => Null");
+	}
+	
+	/**
+	 * Returns whether we should ignore the given character, if so, prints the given messate to stderr
+	 * @param ch The character to test
+	 * @param message The message to print if we're ignoring
+	 * @return True if we should ignore, false otherwise
+	 */
+	private boolean shouldIgnore(char ch, String message)	{
+		boolean ret = ch == _nullChar;
+		
+		if (ret)	{
+			System.err.println(message);
+		}
+		
+		return ret;
 	}
 	
 	/**
@@ -55,6 +107,11 @@ public class Bootstrap extends BaseReader {
 			env.pop();
 			env.pushReader("terminator");
 			env.pushOp("read");
+			return;
+		}
+		
+		if (shouldIgnore((char)ch, "Not setting ignored character"))	{
+			env.pop();
 			return;
 		}
 		
@@ -84,6 +141,10 @@ public class Bootstrap extends BaseReader {
 			return;
 		}
 		
+		if (shouldIgnore((char)ch, "Not setting reader for " + reader.getClass().getName()))	{
+			env.pop();
+			return;
+		}
 		
 		env.setBinding(Character.toString((char) ch), reader);
 		env.pop();
@@ -92,8 +153,6 @@ public class Bootstrap extends BaseReader {
 	}
 	
 	private void readWhitespace(Environment env) throws TypeException	{
-		HashSet<Character> ws = new HashSet<Character>();
-		
 		while (true)	{
 			readChar(env);
 			if (!(env.peek() instanceof VChar))	{
@@ -112,15 +171,13 @@ public class Bootstrap extends BaseReader {
 			
 			env.pop();
 			char c = (char)ch;
-			if (ws.contains(c))	{
-				// We've already defined this character.  That's our cue to stop
+			if (shouldIgnore(c, "Finished with whitespace"))	{
 				break;
 			}
 			
 			VWhitespace vws = new VWhitespace(c);
 			
 			env.setBinding(Character.toString(c), vws);
-			ws.add(c);
 			
 			System.err.println("r(Bootstrap): " + vws.toString() + " => Whitespace");
 		}

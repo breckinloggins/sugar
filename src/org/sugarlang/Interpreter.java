@@ -77,6 +77,7 @@ public class Interpreter implements Runnable {
 			env.setBinding("whitespace", new org.sugarlang.reader.Whitespace());
 			
 			env.setBinding("nop", new org.sugarlang.op.Nop());
+			env.setBinding("null", new org.sugarlang.op.Null());
 			env.setBinding("mark", new org.sugarlang.op.Mark());
 			env.setBinding("stack", new org.sugarlang.op.Stack());
 			env.setBinding("env", new org.sugarlang.op.Env());
@@ -103,8 +104,6 @@ public class Interpreter implements Runnable {
 		}
 		
 		// TODO:
-		// - Add null symbol so you can skip definitions of things you don't need
-		//		- Should be an op that pushes TNull on the stack, the bootstrapper can then interpret that accordingly
 		// - User defined types based on Product and Sum Types 
 		// - Add inheritance concept and add to the is op (edit: nope, is should do structural checking)
 		// - I'm pretty sure we can build cons cells from type constructors

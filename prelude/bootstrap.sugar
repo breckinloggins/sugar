@@ -1,9 +1,22 @@
-- 
+_- 
 Sugar Prelude Bootstrap File
 
 (c) 2012 Breckin Loggins
 
-The very first character in this file represents the "ignore" character.  Every time
+The first character in this file is the "Null" character.  Everytime the discriminator
+sees it, it will push Null on the stack (in other words, it's short for the null op).
+
+Everything below can be ignored by giving Sugar the null op instead of another character.
+This will cause the thing Sugar wants to create to not be created or bound to a character.
+For example, if you don't need quotation, you can give Sugar the null character when it 
+expects a character to define quotation.
+
+Interestingly, this implies that the minimum sugar file is a single character (including
+what you normally think of as whitespace) repeated until the interpreter tells you
+that Sugar is bootstrapped.  Of course, you can't do anything with that language but
+repeatedly push null on the stack.
+
+The second character is the "ignore" character.  Every time
 Sugar sees this character, it ignores all input until it sees it again.  Thus, the 
 first syntactic construct we have is a comment.
 
@@ -11,12 +24,12 @@ The next two characters after the end of this comment define the command (op) tr
 character, and the quoting character, respectively.
 
 After that, we teach Sugar about whitespace.  Sugar will read a set of characters and
-add each one as a whitespace reader.  It will continue until it sees a character you 
-have already defined as whitespace.  Thus the literal characters after the quote are
-SPC TAB NEWLINE SPC.  The following hyphen starts the next comment...
+add each one as a whitespace reader.  It will continue until it sees the Null characer.
+Thus the literal characters after the quote are
+SPC TAB NEWLINE_.  The following hyphen starts the next comment...
 
 -!` 	
- - 
+_- 
 At this point the compiler has a notion of a "symbol".  A symbol is a collection of
 one or more contiguous non whitespace characters.  The environment already has several
 symbols bound to opcodes, types, and readers, so we now have enough syntax to execute

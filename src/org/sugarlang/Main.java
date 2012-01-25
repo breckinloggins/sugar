@@ -323,6 +323,7 @@ public class Main {
 							try {
 								byte[] b = getBytesFromFile(new java.io.File(preludeFile));						
 								poStream.write(b);
+								poStream.flush();
 							} catch (IOException ex) {
 								ex.printStackTrace(System.err);
 							}		
