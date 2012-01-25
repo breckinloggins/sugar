@@ -1,11 +1,11 @@
 NEXT ACTIONS:
-	- Create dup and swap macros
-	
-TYPE SYSTEM:
 	- Add type macro: pops a symbol and returns the type bound to that symbol
 	- Add overloaded method for all types that pop up to n-args off the stack and create a new value of that type (in other words, a data constructor for each type)
 	- Add create-op: pops a type and a bunch of args (as needed by the type), and instantiates a new value for that type, pushing it on the stack, using that type's
 		data constructor
+	
+	
+TYPE SYSTEM:
 	- Remove createmacro-op and replace with the above infrastructure
 	- Define createmacro as the first macro
 	- Create ProductType (takes one or more other types and represents a tuple of those types)
