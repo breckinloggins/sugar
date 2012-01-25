@@ -1,4 +1,9 @@
 NEXT ACTIONS:
+	- Add single register to environment
+	- Modify pop-op to saves whatever was popped into the register
+	- Create push-op to push whatever is in the register onto the stack
+
+TYPE SYSTEM:
 	- Add type macro: pops a symbol and returns the type bound to that symbol
 	- Add overloaded method for all types that pop up to n-args off the stack and create a new value of that type (in other words, a data constructor for each type)
 	- Add create-op: pops a type and a bunch of args (as needed by the type), and instantiates a new value for that type, pushing it on the stack, using that type's
@@ -48,6 +53,7 @@ RESEARCH/THOUGHTS/BACKLOG:
 		//
 		// But, again, we ultimately want to hard-code as little of this as possible.
 
+- Handle pasting chars into the editor, write now it just passes the "v" or nothing
 
 - Define the character escape types.  By default this just lets you escape \xxxx unicode code points, 
 		so we'll want a way to define the traditional \n, \r, and so forth escapes as the user sees fit.

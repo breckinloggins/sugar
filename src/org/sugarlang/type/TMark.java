@@ -9,6 +9,9 @@ package org.sugarlang.type;
  * @author bloggins
  */
 public class TMark extends BaseType {
+	public TMark() throws TypeException	{
+		seal();
+	}
 	
 	@Override
 	public String getDescription() {
