@@ -2,7 +2,6 @@ package org.sugarlang;
 
 import java.io.PrintStream;
 import java.util.EmptyStackException;
-import java.util.HashMap;
 import java.util.Set;
 import java.util.Stack;
 
@@ -10,7 +9,6 @@ import org.sugarlang.base.IOp;
 import org.sugarlang.base.IReader;
 import org.sugarlang.base.IValue;
 import org.sugarlang.type.TMark;
-import org.sugarlang.type.TNull;
 import org.sugarlang.type.TypeException;
 import org.sugarlang.value.VString;
 import org.sugarlang.value.VSymbol;
@@ -18,11 +16,11 @@ import org.sugarlang.value.VSymbol;
 
 public class Environment {
 	
-	private HashMap<VSymbol, IValue> _dictionary;
+	private Dictionary _dictionary;
 	private Stack<IValue> _stack;
 	
 	public Environment()	{		
-		_dictionary = new HashMap<VSymbol, IValue>();
+		_dictionary = new Dictionary(null);
 		_stack = new Stack<IValue>();
 	}
 	
@@ -30,23 +28,11 @@ public class Environment {
 	 * Sets a binding in the dictionary between a symbol and an arbitrary object
 	 * @param sym The symbol to which to bind the object.  If a binding already exists for this symbol, it will be
 	 * overwritten
-	 * @param obj The object to set, may be null to represent an unbound symbol
+	 * @param obj The object to set
 	 * @throws TypeException Thrown if attempt to bind to an unsealed object
 	 */
 	public void setBinding(VSymbol sym, IValue obj) throws TypeException	{
-		if (null == obj)	{
-			obj = new TNull();
-		}
-		
-		if (!obj.isSealed())	{
-			String type = "null";
-			if (null != obj.getType())	{
-				type = obj.getType().toString();
-			}
-			throw new TypeException("Cannot bind to an unsealed object (" + obj.toString() + " <" + type + ">)");
-		}
-		
-		_dictionary.put(sym, obj);
+		_dictionary.set(sym, obj);
 	}
 	
 	/**
@@ -65,9 +51,10 @@ public class Environment {
 	/**
 	 * Clears anything bound to the given symbol
 	 * @param sym The symbol to unset
+	 * @throws TypeException Thrown if the symbol is null or unsealed
 	 */
-	public void unsetBinding(VSymbol sym)	{
-		_dictionary.remove(sym);
+	public void unsetBinding(VSymbol sym) throws TypeException	{
+		_dictionary.unset(sym);
 	}
 	
 	/**
@@ -75,9 +62,10 @@ public class Environment {
 	 * @param sym The symbol to look up
 	 * @return null if the symbol is not bound, TNull if the symbol is bound to null, 
 	 * the bound object otherwise
+	 * @throws TypeException Thrown if the symbol is null or unseaded
 	 */
-	public IValue getBoundObject(VSymbol sym)	{
-		return _dictionary.get(sym);
+	public IValue getBoundObject(VSymbol sym) throws TypeException	{
+		return _dictionary.lookup(sym);
 	}
 	
 	/**
@@ -97,7 +85,7 @@ public class Environment {
 	 * @return The symbol list
 	 */
 	public Set<VSymbol> getBindingSymbols()	{
-		return _dictionary.keySet();
+		return _dictionary.getBindingSymbols();
 	}
 	
 	/**

@@ -1,6 +1,6 @@
 NEXT ACTIONS:
-	- Add pushenv-op to push a new local environment
-	- Add popenv-op to destroy the local environment, pushing everything on the local environment's stack to the parent stack
+	- Add pushbindings-op to create a new (chained) binding environment
+	- Add popbinding-op to destroy the local binding environment
 	- Create dup and swap macros
 	
 TYPE SYSTEM:
