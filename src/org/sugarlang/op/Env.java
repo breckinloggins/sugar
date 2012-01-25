@@ -67,7 +67,18 @@ public class Env extends BaseOp {
 				continue;
 			}
 			
-			System.out.print(symbol.toString() + " => " + v + " <" + v.getType().toString() + ">");
+			String sym = symbol.toString();
+			if (" ".equals(sym))	{
+				sym = "' '";
+			} else if ("\r".equals(sym))	{
+				sym = "\\r";
+			} else if ("\n".equals(sym)) {
+				sym = "\\n";
+			} else if ("\t".equals(sym)) {
+				sym = "\\t";
+			}
+			
+			System.out.print(sym + " => " + v + " <" + v.getType().toString() + ">");
 			System.out.println();
 		}
 	}

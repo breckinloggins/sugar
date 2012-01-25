@@ -75,6 +75,7 @@ public class Interpreter implements Runnable {
 			env.setBinding("Reader", BuiltinTypes.Reader);
 			env.setBinding("String", BuiltinTypes.String);
 			env.setBinding("Symbol", BuiltinTypes.Symbol);
+			env.setBinding("Whitespace", BuiltinTypes.Whitespace);
 			
 			env.setBinding("bootstrap", new org.sugarlang.reader.Bootstrap());
 			env.setBinding("ignore", new org.sugarlang.reader.Ignore());
@@ -115,15 +116,7 @@ public class Interpreter implements Runnable {
 		// TODO:
 		// - Bootstrap should define all whitespace characters
 		// - User defined types based on Product and Sum Types 
-		// - Java FFI... should be able to get rid of the "Print" op and probably
-		// 	 a few others once we have that
-		//		- http://www.javapractices.com/topic/TopicAction.do?Id=113
-		//		- http://stackoverflow.com/questions/160970/how-do-i-invoke-a-java-method-when-given-the-method-name-as-a-string
-		//		- Implement JavaType type so we can talk about Java Class Types
-		//		- Add type op to push a type on the stack given its name (useful elsewhere)
-		//		- Add CreateJavaClass op
-		//		- Add invoke op (generic FFI)
-		// - Add inheritence concept and add to the is op
+		// - Add inheritance concept and add to the is op (edit: nope, is should do structural checking)
 		// - I'm pretty sure we can build cons cells from type constructors
 		// - Built-in list type
 		//		- Create TList (can only contain homogeneous members)
@@ -148,6 +141,15 @@ public class Interpreter implements Runnable {
 		// - add accept and expect readers that take as an argument a type to accept or expect
 		// - add integer reader
 		// - add ops to push and pop chained environments
+		// - Java FFI... should be able to get rid of the "Print" op and probably
+				// 	 a few others once we have that
+				//		- http://www.javapractices.com/topic/TopicAction.do?Id=113
+				//		- http://stackoverflow.com/questions/160970/how-do-i-invoke-a-java-method-when-given-the-method-name-as-a-string
+				//		- Implement JavaType type so we can talk about Java Class Types
+				//		- Add type op to push a type on the stack given its name (useful elsewhere)
+				//		- Constructing an instance of a JavaType should cause the underlying VM to create the corresponding
+				//			class instance (in other words, a JavaType is a UDT, but one the VM knows about)
+				//		- Add invoke op (generic FFI)
 		// - add evaluate command.  If the thing on the top of the stack is a command, it is 
 		//   evaluated, else the stack is undisturbed other than popping off the command
 		//   (NOTE: with a simple IsCommand test command, this doesn't have to be a hard-coded command) 

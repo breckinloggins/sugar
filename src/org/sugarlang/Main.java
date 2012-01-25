@@ -1,11 +1,12 @@
 package org.sugarlang;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.io.PrintStream;
-import java.io.RandomAccessFile;
+import java.lang.reflect.InvocationTargetException;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Insets;
@@ -23,6 +24,42 @@ public class Main {
 	private static InterpreterThread _interpreterThread;
 	private static JMenuItem _runMenuItem;
 	private static JMenuItem _stopMenuItem;
+	
+	// Returns the contents of the file in a byte array.
+	public static byte[] getBytesFromFile(java.io.File file) throws IOException {
+	    InputStream is = new java.io.FileInputStream(file);
+
+	    // Get the size of the file
+	    long length = file.length();
+
+	    // You cannot create an array using a long type.
+	    // It needs to be an int type.
+	    // Before converting to an int type, check
+	    // to ensure that file is not larger than Integer.MAX_VALUE.
+	    if (length > Integer.MAX_VALUE) {
+	        // File is too large
+	    }
+
+	    // Create the byte array to hold the data
+	    byte[] bytes = new byte[(int)length];
+
+	    // Read in the bytes
+	    int offset = 0;
+	    int numRead = 0;
+	    while (offset < bytes.length
+	           && (numRead=is.read(bytes, offset, bytes.length-offset)) >= 0) {
+	        offset += numRead;
+	    }
+
+	    // Ensure all the bytes have been read in
+	    if (offset < bytes.length) {
+	        throw new IOException("Could not completely read file "+file.getName());
+	    }
+
+	    // Close the input stream and return bytes
+	    is.close();
+	    return bytes;
+	}
 	
 	/**
 	 * Creates an output stream that writes to a text area instead of to the console
@@ -280,15 +317,18 @@ public class Main {
 			public void interpreterStarted(Interpreter e) {
 				if (preludeFile != "")	{
 					System.err.println("Executing prelude: " + preludeFile);
-					try {
-						RandomAccessFile raf = new RandomAccessFile(preludeFile, "r");
-						byte[] b = new byte[(int)raf.length()];
-						raf.read(b);
-						raf.close();
-						poStream.write(b);
-					} catch (IOException e1) {
-						e1.printStackTrace(System.err);
-					}
+					SwingUtilities.invokeLater(new Runnable()	{
+
+						@Override
+						public void run() {
+							try {
+								byte[] b = getBytesFromFile(new java.io.File(preludeFile));						
+								poStream.write(b);
+							} catch (IOException ex) {
+								ex.printStackTrace(System.err);
+							}		
+						}
+					});
 				}
 			}
 		});

@@ -9,9 +9,19 @@ first syntactic construct we have is a comment.
 
 The next two characters after the end of this comment define the command (op) trigger
 character, and the quoting character, respectively.
--!`
-- At this point we have enough syntax to declare our first macro -
 
+After that, we teach Sugar about whitespace.  Sugar will read a set of characters and
+add each one as a whitespace reader.  It will continue until it sees a character you 
+have already defined as whitespace.  Thus the literal characters after the quote are
+SPC TAB NEWLINE SPC.  The following hyphen starts the next comment...
+
+-!` 	
+ - 
+At this point the compiler has a notion of a "symbol".  A symbol is a collection of
+one or more contiguous non whitespace characters.  The environment already has several
+symbols bound to opcodes, types, and readers, so we now have enough syntax to execute
+commands and create macros. 
+-
 #				- The symbol we'll bind this macro to -
 `symbol
 `!reader

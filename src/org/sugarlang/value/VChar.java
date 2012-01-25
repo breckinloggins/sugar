@@ -70,7 +70,7 @@ public class VChar extends BaseValue {
 		if (_c == 0)	{
 			return "\0";
 		}
-		
+
 		return Character.toString((char)_c);
 	}
 

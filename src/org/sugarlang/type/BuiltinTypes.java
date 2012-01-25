@@ -17,6 +17,7 @@ public class BuiltinTypes {
 	public static TReader Reader;
 	public static TString String;
 	public static TSymbol Symbol;
+	public static TWhitespace Whitespace;
 	
 	/**
 	 * Initializes the static builtin types class
@@ -32,5 +33,6 @@ public class BuiltinTypes {
 		BuiltinTypes.Reader = new TReader();
 		BuiltinTypes.String = new TString();
 		BuiltinTypes.Symbol = new TSymbol();
+		BuiltinTypes.Whitespace = new TWhitespace();
 	}
 }

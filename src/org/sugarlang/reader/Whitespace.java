@@ -3,8 +3,10 @@ package org.sugarlang.reader;
 import java.io.IOException;
 
 import org.sugarlang.Environment;
+import org.sugarlang.base.IValue;
 import org.sugarlang.type.TypeException;
 import org.sugarlang.value.VChar;
+import org.sugarlang.value.VWhitespace;
 
 
 public class Whitespace extends BaseReader {
@@ -20,39 +22,19 @@ public class Whitespace extends BaseReader {
 	
 	@Override
 	public void readInternal(Environment env) throws IOException, TypeException {
-		
-		readChar(env);
-		if (!(env.peek() instanceof VChar))	{
-			return;
-		}
-		
-		// TODO: User should be able to configure what counts as whitespace and any special actions
-		// that might occur (such as to support pythonic languages)
-		int c = ((VChar)env.peek()).getChar();
-		if (c == -1)	{
-			env.pop();
-			env.pushReader("terminator");
-			env.pushOp("read");
-			return;
-		}
-		
-		boolean hasWhitespace = false;
-		
-		while (Character.isWhitespace(c))	{
-			hasWhitespace = true;
-			env.pop();
-			
+		while (true)	{
 			readChar(env);
 			if (!(env.peek() instanceof VChar))	{
 				return;
 			}
-			c = ((VChar)env.peek()).getChar();
+			
+			int ch = ((VChar)env.peek()).getChar();
+			IValue v = env.getBoundObject(Character.toString((char)ch));
+			if (null == v || !(v instanceof VWhitespace))	{
+				break;
+			}
+			
+			env.pop();
 		}
-		
-		if (hasWhitespace)	System.err.println("r(Whitespace)");
-		
-		env.pushReader("discriminator");
-		env.pushOp("read");
 	}
-
 }

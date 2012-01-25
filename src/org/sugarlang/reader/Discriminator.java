@@ -8,6 +8,7 @@ import org.sugarlang.base.IValue;
 import org.sugarlang.type.TypeException;
 import org.sugarlang.value.VChar;
 import org.sugarlang.value.VMacro;
+import org.sugarlang.value.VWhitespace;
 
 
 public class Discriminator extends BaseReader {
@@ -54,13 +55,14 @@ public class Discriminator extends BaseReader {
 			env.pop();
 			env.push(v);
 			env.pushOp("execute");
+		} else if (null != v && v instanceof VWhitespace)	{
+			env.pop();
+			env.pushReader("discriminator");
+			env.pushOp("read");
 		} else if (Character.isLetter(ch) || ch == '_')	{
 			env.pushReader("name");
 			env.pushOp("read");
 			return;
-		} else if (Character.isWhitespace(ch))	{
-			env.pushReader("whitespace");
-			env.pushOp("read");
 		} else {
 			env.pushReader("symbol");
 			env.pushOp("read");	

@@ -4,11 +4,13 @@
 package org.sugarlang.reader;
 
 import java.io.IOException;
+import java.util.HashSet;
 
 import org.sugarlang.Environment;
 import org.sugarlang.base.IReader;
 import org.sugarlang.type.TypeException;
 import org.sugarlang.value.VChar;
+import org.sugarlang.value.VWhitespace;
 
 /**
  * Reads the minimum number of characters necessary to setup the environment so that typing is possible
@@ -30,6 +32,7 @@ public class Bootstrap extends BaseReader {
 		readIgnoredCharacter(env);
 		readAndBindToReader(env, new org.sugarlang.reader.Command());
 		readAndBindToReader(env, new org.sugarlang.reader.Quoted());
+		readWhitespace(env);
 	}
 	
 	/**
@@ -86,6 +89,41 @@ public class Bootstrap extends BaseReader {
 		env.pop();
 		
 		System.err.println("r(Bootstrap): " + Character.toString((char) ch) + " => " + reader.getClass().getName());	
+	}
+	
+	private void readWhitespace(Environment env) throws TypeException	{
+		HashSet<Character> ws = new HashSet<Character>();
+		
+		while (true)	{
+			readChar(env);
+			if (!(env.peek() instanceof VChar))	{
+				env.pushError("Argument on the stack is not a Char");
+				return;
+			}
+			
+			int ch = ((VChar)env.peek()).getChar();
+			if (ch == -1)	{
+				// End of stream, send the Terminator
+				env.pop();
+				env.pushReader("terminator");
+				env.pushOp("read");
+				return;
+			}
+			
+			env.pop();
+			char c = (char)ch;
+			if (ws.contains(c))	{
+				// We've already defined this character.  That's our cue to stop
+				break;
+			}
+			
+			VWhitespace vws = new VWhitespace(c);
+			
+			env.setBinding(Character.toString(c), vws);
+			ws.add(c);
+			
+			System.err.println("r(Bootstrap): " + vws.toString() + " => Whitespace");
+		}
 	}
 
 }
