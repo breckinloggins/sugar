@@ -42,7 +42,12 @@ public class Discriminator extends BaseReader {
 		
 		IValue v = env.getBoundObject(Character.toString((char)ch));
 		if (null != v && v instanceof IReader)	{
-			env.pop();
+			if (!(v instanceof Ignore))	{
+				// HACK: Shouldn't have to do a reader-specific test here
+				// TODO: Have each reader configure whether or not it wants the first
+				// character
+				env.pop();
+			}
 			env.pushReader((IReader)v);
 			env.pushOp("read");
 		} else if (null != v && v instanceof VMacro)	{
