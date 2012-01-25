@@ -44,6 +44,15 @@ public class Interpreter implements Runnable {
 		// In other words, what is the minimum set of "hard coded" readers.  I'm thinking the reader system
 		// will end up being a stack-based system.
 		//
+		// I think the best way to do this is to start with single characters only.  There's an order that everything
+		// has to be initialized in.  If you don't need certain features, you should be able to "not say", so we'll need
+		// a "NULL" symbol.  For future compatibility with algebraic data types, it's pretty clear that this should be '_'
+		// by default.
+		//
+		// If we do it this way, that's fine, but we need a way to document what order the characters need to be typed in.
+		//
+		// Lastly, when we have a way to chain environments, we need a way to "hide" symbols from the parent environment
+		//
 		// Should even define syntax highlighting from the reader, so that maybe we start with:
 		// ReaderType (name) gets a certain behavior and has certain "metadata", and we can start with
 		// fontWeight, backgroundColor, foregroundColor.  This will have to be made more generic in the future, of 
@@ -68,6 +77,7 @@ public class Interpreter implements Runnable {
 			env.setBinding("Symbol", BuiltinTypes.Symbol);
 			
 			env.setBinding("bootstrap", new org.sugarlang.reader.Bootstrap());
+			env.setBinding("ignore", new org.sugarlang.reader.Ignore());
 			env.setBinding("command", new org.sugarlang.reader.Command());
 			env.setBinding("symbol", new org.sugarlang.reader.Symbol());
 			env.setBinding("discriminator", new org.sugarlang.reader.Discriminator());
@@ -86,6 +96,7 @@ public class Interpreter implements Runnable {
 			env.setBinding("unquote", new org.sugarlang.op.Unquote());
 			env.setBinding("createmacro", new org.sugarlang.op.CreateMacro());
 			env.setBinding("if", new org.sugarlang.op.If());
+			env.setBinding("is", new org.sugarlang.op.Is());
 			env.setBinding("set", new org.sugarlang.op.Set());
 			env.setBinding("unset", new org.sugarlang.op.Unset());
 			env.setBinding("get", new org.sugarlang.op.Get());
@@ -102,6 +113,8 @@ public class Interpreter implements Runnable {
 		}
 		
 		// TODO:
+		// - Add inheritence concept and add to the is op
+		// - I'm pretty sure we can build cons cells from type constructors
 		// - Built-in list type
 		//		- Create TList (can only contain homogeneous members)
 		//		- Lazy
@@ -110,7 +123,6 @@ public class Interpreter implements Runnable {
 		// - List reader (use '()' for syntax for now)
 		// - Create an abstraction that IOp and TMacro both inherit from? (ICallable?)
 		// - Remainder of Haskell built-in types: Int, Double, Bool, Char
-		// - Add "is" type test op
 		// - Create type system (http://cs.wallawalla.edu/research/KU/PR/Haskell.html)
 		//		- User-defined types as an instance of TUserType
 		//		- Simple Type algebra for how the type is defined
@@ -135,6 +147,7 @@ public class Interpreter implements Runnable {
 		// - replace error, name, and whitespace with dynamically defined readers 
 		// - find a way to abstract the notion of types so we don't hard code any (including strings and ints) in the 
 		//	 interpreter.  Probably want to study up on how F# and Haskell does type definitions.
+		// - Construct type system like Haskell (http://www.haskell.org/onlinereport/decls.html)
 		// - since we're going for nearly everything to be redefinable, perhaps we should look more into dependent types:
 		//	 http://www.cs.st-andrews.ac.uk/~eb/writings/idris-tutorial.pdf
 		// - add a coerce command to replace the top value on the stack with the same value under the given new type

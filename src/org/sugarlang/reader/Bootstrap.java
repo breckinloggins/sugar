@@ -27,13 +27,48 @@ public class Bootstrap extends BaseReader {
 
 	@Override
 	public void readInternal(Environment env) throws IOException, TypeException {
+		readIgnoredCharacter(env);
 		readAndBindToReader(env, new org.sugarlang.reader.Command());
 		readAndBindToReader(env, new org.sugarlang.reader.Quoted());
+	}
+	
+	/**
+	 * Reads a character and immediately invokes the "ignored" reader after setting that 
+	 * character as the symbol binding
+	 * @param env
+	 * @throws IOException
+	 * @throws TypeException
+	 */
+	private void readIgnoredCharacter(Environment env) throws IOException, TypeException	{
+		readChar(env);
+		if (!(env.peek() instanceof VChar))	{
+			env.pushError("Argument on the stack is not a Char");
+			return;
+		}
+		
+		int ch = ((VChar)env.peek()).getChar();
+		if (ch == -1)	{
+			// End of stream, send the Terminator
+			env.pop();
+			env.pushReader("terminator");
+			env.pushOp("read");
+			return;
+		}
+		
+		IReader ignored = new org.sugarlang.reader.Ignore();
+		env.setBinding(Character.toString((char)ch), ignored);
+		
+		// We will invoke the reader now and leave that character on the stack
+		// so ignored will know what to trigger by
+		env.pushReader("ignore");
+		env.pushOp("read");
+		env.evaluateStack();
 	}
 	
 	private void readAndBindToReader(Environment env, IReader reader) throws IOException, TypeException	{
 		readChar(env);
 		if (!(env.peek() instanceof VChar))	{
+			env.pushError("Argument on the stack is not a Char");
 			return;
 		}
 		

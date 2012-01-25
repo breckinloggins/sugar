@@ -7,6 +7,7 @@ import java.util.Stack;
 
 import org.sugarlang.Environment;
 import org.sugarlang.base.IValue;
+import org.sugarlang.type.TNull;
 import org.sugarlang.type.TypeException;
 
 
@@ -47,7 +48,7 @@ public class If extends BaseOp {
 		Stack<IValue> ifBranch = env.popToMark();
 		Stack<IValue> elseBranch = env.popToMark();
 		
-		if (test == null || test.toString() == "0" || test.toString().toLowerCase() == "false")	{
+		if (test == null || test instanceof TNull || test.toString() == "0" || test.toString().toLowerCase() == "false")	{
 			
 			// FALSE - push the else branch back on
 			env.pushStack(elseBranch);

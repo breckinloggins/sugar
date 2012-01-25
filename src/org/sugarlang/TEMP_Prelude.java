@@ -8,7 +8,7 @@ package org.sugarlang;
 public class TEMP_Prelude {
 	
 	public static String normalCode = 
-	"!`"+
+	"--!`"+
 	"#\n"+
 	"`symbol\n"+
 	"`!reader\n"+
