@@ -113,6 +113,7 @@ public class Interpreter implements Runnable {
 		}
 		
 		// TODO:
+		// - Bootstrap should define all whitespace characters
 		// - Add inheritence concept and add to the is op
 		// - I'm pretty sure we can build cons cells from type constructors
 		// - Built-in list type

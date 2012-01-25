@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.io.PrintStream;
+import java.io.RandomAccessFile;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Insets;
@@ -132,6 +133,13 @@ public class Main {
 		// - Text in output should be in red if interpreter isn't running
 	
 		String title = "Sugar";
+		
+		String firstArg = "";
+		if (args.length > 0)	{
+			firstArg = args[0];
+		}
+		
+		final String preludeFile = firstArg;
 		
 		setAppleMenus(title);
 		
@@ -270,11 +278,17 @@ public class Main {
 			
 			@Override
 			public void interpreterStarted(Interpreter e) {
-				System.err.println("Executing prelude.");
-				try {
-					poStream.write(TEMP_Prelude.code.getBytes());
-				} catch (IOException e1) {
-					e1.printStackTrace(System.err);
+				if (preludeFile != "")	{
+					System.err.println("Executing prelude: " + preludeFile);
+					try {
+						RandomAccessFile raf = new RandomAccessFile(preludeFile, "r");
+						byte[] b = new byte[(int)raf.length()];
+						raf.read(b);
+						raf.close();
+						poStream.write(b);
+					} catch (IOException e1) {
+						e1.printStackTrace(System.err);
+					}
 				}
 			}
 		});

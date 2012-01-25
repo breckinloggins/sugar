@@ -1,0 +1,24 @@
+- 
+Sugar Prelude Bootstrap File
+
+(c) 2012 Breckin Loggins
+
+The very first character in this file represents the "ignore" character.  Every time
+Sugar sees this character, it ignores all input until it sees it again.  Thus, the 
+first syntactic construct we have is a comment.
+
+The next two characters after the end of this comment define the command (op) trigger
+character, and the quoting character, respectively.
+-!`
+- At this point we have enough syntax to declare our first macro -
+
+#				- The symbol we'll bind this macro to -
+`symbol
+`!reader
+`!read			- Invoke the symbol reader -
+`!reader
+`!read			- Invoke the reader by the given symbol -
+!createmacro	- Create the macro with the quoted stack contents -
+!set			- Set the macro binding to the # character -
+
+	
