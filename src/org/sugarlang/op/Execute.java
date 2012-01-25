@@ -3,7 +3,7 @@
  */
 package org.sugarlang.op;
 
-import java.util.Stack;
+import java.util.ArrayList;
 import org.sugarlang.Environment;
 import org.sugarlang.base.IValue;
 import org.sugarlang.type.TypeException;
@@ -36,16 +36,21 @@ public class Execute extends BaseOp {
 		
 		if (env.peek() instanceof VMacro)	{
 			VMacro m = (VMacro)env.pop();
-			Stack<IValue> macroStack = new Stack<IValue>();
+			ArrayList<IValue> macroQueue = new ArrayList<IValue>();
 			for (Object o : m.getStackList())	{	
 				VQuote q = (VQuote)o;
-				macroStack.push(q.getInner());
+				macroQueue.add(0, q.getInner());
 			}
 			
 			// Transfer the stack to the environment
-			while (!macroStack.isEmpty())	{
-				env.push(macroStack.pop());
+			for (IValue v : macroQueue)	{	
+				env.push(v);
+				if (v instanceof VMacro)	{
+					env.pushOp("execute");
+				}
+				env.evaluateStack();	
 			}
+			
 		} else {
 			String opName = env.pop().toString();
 			

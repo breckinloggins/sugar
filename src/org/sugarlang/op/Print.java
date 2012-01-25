@@ -24,7 +24,7 @@ public class Print extends BaseOp {
 	}
 
 	@Override
-	public void executeInternal(Environment env) {
+	public void executeInternal(Environment env) throws TypeException {
 		env.evaluateStack();
 		
 		IValue v = env.pop();

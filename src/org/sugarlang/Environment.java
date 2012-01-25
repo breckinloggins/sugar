@@ -263,8 +263,9 @@ public class Environment {
 	 * is left alone
 	 * 
 	 * @return The IOp that was evaluated, or null if the item wasn't an opcode
+	 * @throws TypeException 
 	 */
-	public IOp evaluateStack()	{
+	public IOp evaluateStack() throws TypeException	{
 		// TODO: This doesn't need to be built-in.  An evaluate command is fine for this
 		// TODO: This also doesn't need to do only opcodes.  Any callable entity should suffice
 		if (null == peek())	{
@@ -303,5 +304,28 @@ public class Environment {
 	 */
 	public void printStack(PrintStream stream)	{
 		printStack(_stack, stream);
+	}
+	
+	/**
+	 * Creates a new dictionary and sets it as the current dictionary.  The current dictionary will be
+	 * the parent of this new dictionary
+	 */
+	public void pushDictionary()	{
+		Dictionary d = new Dictionary(_dictionary);
+		_dictionary = d;
+	}
+	
+	/**
+	 * Pops the current dictionary off and sets its parent as the current dictionary.  If there are no more dictionaries left, 
+	 * an exception is thrown
+	 * @throws TypeException
+	 */
+	public void popDictionary() throws TypeException	{
+		Dictionary parent = _dictionary.getParent();
+		if (null == parent)	{
+			throw new TypeException("Cannot pop the root dictionary");
+		}
+		
+		_dictionary = parent;
 	}
 }

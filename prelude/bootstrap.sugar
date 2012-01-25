@@ -36,13 +36,13 @@ symbols bound to opcodes, types, and readers, so we now have enough syntax to ex
 commands and create macros. 
 -
 - The reader macro.  Invokes a reader by the given name -
-#				- The symbol we'll bind this macro to -
 `symbol
 `!reader
 `!read			- Invoke the symbol reader -
 `!reader
 `!read			- Invoke the reader by the given symbol -
 !createmacro	- Create the macro with the quoted stack contents -
+#
 !set			- Set the macro binding to the # character -
 
 	

@@ -1,6 +1,4 @@
 NEXT ACTIONS:
-	- Add pushbindings-op to create a new (chained) binding environment
-	- Add popbinding-op to destroy the local binding environment
 	- Create dup and swap macros
 	
 TYPE SYSTEM:

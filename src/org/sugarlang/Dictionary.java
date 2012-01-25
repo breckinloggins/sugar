@@ -18,6 +18,14 @@ public class Dictionary {
 	}
 	
 	/**
+	 * Gets the parent dictionary for this dictionary
+	 * @return The parent, which may be null
+	 */
+	public Dictionary getParent()	{
+		return _parent;
+	}
+	
+	/**
 	 * Binds the value to the given symbol
 	 * @param sym The symbol to which to bind
 	 * @param val The value to bind

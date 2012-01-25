@@ -21,18 +21,11 @@ public class Set extends BaseOp {
 
 	@Override
 	public String getDescription() {
-		return "Sets a binding in the current dictionary (top-1: symbol, top: object)";
+		return "Sets a binding in the current dictionary (top-1: object, top: symbol)";
 	}
 
 	@Override
 	public void executeInternal(Environment env) throws TypeException {
-		env.evaluateStack();
-		IValue v = env.pop();
-		if (null == v)	{
-			env.pushError("Cannot set binding object, stack is empty");
-			return;
-		}
-		
 		env.evaluateStack();
 		IValue sym = env.pop();
 		if (null == sym)	{
@@ -42,6 +35,13 @@ public class Set extends BaseOp {
 		
 		if (!(sym instanceof VSymbol))	{
 			env.pushError("Cannot set binding, object on the stack (<" + sym.getType().toString() + ">) isn't a symbol");
+			return;
+		}
+		
+		env.evaluateStack();
+		IValue v = env.pop();
+		if (null == v)	{
+			env.pushError("Cannot set binding object, stack is empty");
 			return;
 		}
 		

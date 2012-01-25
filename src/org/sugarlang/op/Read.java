@@ -26,7 +26,7 @@ public class Read extends BaseOp {
 	}
 
 	@Override
-	public void executeInternal(Environment env) {
+	public void executeInternal(Environment env) throws TypeException {
 		env.evaluateStack();
 		Object arg = env.pop();
 		if (null == arg)	{
