@@ -114,6 +114,15 @@ public class Interpreter implements Runnable {
 		
 		// TODO:
 		// - Bootstrap should define all whitespace characters
+		// - User defined types based on Product and Sum Types 
+		// - Java FFI... should be able to get rid of the "Print" op and probably
+		// 	 a few others once we have that
+		//		- http://www.javapractices.com/topic/TopicAction.do?Id=113
+		//		- http://stackoverflow.com/questions/160970/how-do-i-invoke-a-java-method-when-given-the-method-name-as-a-string
+		//		- Implement JavaType type so we can talk about Java Class Types
+		//		- Add type op to push a type on the stack given its name (useful elsewhere)
+		//		- Add CreateJavaClass op
+		//		- Add invoke op (generic FFI)
 		// - Add inheritence concept and add to the is op
 		// - I'm pretty sure we can build cons cells from type constructors
 		// - Built-in list type
@@ -144,8 +153,6 @@ public class Interpreter implements Runnable {
 		//   (NOTE: with a simple IsCommand test command, this doesn't have to be a hard-coded command) 
 		// - figure out which commands need to be built-in ops.  For example:
 		//		* subtract, multiply, if, loop, etc.
-		// - what are evaluators and how do they work?  Do we need them?
-		// - replace error, name, and whitespace with dynamically defined readers 
 		// - find a way to abstract the notion of types so we don't hard code any (including strings and ints) in the 
 		//	 interpreter.  Probably want to study up on how F# and Haskell does type definitions.
 		// - Construct type system like Haskell (http://www.haskell.org/onlinereport/decls.html)
@@ -154,6 +161,12 @@ public class Interpreter implements Runnable {
 		// - add a coerce command to replace the top value on the stack with the same value under the given new type
 		// - move as many readers as possible from hard-coded to user-defined
 		// - show unrecognized input in red
+		// - "Talk back" to the editor
+		//		- Configurable via command line parameter
+		//		- Uses System.err as the communications channel
+		//		- Writes JSON or something else simple
+		//		- Allows for errors, warnings, diagnostic information, editor metadata (like syntax highlighting), 
+		//			editor control (e.g. auto parens), autocomplete
 	}
 	
 	/**
