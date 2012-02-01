@@ -1,4 +1,11 @@
 NEXT ACTIONS:
+	- Add pushdictionary '{' syntax in bootstrap
+	- Add popdictionary '}' syntax in bootstrap
+	- Add '<' + symbol + '>' createmacro syntax
+	- Add symbol unbind macro with '~' syntax
+	- If full symbol is bound to a command or macro, it should be executed by discriminator rather than that symbol pushed
+		on the stack (could still push the symbol on the stack with a quote/unquote operation or macro - need to test this)
+	- Using above method, get rid of the "!" execution syntax.  Not needed and we'll be more FORTH-like
 	- Add type macro: pops a symbol and returns the type bound to that symbol
 	- Add overloaded method for all types that pop up to n-args off the stack and create a new value of that type (in other words, a data constructor for each type)
 	- Add create-op: pops a type and a bunch of args (as needed by the type), and instantiates a new value for that type, pushing it on the stack, using that type's
@@ -28,7 +35,7 @@ RESEARCH/THOUGHTS/BACKLOG:
  5. C-ish (like Go, with easy parse semantics)
  6. C/C#/Java
 
-		// As stated below, reader should start from nothing.
+		// As stated below, reader should start from nothing. [DONE]
 		// First character is the reader metachar (usually '#' but can be anything).  After that, 
 		// there it would be nice if we could configure most or all of these readers from source itself.
 		// In other words, what is the minimum set of "hard coded" readers.  I'm thinking the reader system
@@ -41,7 +48,7 @@ RESEARCH/THOUGHTS/BACKLOG:
 		//
 		// If we do it this way, that's fine, but we need a way to document what order the characters need to be typed in.
 		//
-		// Lastly, when we have a way to chain environments, we need a way to "hide" symbols from the parent environment
+		// Lastly, when we have a way to chain environments, we need a way to "hide" symbols from the parent environment [DONE]
 		//
 		// Should even define syntax highlighting from the reader, so that maybe we start with:
 		// ReaderType (name) gets a certain behavior and has certain "metadata", and we can start with
@@ -51,7 +58,7 @@ RESEARCH/THOUGHTS/BACKLOG:
 		//
 		// But, again, we ultimately want to hard-code as little of this as possible.
 
-- Handle pasting chars into the editor, write now it just passes the "v" or nothing
+- Handle pasting chars into the editor, right now it just passes the "v" or nothing
 
 - Define the character escape types.  By default this just lets you escape \xxxx unicode code points, 
 		so we'll want a way to define the traditional \n, \r, and so forth escapes as the user sees fit.
@@ -60,7 +67,17 @@ RESEARCH/THOUGHTS/BACKLOG:
 
 - User defined types based on Product and Sum Types 
 
+- Need a way to call "bootstrap" all over again
+	- Bootstrap might push a new dictionary instead of reusing the current one
+	- What are we trying to do by re-bootstrapping?  I think we're trying to clear out any syntax, but leave
+	  behind the objects we've created.  This is difficult and might be best done manually.
+
 - What do we need to implement a function macro?
+	- Chained dictionaries (DONE)
+	- Push and pop dictionaries (DONE)
+	- Type representing all function-like invokable things
+		(Ops, Macros, and Functions will all be of this type)
+	- Cleanup of the execution system so it only "knows" about "Arrow Application"
 
 - Implement readers for \U+0008 (backspace) so we can correct spelling mistakes
 		- This is more complicated than it sounds.  EVERY reader needs to be able to undo at every point, and we

@@ -33,7 +33,7 @@ _-
 At this point the compiler has a notion of a "symbol".  A symbol is a collection of
 one or more contiguous non whitespace characters.  The environment already has several
 symbols bound to opcodes, types, and readers, so we now have enough syntax to execute
-commands and create macros. 
+commands and create macros.
 -
 
 - dup: duplicates the top item on the stack - 
