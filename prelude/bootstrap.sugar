@@ -36,23 +36,25 @@ symbols bound to opcodes, types, and readers, so we now have enough syntax to ex
 commands and create macros.
 -
 
+- BASIC FUNCTIONAL MACROS -
+
 - dup: duplicates the top item on the stack - 
-`!pushdictionary
-`tmp `!set
-`tmp `!get
-`tmp `!get
-`!popdictionary
+	`!pushdictionary
+	`tmp `!set
+	`tmp `!get
+	`tmp `!get
+	`!popdictionary
 !createmacro
 dup
 !set
 
 - swap: reverses the order of the top two items on the stack -
-`!pushdictionary
-`tmp1 `!set
-`tmp2 `!set
-`tmp1 `!get
-`tmp2 `!get
-`!popdictionary
+	`!pushdictionary
+	`tmp1 `!set
+	`tmp2 `!set
+	`tmp1 `!get
+	`tmp2 `!get
+	`!popdictionary
 !createmacro
 swap
 !set
@@ -60,8 +62,7 @@ swap
 - The reader macro.  Invokes a reader by the given name -
 `symbol `!reader `!read			- Invoke the symbol reader -
 `!reader `!read			- Invoke the reader by the given symbol -
-!createmacro	- Create the macro with the quoted stack contents -
+!createmacro
 #
-!set			- Set the macro binding to the # character -
-
+!set
 	

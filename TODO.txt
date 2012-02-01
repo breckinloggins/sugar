@@ -1,11 +1,20 @@
 NEXT ACTIONS:
-	- Add pushdictionary '{' syntax in bootstrap
-	- Add popdictionary '}' syntax in bootstrap
-	- Add '<' + symbol + '>' createmacro syntax
-	- Add symbol unbind macro with '~' syntax
 	- If full symbol is bound to a command or macro, it should be executed by discriminator rather than that symbol pushed
 		on the stack (could still push the symbol on the stack with a quote/unquote operation or macro - need to test this)
 	- Using above method, get rid of the "!" execution syntax.  Not needed and we'll be more FORTH-like
+	- Change the "ignore" feature to be a string quote feature.  By default, it pushes the whole string on the stack
+	- Change the bootstrap to take a second "end quote" character.  This COULD be the same character, but if the user makes it
+		different it will allow for nested quoting
+	- Add /* in bootstrap to start a quote
+	- Add */ in bootstrap to end a quote and pop the string off the stack (this will serve as comments)
+	- Make /* and */ use its own dictionary so we can validate that every */ started with a /*
+	- Add ability to read a string or symbol on the stack as if it had been typed in by the user
+	- Remove existing "quote" feature (this might be reintroduced as the "escape" functionality later)
+	- Change all macros to use the new quoting functionality
+	- Add quoted pushdictionary '{' syntax in bootstrap
+	- Add quoted popdictionary '}' syntax in bootstrap
+	- Add '<' + symbol + '>' createmacro syntax
+	- Add symbol unbind macro with '~' syntax
 	- Add type macro: pops a symbol and returns the type bound to that symbol
 	- Add overloaded method for all types that pop up to n-args off the stack and create a new value of that type (in other words, a data constructor for each type)
 	- Add create-op: pops a type and a bunch of args (as needed by the type), and instantiates a new value for that type, pushing it on the stack, using that type's
@@ -26,6 +35,12 @@ TYPE SYSTEM:
 
 
 RESEARCH/THOUGHTS/BACKLOG:
+
+- How do we do selective UNQUOTE in a quoted syntax?
+
+- Escaping
+	- Want to allow a character to serve as the "symbol escape" character
+	- Is the SAME as character escape sequences, including \U+xxxx unicode sequences, or different?
 
 - Let's not try to interpret C-like code right away.  Let's do:
  1. Haskell-like type construction syntax
@@ -85,6 +100,9 @@ RESEARCH/THOUGHTS/BACKLOG:
 		"cleave points" so the user can put their cursor at any point and edit in place.  Doing so will require going
 		back in time in the stack history. And reexecuting based on new edits, BUT this will require token synchronization so
 		as the user is typing we don't execute a bunch of nonsense afterward.
+
+- Opportunity for more rethinking of boostrap syntax: right now we have the "ignore operator" as the very first thing, which 
+	makes it impossible for our language to start out in the literate style.  Is this OK?
 
 - Add structural checking for is-op (structural equivalence)
 - I'm pretty sure we can build cons cells from type constructors
