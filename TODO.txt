@@ -1,16 +1,35 @@
-NEXT ACTIONS:
+=============================================================
+TODO
+=============================================================
+
+REMOVE ! READER:
 	- If full symbol is bound to a command or macro, it should be executed by discriminator rather than that symbol pushed
 		on the stack (could still push the symbol on the stack with a quote/unquote operation or macro - need to test this)
 	- Using above method, get rid of the "!" execution syntax.  Not needed and we'll be more FORTH-like
-	- Change the "ignore" feature to be a string quote feature.  By default, it pushes the whole string on the stack
-	- Change the bootstrap to take a second "end quote" character.  This COULD be the same character, but if the user makes it
-		different it will allow for nested quoting
-	- Add /* in bootstrap to start a quote
-	- Add */ in bootstrap to end a quote and pop the string off the stack (this will serve as comments)
+
+ESCAPING:
+	- Ensure that discriminator has no hard-coded operations EXCEPT to switch to the escape discriminator upon reading the
+		bound escape character
+	- Bind "discriminator" to "NormalDiscriminator"
+	- Create and configure an escape discriminator that, by default, reads everything up to whitespace as a symbol and pushes
+	that symbol onto the stack (similar to our current "QUOTE" operation)
+	- Bind an escape discriminator to "EscapeDiscriminator" (this allows them to be changed when we support user-created readers)
+	- Remove the current "quote" op (will be replaced with reader quoting below)
+	- Change all macros to use the symbol escape functionality
+	
+READER QUOTING:
+	- Add the "until" reader, which consumes everything until it sees the first character read again, and pushes that stuff
+		as a string.  Lots of "pair-like entities" can be implemented with this, including the feature next feature...
+	- Make sure the until reader understands escapes.  It should use the escape character to ignore its own "until" character and 
+		incorporate it unescaped into the string.  Not sure if this uses the escape discriminator itself, probably not.
+	- Change the "ignore" feature to be a string quote feature.  By default, it pushes the whole string on the stack.  Use the until reader
+	- Add /* in bootstrap to start a comment quote
+	- Add */ in bootstrap to end a comment quote and pop the string off the stack
 	- Make /* and */ use its own dictionary so we can validate that every */ started with a /*
-	- Add ability to read a string or symbol on the stack as if it had been typed in by the user
-	- Remove existing "quote" feature (this might be reintroduced as the "escape" functionality later)
-	- Change all macros to use the new quoting functionality
+	- Add ability to read a string or symbol on the stack as if it had been typed in by the user (see chained interpreter notes)
+	- Change all macros to use reader quoting functionality
+	
+MACRO SYNTAX:
 	- Add quoted pushdictionary '{' syntax in bootstrap
 	- Add quoted popdictionary '}' syntax in bootstrap
 	- Add '<' + symbol + '>' createmacro syntax
@@ -19,7 +38,6 @@ NEXT ACTIONS:
 	- Add overloaded method for all types that pop up to n-args off the stack and create a new value of that type (in other words, a data constructor for each type)
 	- Add create-op: pops a type and a bunch of args (as needed by the type), and instantiates a new value for that type, pushing it on the stack, using that type's
 		data constructor
-	
 	
 TYPE SYSTEM:
 	- Remove createmacro-op and replace with the above infrastructure
@@ -34,13 +52,28 @@ TYPE SYSTEM:
 		Bool :: True | False
 
 
+=============================================================
 RESEARCH/THOUGHTS/BACKLOG:
+=============================================================
 
-- How do we do selective UNQUOTE in a quoted syntax?
+- Quoting
+	- How do we do nested quote? (probably need an escape)
+	- How do we do selective UNQUOTE in a quoted syntax?
+
+- Chained interpreters
+	- Just like chained dictionaries, we allow to push and pop an interpreter.
+	- The default (first) interpreter takes input from stdin, output to stdout, and error to stderr
+	- Macros are implemented by pushing an interpreter that reads from a string instead of stdin??
 
 - Escaping
 	- Want to allow a character to serve as the "symbol escape" character
 	- Is the SAME as character escape sequences, including \U+xxxx unicode sequences, or different?
+	- Escape has some rules:
+		- Escape has its own discriminator (which by default does nothing)
+		- Can configure that discriminator so that certain secondary characters do something (like emit a unicode character)
+		- So I think that's what escape is: a reader that invokes the escape discriminator
+
+- Custom disciminators
 
 - Let's not try to interpret C-like code right away.  Let's do:
  1. Haskell-like type construction syntax
