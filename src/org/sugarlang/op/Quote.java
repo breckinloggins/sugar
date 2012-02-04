@@ -25,7 +25,6 @@ public class Quote extends BaseOp {
 
 	@Override
 	public void executeInternal(Environment env) throws TypeException {
-		env.evaluateStack();
 		if (env.isStackEmpty())	{
 			env.pushError("Cannot quote object, stack is empty");
 			return;

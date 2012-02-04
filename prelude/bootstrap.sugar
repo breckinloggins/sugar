@@ -20,15 +20,14 @@ The second character is the "ignore" character.  Every time
 Sugar sees this character, it ignores all input until it sees it again.  Thus, the 
 first syntactic construct we have is a comment.
 
-The next two characters after the end of this comment define the command (op) trigger
-character, and the quoting character, respectively.
+The next character after the end of this comment defines the quoting trigger
 
 After that, we teach Sugar about whitespace.  Sugar will read a set of characters and
-add each one as a whitespace reader.  It will continue until it sees the Null characer.
+add each one as a whitespace reader.  It will continue until it sees the Null character.
 Thus the literal characters after the quote are
 SPC TAB NEWLINE_.  The following hyphen starts the next comment...
 
--!` 	
+-` 	
 _- 
 At this point the compiler has a notion of a "symbol".  A symbol is a collection of
 one or more contiguous non whitespace characters.  The environment already has several
@@ -39,30 +38,30 @@ commands and create macros.
 - BASIC FUNCTIONAL MACROS -
 
 - dup: duplicates the top item on the stack - 
-	`!pushdictionary
-	`tmp `!set
-	`tmp `!get
-	`tmp `!get
-	`!popdictionary
-!createmacro
+	`pushdictionary
+	`tmp `set
+	`tmp
+	`tmp
+	`popdictionary
+createmacro
 dup
-!set
+set
 
 - swap: reverses the order of the top two items on the stack -
-	`!pushdictionary
-	`tmp1 `!set
-	`tmp2 `!set
-	`tmp1 `!get
-	`tmp2 `!get
-	`!popdictionary
-!createmacro
+	`pushdictionary
+	`tmp1 `set
+	`tmp2 `set
+	`tmp1
+	`tmp2
+	`popdictionary
+createmacro
 swap
-!set
+set
 
 - The reader macro.  Invokes a reader by the given name -
-`symbol `!reader `!read			- Invoke the symbol reader -
-`!reader `!read			- Invoke the reader by the given symbol -
-!createmacro
+`symbol `read `read
+createmacro
 #
-!set
+set
+
 	

@@ -36,9 +36,6 @@ public class Bootstrap extends BaseReader {
 		System.err.println("Expecting character for ignored input (comments).  Null to ignore");
 		readIgnoredCharacter(env);
 		
-		System.err.println("Expecting character for command invocation.  Null to ignore");
-		readAndBindToReader(env, new org.sugarlang.reader.Command());
-		
 		System.err.println("Expecting character for stack quotation.  Null to ignore");
 		readAndBindToReader(env, new org.sugarlang.reader.Quoted());
 		

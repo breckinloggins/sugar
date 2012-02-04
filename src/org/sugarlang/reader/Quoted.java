@@ -27,7 +27,7 @@ public class Quoted extends BaseReader {
 	public void readInternal(Environment env) throws IOException, TypeException {
 		// TODO: This could be much more featureful if combined with a new environment
 		
-		env.pushReader("discriminator");
+		env.pushReader("symbol");
 		env.pushOp("read");
 		env.evaluateStack();
 		

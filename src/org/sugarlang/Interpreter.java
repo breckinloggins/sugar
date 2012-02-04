@@ -37,11 +37,9 @@ public class Interpreter implements Runnable {
 			
 			env.setBinding("bootstrap", new org.sugarlang.reader.Bootstrap());
 			env.setBinding("ignore", new org.sugarlang.reader.Ignore());
-			env.setBinding("command", new org.sugarlang.reader.Command());
 			env.setBinding("symbol", new org.sugarlang.reader.Symbol());
 			env.setBinding("discriminator", new org.sugarlang.reader.Discriminator());
 			env.setBinding("quoted", new org.sugarlang.reader.Quoted());
-			env.setBinding("name", new org.sugarlang.reader.Name());
 			env.setBinding("terminator", new org.sugarlang.reader.Terminator());
 			env.setBinding("whitespace", new org.sugarlang.reader.Whitespace());
 			
@@ -66,8 +64,6 @@ public class Interpreter implements Runnable {
 			env.setBinding("getchar", new org.sugarlang.op.Getchar());
 			env.setBinding("read", new org.sugarlang.op.Read());
 			env.setBinding("print", new org.sugarlang.op.Print());
-			env.setBinding("execute", new org.sugarlang.op.Execute());
-			env.setBinding("reader", new org.sugarlang.op.Reader());
 			env.setBinding("error", new org.sugarlang.op.Error());
 		} catch (TypeException e) {
 			e.printStackTrace(System.err);

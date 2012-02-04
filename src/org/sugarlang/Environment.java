@@ -1,6 +1,7 @@
 package org.sugarlang;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.Set;
 import java.util.Stack;
@@ -10,6 +11,8 @@ import org.sugarlang.base.IReader;
 import org.sugarlang.base.IValue;
 import org.sugarlang.type.TMark;
 import org.sugarlang.type.TypeException;
+import org.sugarlang.value.VMacro;
+import org.sugarlang.value.VQuote;
 import org.sugarlang.value.VString;
 import org.sugarlang.value.VSymbol;
 
@@ -266,8 +269,6 @@ public class Environment {
 	 * @throws TypeException 
 	 */
 	public IOp evaluateStack() throws TypeException	{
-		// TODO: This doesn't need to be built-in.  An evaluate command is fine for this
-		// TODO: This also doesn't need to do only opcodes.  Any callable entity should suffice
 		if (null == peek())	{
 			// It's not an error to evaluate an empty stack
 			return null;
@@ -277,7 +278,37 @@ public class Environment {
 			IOp op = (IOp)pop();
 			op.execute(this);
 			return op;
-		}
+		} else if (peek() instanceof VSymbol) 	{
+			IValue v = getBoundObject((VSymbol)peek());
+			if (null != v)	{
+				// Replace the symbol with its bound object
+				pop();
+				
+				if (v instanceof VMacro)	{
+					// We have a macro, so expand it directly
+					VMacro m = (VMacro)v;
+					ArrayList<IValue> macroQueue = new ArrayList<IValue>();
+					for (Object o : m.getStackList())	{	
+						VQuote q = (VQuote)o;
+						macroQueue.add(0, q.getInner());
+					}
+					
+					// Transfer the stack to the environment, executing as we go
+					for (IValue val : macroQueue)	{	
+						push(val);
+						evaluateStack();
+					}
+				}
+				else
+				{
+					// We have a non-callable entity, so just push its value on the stack
+					push(v);
+				}
+				
+				return evaluateStack();
+			}
+		} else if (peek() instanceof VMacro)	{
+					}
 		
 		return null;
 	}

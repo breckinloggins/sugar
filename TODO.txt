@@ -2,11 +2,6 @@
 TODO
 =============================================================
 
-REMOVE ! READER:
-	- If full symbol is bound to a command or macro, it should be executed by discriminator rather than that symbol pushed
-		on the stack (could still push the symbol on the stack with a quote/unquote operation or macro - need to test this)
-	- Using above method, get rid of the "!" execution syntax.  Not needed and we'll be more FORTH-like
-
 ESCAPING:
 	- Ensure that discriminator has no hard-coded operations EXCEPT to switch to the escape discriminator upon reading the
 		bound escape character

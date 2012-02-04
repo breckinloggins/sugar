@@ -8,6 +8,7 @@ import org.sugarlang.base.IValue;
 import org.sugarlang.type.TypeException;
 import org.sugarlang.value.VChar;
 import org.sugarlang.value.VMacro;
+import org.sugarlang.value.VSymbol;
 import org.sugarlang.value.VWhitespace;
 
 
@@ -52,17 +53,16 @@ public class Discriminator extends BaseReader {
 			env.pushReader((IReader)v);
 			env.pushOp("read");
 		} else if (null != v && v instanceof VMacro)	{
+			// We don't push the macro itself, instead we push the symbol
+			// bound to the macro and let the stack evaluator do its job
+			VSymbol sym = new VSymbol(Character.toString((char)ch));
 			env.pop();
-			env.push(v);
-			env.pushOp("execute");
+			env.push(sym);
+			env.evaluateStack();
 		} else if (null != v && v instanceof VWhitespace)	{
 			env.pop();
 			env.pushReader("discriminator");
 			env.pushOp("read");
-		} else if (Character.isLetter(ch) || ch == '_')	{
-			env.pushReader("name");
-			env.pushOp("read");
-			return;
 		} else {
 			env.pushReader("symbol");
 			env.pushOp("read");	
