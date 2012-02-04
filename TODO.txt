@@ -3,7 +3,6 @@ TODO
 =============================================================	
 DEFMACRO SYNTAX SUPPORT:
 	- Add eq-op.  Tests two items on the stack for equality.  Does nothing if true, pops to mark if false
-	- Fix quote operator to allow nested quoting
 	
 TYPE SYSTEM:
 	- Add overloaded method for all types that pop up to n-args off the stack and create a new value of that type (in other words, a data constructor for each type)
