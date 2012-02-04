@@ -2,7 +2,7 @@
 TODO
 =============================================================	
 DEFMACRO SYNTAX SUPPORT:
-	- Add eq-op.  Tests two items on the stack for equality.  Does nothing if true, pops to mark if false
+	- Attempt to create expect macro and defmacro syntax macro
 	
 TYPE SYSTEM:
 	- Add overloaded method for all types that pop up to n-args off the stack and create a new value of that type (in other words, a data constructor for each type)
@@ -85,7 +85,7 @@ RESEARCH/THOUGHTS/BACKLOG:
 		`pushdictionary
 		``read ``_sym ``set
 		``_sym ``_f
-		``_sym ``_end ``_eq ``_helper ``mark
+		``_sym ``_end ``_eq ``_helper ``mark 	- This won't work, gotta change it to a quoted series -
 		`createmacro
 		`_helper
 		`set

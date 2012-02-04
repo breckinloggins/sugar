@@ -92,6 +92,25 @@ public class Environment {
 	}
 	
 	/**
+	 * Executes the given macro in the environment
+	 * @param macro The macro to execute
+	 * @throws TypeException
+	 */
+	public void executeMacro(VMacro macro) throws TypeException	{
+		ArrayList<IValue> macroQueue = new ArrayList<IValue>();
+		for (Object o : macro.getStackList())	{	
+			VQuote q = (VQuote)o;
+			macroQueue.add(0, q.getInner());
+		}
+		
+		// Transfer the stack to the environment, executing as we go
+		for (IValue val : macroQueue)	{	
+			push(val);
+			evaluateStack();
+		}
+	}
+	
+	/**
 	 * Pushes an argument onto the environment's stack
 	 * @param arg The argument to push
 	 * @throws TypeException Thrown if attempt to push null or unsealed object
@@ -287,17 +306,7 @@ public class Environment {
 				if (v instanceof VMacro)	{
 					// We have a macro, so expand it directly
 					VMacro m = (VMacro)v;
-					ArrayList<IValue> macroQueue = new ArrayList<IValue>();
-					for (Object o : m.getStackList())	{	
-						VQuote q = (VQuote)o;
-						macroQueue.add(0, q.getInner());
-					}
-					
-					// Transfer the stack to the environment, executing as we go
-					for (IValue val : macroQueue)	{	
-						push(val);
-						evaluateStack();
-					}
+					executeMacro(m);
 				}
 				else
 				{

@@ -50,6 +50,7 @@ public class Interpreter implements Runnable {
 			env.setBinding("env", new org.sugarlang.op.Env());
 			env.setBinding("pop", new org.sugarlang.op.Pop());
 			env.setBinding("popmark", new org.sugarlang.op.Popmark());
+			env.setBinding("eq", new org.sugarlang.op.Eq());
 			env.setBinding("pushdictionary", new org.sugarlang.op.PushDictionary());
 			env.setBinding("popdictionary", new org.sugarlang.op.PopDictionary());
 			env.setBinding("quote", new org.sugarlang.op.Quote());
