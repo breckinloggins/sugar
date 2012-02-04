@@ -35,6 +35,8 @@ symbols bound to opcodes, types, and readers, so we now have enough syntax to ex
 commands and create macros.
 -
 
+- SYNTAX MACROS -
+
 - BASIC FUNCTIONAL MACROS -
 
 - dup: duplicates the top item on the stack - 

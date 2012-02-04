@@ -1,40 +1,14 @@
 =============================================================
 TODO
-=============================================================
-
-ESCAPING:
-	- Ensure that discriminator has no hard-coded operations EXCEPT to switch to the escape discriminator upon reading the
-		bound escape character
-	- Bind "discriminator" to "NormalDiscriminator"
-	- Create and configure an escape discriminator that, by default, reads everything up to whitespace as a symbol and pushes
-	that symbol onto the stack (similar to our current "QUOTE" operation)
-	- Bind an escape discriminator to "EscapeDiscriminator" (this allows them to be changed when we support user-created readers)
-	- Remove the current "quote" op (will be replaced with reader quoting below)
-	- Change all macros to use the symbol escape functionality
+=============================================================	
+DEFMACRO SYNTAX SUPPORT:
+	- Add eq-op.  Tests two items on the stack for equality.  Does nothing if true, pops to mark if false
+	- Fix quote operator to allow nested quoting
 	
-READER QUOTING:
-	- Add the "until" reader, which consumes everything until it sees the first character read again, and pushes that stuff
-		as a string.  Lots of "pair-like entities" can be implemented with this, including the feature next feature...
-	- Make sure the until reader understands escapes.  It should use the escape character to ignore its own "until" character and 
-		incorporate it unescaped into the string.  Not sure if this uses the escape discriminator itself, probably not.
-	- Change the "ignore" feature to be a string quote feature.  By default, it pushes the whole string on the stack.  Use the until reader
-	- Add /* in bootstrap to start a comment quote
-	- Add */ in bootstrap to end a comment quote and pop the string off the stack
-	- Make /* and */ use its own dictionary so we can validate that every */ started with a /*
-	- Add ability to read a string or symbol on the stack as if it had been typed in by the user (see chained interpreter notes)
-	- Change all macros to use reader quoting functionality
-	
-MACRO SYNTAX:
-	- Add quoted pushdictionary '{' syntax in bootstrap
-	- Add quoted popdictionary '}' syntax in bootstrap
-	- Add '<' + symbol + '>' createmacro syntax
-	- Add symbol unbind macro with '~' syntax
-	- Add type macro: pops a symbol and returns the type bound to that symbol
+TYPE SYSTEM:
 	- Add overloaded method for all types that pop up to n-args off the stack and create a new value of that type (in other words, a data constructor for each type)
 	- Add create-op: pops a type and a bunch of args (as needed by the type), and instantiates a new value for that type, pushing it on the stack, using that type's
 		data constructor
-	
-TYPE SYSTEM:
 	- Remove createmacro-op and replace with the above infrastructure
 	- Define createmacro as the first macro
 	- Create ProductType (takes one or more other types and represents a tuple of those types)
@@ -50,6 +24,89 @@ TYPE SYSTEM:
 =============================================================
 RESEARCH/THOUGHTS/BACKLOG:
 =============================================================
+
+- Support of some primitives to enable richer syntax
+	- Want to be able to define a macro that lets FURTHER macros be defined like
+		defmacro foo
+		(
+			some
+			macro
+			stuff
+		)
+	- For this to work, defmacro would have to be a reader that:
+		1. Read a symbol declaring the name of the macro
+		2. Read in a list
+		3. Quoted each item in the list, pushing it onto the stack
+		4. Called createmacro
+		5. Pushed the name symbol onto the stack
+		6. Called set
+	- But I don't know if I'm quite ready to add lists to the language yet, so can
+	we replace that logic with something else?
+	- We could define a reader that:
+		1. Took a symbol (any symbol)
+		2. Read, quoted, and pushed any symbol that wasn't the first symbol read
+	- But even this might be too specific.  We could also define a reader that:
+		1. Read a symbol representing the start symbol
+		2. Read a symbol representing the end symbol
+		1. Read a symbol representing an op or macro
+		2. Read the start symbol
+		3. Read each symbol in a loop (not the end symbol) applying the macro or op in turn
+		(Kind of like mapping over a list in Haskell) 
+	- I like this approach, but what would we need to define it in Sugar itself?
+		`pushdictionary
+		`symbol `read `_start `set	- Read the desired start symbol -
+		`symbol `read `_end `set	- Read the desired end symbol -
+		`symbol `read `_f `set		- Read the op or macro to apply to each read symbol -
+		`_start `expect				- Wait to read the start symbol -
+		`mark						- Where we'll loop back to -
+		`read `_sym `set			- Read a symbol - 
+		`_sym `_f					- Operate on it -
+		`_sym `_end `eq	`loop `mark	- Loop back -
+		`pop						- Pop the quoted end symbol -
+		`popdictionary				- Done -
+	- With the above macro, we are missing some primitives:
+		- loop, which goes back to the mark
+		- eq, which tests for equality.  If true, does nothing, if false, pops to mark
+		- expect, which reads a symbol and throws an error if it is not equal to the symbol on the top of the stack
+		- Expect could be a macro:
+			`symbol `read						- Read a symbol -
+			`eq `ERROREXPECT `error `mark		- Push an error if the item on the stack and read symbol aren't equal -
+												- (ERROREXPECT is a hack message until we have strings) -
+	- Loop is going to be a little more difficult.  What we REALLY want it to do is to re-execute everything in the
+		macro after the mark.  We can't do that, though, because macros are executed line at a time, so the stack doesn't
+		have a record of the macro instructions or anything.  This probably means that we can't do loop.  We're going to 
+		have to make a second helper macro and call it recursively.  Something like this:
+		`read `_sym `set
+		`_sym `_quote
+		`_sym `_end `eq `THIS `mark		- Call self recursively, how do we do that? -
+		Actually, quite simply, because it's a macro it has a name, and we know what name we're going to call it!  The only thing
+		keeping us from doing this is that we'd have to make a nasty helper macro that everyone could see, but that wouldn't be
+		used except inside the inner macro.  If we could JUST support double quoting we wouldn't care, because the macro would
+		disappear once outside of the main macro's dictionary.  So, here's what we'd LIKE to do:
+		`pushdictionary
+		``read ``_sym ``set
+		``_sym ``_f
+		``_sym ``_end ``_eq ``_helper ``mark
+		`createmacro
+		`_helper
+		`set
+		`symbol `read `_start `set
+		`symbol `read `_end `set
+		`symbol `read `_f `set
+		`_helper
+		`pop
+		`popdictionary
+		createmacro
+		mapsyms
+		set
+		
+Gensym:
+	- Need to fix macro capture problems
+	- Just necessary to generate random prefix within a dictionary that isn't likely to be used by the programmer.
+	- Something like _01010394_VAR (where VAR is what the user wanted)
+	- So if we defined a reader like #$foo, this would invoke the $ reader, which would create a gensym from
+	the foo symbol
+	- The prefix should be specific to the dictionary.  Probably the object's hash code would be fine
 
 - Quoting
 	- How do we do nested quote? (probably need an escape)
@@ -173,9 +230,6 @@ RESEARCH/THOUGHTS/BACKLOG:
 		- Constructing an instance of a JavaType should cause the underlying VM to create the corresponding
 			class instance (in other words, a JavaType is a UDT, but one the VM knows about)
 		- Add invoke op (generic FFI)
-- add evaluate command.  If the thing on the top of the stack is a command, it is 
-   evaluated, else the stack is undisturbed other than popping off the command
-   (NOTE: with a simple IsCommand test command, this doesn't have to be a hard-coded command) 
 - figure out which commands need to be built-in ops.  For example:
 		* subtract, multiply, if, loop, etc.
 - add a coerce command to replace the top value on the stack with the same value under the given new type

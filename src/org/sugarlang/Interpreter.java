@@ -55,8 +55,6 @@ public class Interpreter implements Runnable {
 			env.setBinding("quote", new org.sugarlang.op.Quote());
 			env.setBinding("unquote", new org.sugarlang.op.Unquote());
 			env.setBinding("createmacro", new org.sugarlang.op.CreateMacro());
-			env.setBinding("if", new org.sugarlang.op.If());
-			env.setBinding("is", new org.sugarlang.op.Is());
 			env.setBinding("set", new org.sugarlang.op.Set());
 			env.setBinding("unset", new org.sugarlang.op.Unset());
 			env.setBinding("get", new org.sugarlang.op.Get());
