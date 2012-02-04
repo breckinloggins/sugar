@@ -37,6 +37,16 @@ commands and create macros.
 
 - SYNTAX MACROS -
 
+- expect: read a symbol and error if it is not the same as the symbol on top of the stack -
+`symbol `read
+``ErrorExpect
+``error
+`createmacro
+`neq
+createmacro
+expect
+set
+
 - BASIC FUNCTIONAL MACROS -
 
 - dup: duplicates the top item on the stack - 

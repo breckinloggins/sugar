@@ -2,7 +2,7 @@
 TODO
 =============================================================	
 DEFMACRO SYNTAX SUPPORT:
-	- Attempt to create expect macro and defmacro syntax macro
+	- Attempt to create defmacro syntax macro
 	
 TYPE SYSTEM:
 	- Add overloaded method for all types that pop up to n-args off the stack and create a new value of that type (in other words, a data constructor for each type)
