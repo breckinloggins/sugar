@@ -3,6 +3,7 @@ package org.sugarlang.op;
 import org.sugarlang.Environment;
 import org.sugarlang.base.IValue;
 import org.sugarlang.type.TypeException;
+import org.sugarlang.value.VQuote;
 import org.sugarlang.value.VSymbol;
 
 
@@ -31,6 +32,10 @@ public class Get extends BaseOp {
 		if (null == sym)	{
 			env.pushError("Cannot execute get op, the stack is empty");
 			return;
+		}
+		
+		if (sym instanceof VQuote)	{
+			sym = ((VQuote)sym).getInner();
 		}
 		
 		if (!(sym instanceof VSymbol))	{

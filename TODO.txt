@@ -1,8 +1,9 @@
 =============================================================
 TODO
 =============================================================	
-DEFMACRO SYNTAX SUPPORT:
-	- Attempt to create defmacro syntax macro
+MISC:
+	- Add ignore reader macro so we can do things like ignore whitespace
+	
 	
 TYPE SYSTEM:
 	- Add overloaded method for all types that pop up to n-args off the stack and create a new value of that type (in other words, a data constructor for each type)
@@ -24,81 +25,6 @@ TYPE SYSTEM:
 RESEARCH/THOUGHTS/BACKLOG:
 =============================================================
 
-- Support of some primitives to enable richer syntax
-	- Want to be able to define a macro that lets FURTHER macros be defined like
-		defmacro foo
-		(
-			some
-			macro
-			stuff
-		)
-	- For this to work, defmacro would have to be a reader that:
-		1. Read a symbol declaring the name of the macro
-		2. Read in a list
-		3. Quoted each item in the list, pushing it onto the stack
-		4. Called createmacro
-		5. Pushed the name symbol onto the stack
-		6. Called set
-	- But I don't know if I'm quite ready to add lists to the language yet, so can
-	we replace that logic with something else?
-	- We could define a reader that:
-		1. Took a symbol (any symbol)
-		2. Read, quoted, and pushed any symbol that wasn't the first symbol read
-	- But even this might be too specific.  We could also define a reader that:
-		1. Read a symbol representing the start symbol
-		2. Read a symbol representing the end symbol
-		1. Read a symbol representing an op or macro
-		2. Read the start symbol
-		3. Read each symbol in a loop (not the end symbol) applying the macro or op in turn
-		(Kind of like mapping over a list in Haskell) 
-	- I like this approach, but what would we need to define it in Sugar itself?
-		`pushdictionary
-		`symbol `read `_start `set	- Read the desired start symbol -
-		`symbol `read `_end `set	- Read the desired end symbol -
-		`symbol `read `_f `set		- Read the op or macro to apply to each read symbol -
-		`_start `expect				- Wait to read the start symbol -
-		`mark						- Where we'll loop back to -
-		`read `_sym `set			- Read a symbol - 
-		`_sym `_f					- Operate on it -
-		`_sym `_end `eq	`loop `mark	- Loop back -
-		`pop						- Pop the quoted end symbol -
-		`popdictionary				- Done -
-	- With the above macro, we are missing some primitives:
-		- loop, which goes back to the mark
-		- eq, which tests for equality.  If true, does nothing, if false, pops to mark
-		- expect, which reads a symbol and throws an error if it is not equal to the symbol on the top of the stack
-		- Expect could be a macro:
-			`symbol `read						- Read a symbol -
-			`eq `ERROREXPECT `error `mark		- Push an error if the item on the stack and read symbol aren't equal -
-												- (ERROREXPECT is a hack message until we have strings) -
-	- Loop is going to be a little more difficult.  What we REALLY want it to do is to re-execute everything in the
-		macro after the mark.  We can't do that, though, because macros are executed line at a time, so the stack doesn't
-		have a record of the macro instructions or anything.  This probably means that we can't do loop.  We're going to 
-		have to make a second helper macro and call it recursively.  Something like this:
-		`read `_sym `set
-		`_sym `_quote
-		`_sym `_end `eq `THIS `mark		- Call self recursively, how do we do that? -
-		Actually, quite simply, because it's a macro it has a name, and we know what name we're going to call it!  The only thing
-		keeping us from doing this is that we'd have to make a nasty helper macro that everyone could see, but that wouldn't be
-		used except inside the inner macro.  If we could JUST support double quoting we wouldn't care, because the macro would
-		disappear once outside of the main macro's dictionary.  So, here's what we'd LIKE to do:
-		`pushdictionary
-		``read ``_sym ``set
-		``_sym ``_f
-		``_sym ``_end ``_eq ``_helper ``mark 	- This won't work, gotta change it to a quoted series -
-		`createmacro
-		`_helper
-		`set
-		`symbol `read `_start `set
-		`symbol `read `_end `set
-		`symbol `read `_f `set
-		`_helper
-		`pop
-		`popdictionary
-		createmacro
-		mapsyms
-		set
-		
 Gensym:
 	- Need to fix macro capture problems
 	- Just necessary to generate random prefix within a dictionary that isn't likely to be used by the programmer.

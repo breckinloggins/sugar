@@ -27,13 +27,7 @@ public class Error extends BaseOp {
 		env.evaluateStack();
 		String error = env.pop().toString();
 		
-		if (null == error)	{
-			// TODO: This should be an error op
-			System.err.println("ERROR (no message)");
-			return;
-		}
-		
-		System.err.println("ERROR: " + error);
+		env.pushError(error);
 	}
 
 }

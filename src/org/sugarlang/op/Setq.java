@@ -9,20 +9,19 @@ import org.sugarlang.type.TypeException;
 import org.sugarlang.value.VQuote;
 import org.sugarlang.value.VSymbol;
 
-
 /**
- * Sets a binding in the current dictionary
+ * Sets a binding in the current dictionary.  If the object is quoted, it will be unquoted first
  * @author bloggins
  */
-public class Set extends BaseOp {
+public class Setq extends BaseOp {
 
-	public Set() throws TypeException {
+	public Setq() throws TypeException {
 		super();
 	}
 
 	@Override
 	public String getDescription() {
-		return "Sets a binding in the current dictionary (top-1: object, top: symbol)";
+		return "Sets a binding in the current dictionary (top-1: object, top: symbol).  If the object is quoted, it will be unquoted first";
 	}
 
 	@Override
@@ -50,7 +49,11 @@ public class Set extends BaseOp {
 			return;
 		}
 		
+		if (v instanceof VQuote)	{
+			// Unquote the object
+			v = ((VQuote)v).getInner();
+		}
+		
 		env.setBinding((VSymbol)sym, v);
 	}
-
 }

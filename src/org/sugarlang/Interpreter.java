@@ -52,13 +52,16 @@ public class Interpreter implements Runnable {
 			env.setBinding("popmark", new org.sugarlang.op.Popmark());
 			env.setBinding("eq", new org.sugarlang.op.Eq());
 			env.setBinding("neq", new org.sugarlang.op.Neq());
+			env.setBinding("eval", new org.sugarlang.op.Eval());
 			env.setBinding("pushdictionary", new org.sugarlang.op.PushDictionary());
 			env.setBinding("popdictionary", new org.sugarlang.op.PopDictionary());
 			env.setBinding("quote", new org.sugarlang.op.Quote());
 			env.setBinding("unquote", new org.sugarlang.op.Unquote());
 			env.setBinding("createmacro", new org.sugarlang.op.CreateMacro());
 			env.setBinding("set", new org.sugarlang.op.Set());
+			env.setBinding("setq", new org.sugarlang.op.Setq());
 			env.setBinding("unset", new org.sugarlang.op.Unset());
+			env.setBinding("hide", new org.sugarlang.op.Hide());
 			env.setBinding("get", new org.sugarlang.op.Get());
 			env.setBinding("add", new org.sugarlang.op.Add());
 			env.setBinding("getchar", new org.sugarlang.op.Getchar());
@@ -114,7 +117,7 @@ public class Interpreter implements Runnable {
 				
 				e.pushReader("discriminator");
 				e.pushOp("read");
-			
+				
 				while(!_rootEnvironment.isStackEmpty()) {
 					if (_shouldStop)	{
 						throw new Exception("The interpreter has been stopped");

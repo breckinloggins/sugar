@@ -61,6 +61,16 @@ public class Environment {
 	}
 	
 	/**
+	 * Hides the given symbol in the current dictionary so it appears unbound in any parent dictionaries 
+	 * (also unsets the binding if it is present in the dictionary)
+	 * @param sym The symbol to hide
+	 * @throws TypeException Thrown if the symbol is null or unsealed
+	 */
+	public void hideBinding(VSymbol sym) throws TypeException	{
+		_dictionary.hide(sym);
+	}
+ 	
+	/**
 	 * Gets a binding in the dictionary by the given symbol
 	 * @param sym The symbol to look up
 	 * @return null if the symbol is not bound, TNull if the symbol is bound to null, 

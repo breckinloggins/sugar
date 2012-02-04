@@ -47,33 +47,70 @@ createmacro
 expect
 set
 
+- mapsyms: read a list of symbols, applying an op or macro to each one as it is read -
+- TODO: It hates whitespace, because we don't have an accept -
+`pushdictionary
+`_f `set
+`quote
+`_end `set
+`_start `set
+``quoted ``read ```_sym ``set
+``_sym ``_end
+	``mark	- So we know where this macro starts -
+	```_sym ```_f ```unquote ```eval
+	```_helper
+	``createmacro 
+``neq
+`createmacro
+`_helper
+`set
+`_start `expect
+`_helper
+`popdictionary
+createmacro
+mapsyms
+set
+
+- id: keeps whatever is on the stack (does nothing) -
+`nop
+createmacro
+id
+set
+
+- defmacro: use mapsyms to make macros -
+- TODO: Use gensyms here when we have them to avoid name capture -
+`symbol `read ``_defmacro_name `set
+`( `) ``id `mapsyms
+`createmacro `_defmacro_name `set
+createmacro
+defmacro
+set
+		
 - BASIC FUNCTIONAL MACROS -
 
+
 - dup: duplicates the top item on the stack - 
-	`pushdictionary
-	`tmp `set
-	`tmp
-	`tmp
-	`popdictionary
-createmacro
-dup
-set
+defmacro dup
+(
+pushdictionary
+tmp set
+tmp
+tmp
+popdictionary
+)
 
 - swap: reverses the order of the top two items on the stack -
-	`pushdictionary
-	`tmp1 `set
-	`tmp2 `set
-	`tmp1
-	`tmp2
-	`popdictionary
-createmacro
-swap
-set
+defmacro swap
+(
+pushdictionary
+tmp1 set
+tmp2 set
+tmp1
+tmp2
+popdictionary
+)
 
 - The reader macro.  Invokes a reader by the given name -
-`symbol `read `read
-createmacro
-#
-set
+defmacro # ( symbol read read )
 
 	

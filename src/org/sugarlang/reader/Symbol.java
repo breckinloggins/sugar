@@ -25,7 +25,7 @@ public class Symbol extends BaseReader {
 
 	@Override
 	public String getDescription() {
-		return "Reads one or more non-WHITESPACE characters and pushes them onto the stack";
+		return "Reads one or more non-WHITESPACE characters and pushes a quoted symbol onto the stack";
 	}
 
 	@Override
